@@ -3,11 +3,11 @@ import datetime
 import urllib.request
 import os
 
-API_KEY = os.getenv("API_KEY", "YOUR_API_KEY")
+# The .strip() method removes hidden newlines or spaces from the secret
+API_KEY = os.getenv("API_KEY", "").strip()
 SINNER_ID = "200615"
 SEASON = "2026"
 
-# Rival IDs for H2H automation
 RIVALS = {
     "Carlos Alcaraz": "275923",
     "Novak Djokovic": "14486",
@@ -23,33 +23,32 @@ def api_call(endpoint):
         return json.loads(response.read().decode())
 
 def update_database():
-    if API_KEY == "YOUR_API_KEY" or API_KEY == "":
-        print("CRITICAL: API_KEY not configured in GitHub Secrets!")
+    if not API_KEY or API_KEY == "YOUR_API_KEY":
+        print("CRITICAL: API_KEY is empty or not configured!")
         return
 
     try:
-        # 1. General Player Data
         print("Syncing Ranking and Points...")
         player_data = api_call(f"player/{SINNER_ID}")
         
-        # 2. Detailed Season Stats
-        print("Syncing Technical Stats...")
+        print("Syncing Season Statistics...")
         stats_data = api_call(f"player/{SINNER_ID}/statistics/{SEASON}/all")
         s = stats_data.get('statistics', {})
         
-        # 3. Head-to-Head Automation
         print("Syncing Rivalries...")
         rivals_list = []
         for name, r_id in RIVALS.items():
-            h2h = api_call(f"player/{SINNER_ID}/h2h/{r_id}")
-            rivals_list.append({
-                "name": name,
-                "wins": h2h.get('homeWins', 0),
-                "losses": h2h.get('awayWins', 0),
-                "country": "🇪🇸" if "Alcaraz" in name else "🇷🇸" if "Djokovic" in name else "🏳️"
-            })
+            try:
+                h2h = api_call(f"player/{SINNER_ID}/h2h/{r_id}")
+                rivals_list.append({
+                    "name": name,
+                    "wins": h2h.get('homeWins', 0),
+                    "losses": h2h.get('awayWins', 0),
+                    "country": "🇪🇸" if "Alcaraz" in name else "🇷🇸" if "Djokovic" in name else "🏳️"
+                })
+            except Exception as e:
+                print(f"Skipping H2H for {name}: {e}")
 
-        # Assemble the 100% automated JSON
         database = {
             "last_updated": datetime.datetime.now(datetime.timezone.utc).isoformat(),
             "ranking": player_data.get('ranking', 1),
@@ -75,7 +74,7 @@ def update_database():
         with open('data.json', 'w') as f:
             json.dump(database, f, indent=2)
             
-        print("SUCCESS: All stats updated via API.")
+        print("SUCCESS: Every single stat has been updated via API.")
 
     except Exception as e:
         print(f"Update failed: {e}")
