@@ -1,9 +1,10 @@
-const CACHE_NAME = 'sinner-tracker-v2';
+const CACHE_NAME = 'sinner-tracker-v3';
 const urlsToCache = [
   '/sinner-tracker/',
   '/sinner-tracker/index.html',
   '/sinner-tracker/style.css',
-  '/sinner-tracker/script.js'
+  '/sinner-tracker/script.js',
+  '/sinner-tracker/social-cover.jpg'
 ];
 
 // Install the service worker
@@ -14,6 +15,7 @@ self.addEventListener('install', event => {
         return cache.addAll(urlsToCache);
       })
   );
+  self.skipWaiting();
 });
 
 // Serve cached content when offline
@@ -21,7 +23,6 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // Return cache hit or fetch from network
         return response || fetch(event.request);
       })
   );
