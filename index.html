@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sinner Tracker - The Fox</title>
+    
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Montserrat', 'sans-serif'] },
+                    colors: {
+                        'sinner-orange': '#f97316',
+                        'sinner-black': '#171717',
+                        'sinner-green': '#22c55e',
+                        'sinner-white': '#f8fafc',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-sinner-white text-sinner-black antialiased">
+
+    <header class="bg-sinner-black text-sinner-white py-4 px-6 shadow-md">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <span class="text-3xl">🦊🥕</span>
+                <h1 class="text-2xl font-black tracking-widest uppercase text-sinner-orange">Sinner Tracker</h1>
+            </div>
+            <button class="bg-sinner-orange hover:bg-orange-600 text-white font-bold py-1.5 px-4 rounded-md text-sm transition">EN / IT</button>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-6 mt-6">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-sinner-orange custom-hover">
+                <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider">ATP Ranking</h3>
+                <p class="text-5xl font-black mt-2">#1 👑</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-sinner-green custom-hover">
+                <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider">Win / Loss</h3>
+                <p class="text-5xl font-black mt-2">22 - 1 <span class="text-sinner-green text-lg">+95%</span></p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-sinner-black custom-hover">
+                <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider">Total ATP Points</h3>
+                <p id="total-points-display" class="text-5xl font-black mt-2">0</p>
+            </div>
+        </div>
+
+        <section class="mb-12">
+            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4">Points Evolution</h2>
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                <canvas id="pointsChart" style="max-height: 350px;"></canvas>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4">The Fox Stats</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="text-xl font-bold mb-4 text-sinner-orange">Service Power 🎾</h3>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm font-bold mb-1">
+                            <span>1st Serve In</span>
+                            <span>64%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-sinner-orange h-2.5 rounded-full" style="width: 64%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm font-bold mb-1">
+                            <span>Break Points Saved</span>
+                            <span>73%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-sinner-black h-2.5 rounded-full" style="width: 73%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-gray-50 rounded-lg text-center">
+                        <p class="text-gray-500 text-xs uppercase font-bold">Total Aces (2024)</p>
+                        <p class="text-3xl font-black text-sinner-black mt-1">184</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="text-xl font-bold mb-4 text-sinner-green">Return Game ⚡</h3>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm font-bold mb-1">
+                            <span>1st Serve Return Pts Won</span>
+                            <span>34%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-sinner-green h-2.5 rounded-full" style="width: 34%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="flex justify-between text-sm font-bold mb-1">
+                            <span>Break Points Converted</span>
+                            <span>42%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-sinner-orange h-2.5 rounded-full" style="width: 42%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-gray-50 rounded-lg text-center">
+                        <p class="text-gray-500 text-xs uppercase font-bold">Return Games Won</p>
+                        <p class="text-3xl font-black text-sinner-black mt-1">29%</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4">Trophy Cabinet 🏆</h2>
+            <p class="text-gray-500 mb-6 text-sm">A collection of major titles. Grand Slams are highlighted in gold.</p>
+            
+            <div id="trophy-cabinet" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                </div>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4">Tournaments Breakdown</h2>
+            <div class="bg-white shadow-md rounded-xl overflow-hidden border border-gray-100">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-sinner-black text-sinner-white text-sm uppercase tracking-wider">
+                        <tr>
+                            <th class="py-4 px-6">Tournament</th>
+                            <th class="py-4 px-6 text-center">Defending</th>
+                            <th class="py-4 px-6 text-center">Earned</th>
+                            <th class="py-4 px-6 text-center">Net Diff</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tournament-data" class="text-sm font-semibold text-gray-800"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
