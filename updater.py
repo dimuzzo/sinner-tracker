@@ -13,11 +13,11 @@ HEADERS = {
 }
 
 # Matchstat IDs for Sinner and Rivals
-SINNER_ID = "705021" # Jannik Sinner Matchstat ID
+SINNER_ID = "47275" # Jannik Sinner Matchstat ID
 RIVALS = {
-    "Carlos Alcaraz": "862713",
+    "Carlos Alcaraz": "68074",
     "Novak Djokovic": "153443",
-    "Daniil Medvedev": "603213"
+    "Alexander Zverev": "5992"
 }
 
 def api_call(endpoint, params=""):
