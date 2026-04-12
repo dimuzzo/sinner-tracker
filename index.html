@@ -11,19 +11,16 @@
     <meta property="og:url" content="https://dimuzzo.github.io/sinner-tracker/">
     <meta property="og:title" content="Sinner Tracker 🦊🥕">
     <meta property="og:description" content="Follow the journey of the World No. 1. Live points, epic rivalries, and real-time stats.">
-    <meta property="og:image" content="https://dimuzzo.github.io/sinner-tracker/social-cover.jpg">
+    <meta property="og:image" content="https://dimuzzo.github.io/sinner-tracker/social-cover.png">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Sinner Tracker 🦊🥕">
     <meta name="twitter:description" content="Follow the journey of the World No. 1. Live points, epic rivalries, and real-time stats.">
-    <meta name="twitter:image" content="https://dimuzzo.github.io/sinner-tracker/social-cover.jpg">
+    <meta name="twitter:image" content="https://dimuzzo.github.io/sinner-tracker/social-cover.png">
     
     <link rel="stylesheet" href="style.css">
-
     <link rel="manifest" href="manifest.json">
-
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <script>
@@ -50,7 +47,7 @@
                 <span class="text-3xl">🦊</span>
                 <h1 class="text-2xl font-black tracking-widest uppercase text-sinner-orange">Sinner Tracker</h1>
             </div>
-            <button class="bg-sinner-orange hover:bg-orange-600 text-white font-bold py-1.5 px-4 rounded-md text-sm transition">EN / IT</button>
+            <button onclick="toggleLanguage()" class="bg-sinner-orange hover:bg-orange-600 text-white font-bold py-1.5 px-4 rounded-md text-sm transition">EN / IT</button>
         </div>
     </header>
 
@@ -59,78 +56,78 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-sinner-orange custom-hover flex items-center justify-between">
                 <div>
-                    <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider">ATP Ranking</h3>
+                    <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider" data-i18n="rankingTitle">ATP Ranking</h3>
                     <p id="ranking-display" class="text-5xl font-black mt-2">#1 👑</p>
                 </div>
                 <img src="icon-192.png" alt="Jannik Sinner" class="w-20 h-20 rounded-full border-2 border-sinner-orange shadow-sm object-cover">
             </div>
 
             <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-sinner-green custom-hover">
-                <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider">Win / Loss (YTD)</h3>
+                <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider" data-i18n="winLossTitle">Win / Loss (YTD)</h3>
                 <p id="win-loss-display" class="text-5xl font-black mt-2">0 - 0</p>
             </div>
 
             <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-sinner-black custom-hover">
-                <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider">Total ATP Points</h3>
+                <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider" data-i18n="pointsTitle">Total ATP Points</h3>
                 <p id="total-points-display" class="text-5xl font-black mt-2">0</p>
             </div>
         </div>
 
         <section class="mb-12">
-            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4">Points Evolution</h2>
+            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="pointsEvolution">Points Evolution</h2>
             <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
                 <canvas id="pointsChart" style="max-height: 350px;"></canvas>
             </div>
         </section>
 
         <section class="mb-12">
-            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4">The Fox Stats</h2>
+            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="foxStats">The Fox Stats</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-                    <h3 class="text-xl font-bold mb-4 text-sinner-orange">Service Power 🎾</h3>
+                    <h3 class="text-xl font-bold mb-4 text-sinner-orange" data-i18n="servicePower">Service Power 🎾</h3>
                     <div class="mb-4">
-                        <div class="flex justify-between text-sm font-bold mb-1"><span>1st Serve In</span><span>64%</span></div>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5"><div class="bg-sinner-orange h-2.5 rounded-full" style="width: 64%"></div></div>
+                        <div class="flex justify-between text-sm font-bold mb-1"><span data-i18n="serveIn">1st Serve In</span><span id="stat-serve-in">64%</span></div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5"><div id="bar-serve-in" class="bg-sinner-orange h-2.5 rounded-full" style="width: 64%"></div></div>
                     </div>
                     <div class="mb-4">
-                        <div class="flex justify-between text-sm font-bold mb-1"><span>Break Points Saved</span><span>73%</span></div>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5"><div class="bg-sinner-black h-2.5 rounded-full" style="width: 73%"></div></div>
+                        <div class="flex justify-between text-sm font-bold mb-1"><span data-i18n="bpSaved">Break Points Saved</span><span id="stat-bp-saved">73%</span></div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5"><div id="bar-bp-saved" class="bg-sinner-black h-2.5 rounded-full" style="width: 73%"></div></div>
                     </div>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
-                    <h3 class="text-xl font-bold mb-4 text-sinner-green">Return Game ⚡</h3>
+                    <h3 class="text-xl font-bold mb-4 text-sinner-green" data-i18n="returnGame">Return Game ⚡</h3>
                     <div class="mb-4">
-                        <div class="flex justify-between text-sm font-bold mb-1"><span>1st Serve Return Pts Won</span><span>34%</span></div>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5"><div class="bg-sinner-green h-2.5 rounded-full" style="width: 34%"></div></div>
+                        <div class="flex justify-between text-sm font-bold mb-1"><span data-i18n="returnWon">1st Serve Return Pts Won</span><span id="stat-ret-won">34%</span></div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5"><div id="bar-ret-won" class="bg-sinner-green h-2.5 rounded-full" style="width: 34%"></div></div>
                     </div>
                     <div class="mb-4">
-                        <div class="flex justify-between text-sm font-bold mb-1"><span>Break Points Converted</span><span>42%</span></div>
-                        <div class="w-full bg-gray-200 rounded-full h-2.5"><div class="bg-sinner-orange h-2.5 rounded-full" style="width: 42%"></div></div>
+                        <div class="flex justify-between text-sm font-bold mb-1"><span data-i18n="bpConv">Break Points Converted</span><span id="stat-bp-conv">42%</span></div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5"><div id="bar-bp-conv" class="bg-sinner-orange h-2.5 rounded-full" style="width: 42%"></div></div>
                     </div>
                 </div>
             </div>
         </section>
 
         <section class="mb-12">
-            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4">Trophy Cabinet 🏆</h2>
+            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="trophyCabinet">Trophy Cabinet 🏆</h2>
             <div id="trophy-cabinet" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
         </section>
 
         <section class="mb-12">
-            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4">Epic Rivalries ⚔️</h2>
+            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="rivalries">Epic Rivalries ⚔️</h2>
             <div id="h2h-container" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
         </section>
 
         <section>
-            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4">Tournaments Breakdown</h2>
+            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="tournaments">Tournaments Breakdown</h2>
             <div class="bg-white shadow-md rounded-xl overflow-hidden border border-gray-100">
                 <table class="w-full text-left border-collapse">
                     <thead class="bg-sinner-black text-sinner-white text-sm uppercase tracking-wider">
                         <tr>
-                            <th class="py-4 px-6">Tournament</th>
-                            <th class="py-4 px-6 text-center">Defending</th>
-                            <th class="py-4 px-6 text-center">Earned</th>
-                            <th class="py-4 px-6 text-center">Net Diff</th>
+                            <th class="py-4 px-6" data-i18n="tournHeader">Tournament</th>
+                            <th class="py-4 px-6 text-center" data-i18n="defendingHeader">Defending</th>
+                            <th class="py-4 px-6 text-center" data-i18n="earnedHeader">Earned</th>
+                            <th class="py-4 px-6 text-center" data-i18n="netDiffHeader">Net Diff</th>
                         </tr>
                     </thead>
                     <tbody id="tournament-data" class="text-sm font-semibold text-gray-800"></tbody>
@@ -138,6 +135,10 @@
             </div>
         </section>
     </main>
+
+    <footer class="bg-sinner-black text-gray-400 py-6 text-center text-sm mt-12 shadow-inner">
+        <p data-i18n="footerText">Sinner Tracker - Unofficial Fan Dashboard</p>
+    </footer>
 
     <script src="script.js"></script>
 
