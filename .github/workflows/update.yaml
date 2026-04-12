@@ -1,0 +1,32 @@
+name: Sinner Stats Auto-Updater
+
+# This tells GitHub WHEN to run the bot
+on:
+  schedule:
+    - cron: '0 2 * * *' # Runs every day at 02:00 AM UTC
+  workflow_dispatch: # Allows you to trigger it manually with a button on GitHub
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Run the Python Bot
+        run: python updater.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add data.json
+          # If there are changes, commit them; otherwise, do nothing
+          git commit -m "🤖 Auto-update Sinner stats" || exit 0
+          git push

@@ -1,0 +1,13 @@
+{
+  "last_updated": "2024-05-01T12:00:00Z",
+  "ranking": 1,
+  "win_loss": "22 - 1",
+  "total_points": 8710,
+  "tournaments": [
+    { "name": "Australian Open", "defending": 180, "earned": 2000 },
+    { "name": "Rotterdam", "defending": 300, "earned": 500 },
+    { "name": "Indian Wells", "defending": 360, "earned": 400 },
+    { "name": "Miami Open", "defending": 600, "earned": 1000 },
+    { "name": "Monte-Carlo", "defending": 360, "earned": 180 }
+  ]
+}
