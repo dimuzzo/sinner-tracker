@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sinner-tracker-v1';
+const CACHE_NAME = 'sinner-tracker-v2';
 const urlsToCache = [
   '/sinner-tracker/',
   '/sinner-tracker/index.html',
