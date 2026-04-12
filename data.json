@@ -1,23 +1,55 @@
 {
-  "last_updated": "2026-04-12T23:00:00Z",
+  "last_updated": "2026-04-12T21:34:08.122518+00:00",
   "ranking": 1,
-  "win_loss": "28 - 3",
   "total_points": 11500,
+  "win_loss": "28 - 3",
   "stats": {
     "first_serve_in": 64,
     "break_points_saved": 73,
     "first_return_won": 34,
     "break_points_converted": 42
   },
-  "tournaments": [
-    { "name": "Australian Open", "defending": 2000, "earned": 800 },
-    { "name": "Miami Open", "defending": 1000, "earned": 1000 }
-  ],
   "rivalries": [
-    { "name": "Carlos Alcaraz", "wins": 8, "losses": 10, "country": "🇪🇸" },
-    { "name": "Novak Djokovic", "wins": 7, "losses": 5, "country": "🇷🇸" }
+    {
+      "name": "Carlos Alcaraz",
+      "wins": 8,
+      "losses": 10,
+      "country": "\ud83c\uddea\ud83c\uddf8"
+    },
+    {
+      "name": "Novak Djokovic",
+      "wins": 7,
+      "losses": 5,
+      "country": "\ud83c\uddf7\ud83c\uddf8"
+    }
+  ],
+  "tournaments": [
+    {
+      "name": "Australian Open",
+      "defending": 2000,
+      "earned": 2000
+    },
+    {
+      "name": "Indian Wells",
+      "defending": 400,
+      "earned": 1000
+    },
+    {
+      "name": "Miami Open",
+      "defending": 1000,
+      "earned": 1000
+    }
   ],
   "trophies": [
-    { "title": "Wimbledon", "year": 2025, "category": "Grand Slam" }
+    {
+      "title": "Australian Open",
+      "year": 2026,
+      "category": "Grand Slam"
+    },
+    {
+      "title": "ATP Finals",
+      "year": 2025,
+      "category": "Tour Finals"
+    }
   ]
 }
