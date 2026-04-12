@@ -173,9 +173,64 @@ function renderTrophies() {
     cabinet.innerHTML = htmlContent;
 }
 
+// --- H2H RIVALRIES LOGIC ---
+
+// Database of main rivals (Update these numbers as the season progresses!)
+const rivalsData = [
+    { name: "Carlos Alcaraz", wins: 4, losses: 5, country: "🇪🇸" },
+    { name: "Novak Djokovic", wins: 3, losses: 4, country: "🇷🇸" },
+    { name: "Daniil Medvedev", wins: 5, losses: 6, country: "🏳️" }
+];
+
+/**
+ * Generates HTML for the Head-to-Head cards with dynamic progress bars
+ */
+function renderH2H() {
+    const container = document.getElementById('h2h-container');
+    if (!container) return;
+
+    let htmlContent = '';
+
+    rivalsData.forEach(rival => {
+        const totalMatches = rival.wins + rival.losses;
+        // Calculate Sinner's win percentage to fill the bar
+        const winPercentage = totalMatches === 0 ? 0 : Math.round((rival.wins / totalMatches) * 100);
+        
+        // Determine text color based on who is leading the H2H
+        let statusColor = "text-gray-500";
+        if (rival.wins > rival.losses) {
+            statusColor = "text-sinner-green"; // Sinner is leading
+        } else if (rival.wins < rival.losses) {
+            statusColor = "text-red-500"; // Rival is leading
+        }
+
+        htmlContent += `
+            <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100 transition-transform hover:-translate-y-2 duration-300">
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="font-bold text-lg text-sinner-black">${rival.name} ${rival.country}</h4>
+                    <span class="text-2xl font-black ${statusColor}">${rival.wins} - ${rival.losses}</span>
+                </div>
+                
+                <div class="w-full bg-gray-200 rounded-full h-3 mb-2 flex overflow-hidden">
+                    <div class="bg-sinner-orange h-3" style="width: ${winPercentage}%"></div>
+                    <div class="bg-sinner-black h-3" style="width: ${100 - winPercentage}%"></div>
+                </div>
+                
+                <div class="flex justify-between text-xs font-bold text-gray-400 uppercase tracking-wider">
+                    <span>Sinner (${winPercentage}%)</span>
+                    <span>Opponent</span>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = htmlContent;
+}
+
 // --- GLOBAL INITIALIZATION ---
 // This is the ONLY EventListener needed when the page loads
 document.addEventListener('DOMContentLoaded', () => {
     initDashboard();
     renderTrophies();
+    renderH2H();
 });
