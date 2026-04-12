@@ -1,55 +1,29 @@
 {
-  "last_updated": "2026-04-12T21:34:08.122518+00:00",
+  "last_updated": "2026-04-12T23:00:00Z",
   "ranking": 1,
-  "total_points": 11500,
-  "win_loss": "28 - 3",
+  "total_points": 13400,
+  "win_loss": "24 - 2",
   "stats": {
     "first_serve_in": 64,
     "break_points_saved": 73,
     "first_return_won": 34,
     "break_points_converted": 42
   },
-  "rivalries": [
-    {
-      "name": "Carlos Alcaraz",
-      "wins": 8,
-      "losses": 10,
-      "country": "\ud83c\uddea\ud83c\uddf8"
-    },
-    {
-      "name": "Novak Djokovic",
-      "wins": 7,
-      "losses": 5,
-      "country": "\ud83c\uddf7\ud83c\uddf8"
-    }
-  ],
   "tournaments": [
-    {
-      "name": "Australian Open",
-      "defending": 2000,
-      "earned": 2000
-    },
-    {
-      "name": "Indian Wells",
-      "defending": 400,
-      "earned": 1000
-    },
-    {
-      "name": "Miami Open",
-      "defending": 1000,
-      "earned": 1000
-    }
+    { "name": "Australian Open", "defending": 2000, "earned": 800 },
+    { "name": "Indian Wells", "defending": 0, "earned": 1000 },
+    { "name": "Miami Open", "defending": 0, "earned": 1000 },
+    { "name": "Monte-Carlo", "defending": 0, "earned": 1000 }
   ],
+  "rivalries": [
+    { "name": "Carlos Alcaraz", "wins": 8, "losses": 10, "country": "🇪🇸" },
+    { "name": "Novak Djokovic", "wins": 7, "losses": 5, "country": "🇷🇸" },
+    { "name": "Alexander Zverev", "wins": 9, "losses": 4, "country": "🇩🇪" }],
   "trophies": [
-    {
-      "title": "Australian Open",
-      "year": 2026,
-      "category": "Grand Slam"
-    },
-    {
-      "title": "ATP Finals",
-      "year": 2025,
-      "category": "Tour Finals"
-    }
+    { "title": "Australian Open", "year": 2024, "category": "Grand Slam" },
+    { "title": "US Open", "year": 2024, "category": "Grand Slam" },
+    { "title": "Indian Wells", "year": 2026, "category": "Masters 1000" },
+    { "title": "Miami Open", "year": 2026, "category": "Masters 1000" },
+    { "title": "Monte-Carlo", "year": 2026, "category": "Masters 1000" }
   ]
 }

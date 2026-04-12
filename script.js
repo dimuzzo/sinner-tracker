@@ -90,7 +90,7 @@ function renderTableAndPoints(tournaments) {
 
 function renderChart(tournaments) {
     const ctxElement = document.getElementById('pointsChart');
-    if (!ctxElement) return;
+    if (!ctxElement || !tournaments.length) return;
     const ctx = ctxElement.getContext('2d');
     const labels = [];
     const pointsData = [];
