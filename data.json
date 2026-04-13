@@ -1,13 +1,13 @@
 {
-  "last_updated": "2026-04-13T22:11:27.098908+00:00",
+  "last_updated": "2026-04-13T22:18:21.092314+00:00",
   "ranking": 1,
   "total_points": 13400,
   "win_loss": "24 - 2",
   "stats": {
-    "first_serve_in": 64,
-    "break_points_saved": 73,
-    "first_return_won": 34,
-    "break_points_converted": 42
+    "first_serve_in": 60,
+    "break_points_saved": 66,
+    "first_return_won": 67,
+    "break_points_converted": 43
   },
   "next_match": {
     "opponent": "TBD",
