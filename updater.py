@@ -91,15 +91,33 @@ def update_database():
         new_rivalries = []
         for name, r_id in RIVALS.items():
             URL_H2H = f"/tennis/v2/atp/h2h/matches/{SINNER_ID}/{r_id}"
-            
             h2h = api_call(URL_H2H)
+            
+            p1_wins = 0
+            p2_wins = 0
+            
             if h2h:
-                new_rivalries.append({
-                    "name": name,
-                    "wins": h2h.get('player1_wins', 0),
-                    "losses": h2h.get('player2_wins', 0),
-                    "country": "🇪🇸" if "Alcaraz" in name else "🇷🇸" if "Djokovic" in name else "🇩🇪" if "Zverev" in name else "🏳️"
-                })
+                if isinstance(h2h, dict):
+                    # If it's a summary dictionary
+                    p1_wins = h2h.get('player1_wins', 0)
+                    p2_wins = h2h.get('player2_wins', 0)
+                elif isinstance(h2h, list):
+                    # If it's a list of past matches, we count the wins manually
+                    for match in h2h:
+                        # Assuming the API uses 'winner_id' to indicate the winner
+                        winner_id = match.get('winner_id')
+                        if str(winner_id) == str(SINNER_ID):
+                            p1_wins += 1
+                        elif str(winner_id) == str(r_id):
+                            p2_wins += 1
+
+            new_rivalries.append({
+                "name": name,
+                "wins": p1_wins,
+                "losses": p2_wins,
+                "country": "🇪🇸" if "Alcaraz" in name else "🇷🇸" if "Djokovic" in name else "🇩🇪" if "Zverev" in name else "🏳️"
+            })
+            
         if new_rivalries:
             db['rivalries'] = new_rivalries
 
