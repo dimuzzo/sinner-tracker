@@ -4,23 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sinner Tracker - The Fox</title>
-
-    <meta name="description" content="The ultimate live dashboard tracking Jannik Sinner's ATP points, titles, H2H rivalries, and live stats.">
-    
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://dimuzzo.github.io/sinner-tracker/">
-    <meta property="og:title" content="Sinner Tracker 🦊🥕">
-    <meta property="og:description" content="Follow the journey of the World No. 1. Live points, epic rivalries, and real-time stats.">
-    <meta property="og:image" content="https://dimuzzo.github.io/sinner-tracker/social-cover.png">
-
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
     <script>
         tailwind.config = {
-            darkMode: 'class', // Enable class-based dark mode
+            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: { sans: ['Montserrat', 'sans-serif'] },
@@ -53,14 +43,13 @@
     </header>
 
     <main class="max-w-6xl mx-auto p-6 mt-6">
-        
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-md border-t-4 border-sinner-orange custom-hover flex items-center justify-between">
                 <div>
                     <h3 class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider" data-i18n="rankingTitle">ATP Ranking</h3>
                     <p id="ranking-display" class="text-4xl lg:text-5xl font-black mt-2">#1 👑</p>
                 </div>
-                <img src="icon-192.png" alt="Jannik Sinner" class="w-16 h-16 rounded-full border-2 border-sinner-orange shadow-sm object-cover">
+                <img src="icon-192.png" alt="Sinner" class="w-16 h-16 rounded-full border-2 border-sinner-orange object-cover">
             </div>
 
             <div class="bg-gradient-to-br from-sinner-black to-gray-800 text-white p-6 rounded-xl shadow-md border-t-4 border-blue-500 custom-hover relative overflow-hidden">
@@ -93,28 +82,9 @@
 
         <section class="mb-12">
             <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="foxStats">The Fox Stats</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
-                    <h3 class="text-xl font-bold mb-4 text-sinner-orange" data-i18n="servicePower">Service Power 🎾</h3>
-                    <div class="mb-4">
-                        <div class="flex justify-between text-sm font-bold mb-1"><span data-i18n="serveIn">1st Serve In</span><span id="stat-serve-in">--%</span></div>
-                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5"><div id="bar-serve-in" class="bg-sinner-orange h-2.5 rounded-full" style="width: 0%"></div></div>
-                    </div>
-                    <div class="mb-4">
-                        <div class="flex justify-between text-sm font-bold mb-1"><span data-i18n="bpSaved">Break Points Saved</span><span id="stat-bp-saved">--%</span></div>
-                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5"><div id="bar-bp-saved" class="bg-sinner-black dark:bg-gray-400 h-2.5 rounded-full" style="width: 0%"></div></div>
-                    </div>
-                </div>
-                <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
-                    <h3 class="text-xl font-bold mb-4 text-sinner-green" data-i18n="returnGame">Return Game ⚡</h3>
-                    <div class="mb-4">
-                        <div class="flex justify-between text-sm font-bold mb-1"><span data-i18n="returnWon">1st Serve Return Pts Won</span><span id="stat-ret-won">--%</span></div>
-                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5"><div id="bar-ret-won" class="bg-sinner-green h-2.5 rounded-full" style="width: 0%"></div></div>
-                    </div>
-                    <div class="mb-4">
-                        <div class="flex justify-between text-sm font-bold mb-1"><span data-i18n="bpConv">Break Points Converted</span><span id="stat-bp-conv">--%</span></div>
-                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5"><div id="bar-bp-conv" class="bg-sinner-orange h-2.5 rounded-full" style="width: 0%"></div></div>
-                    </div>
+            <div class="bg-white dark:bg-dark-card p-8 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 flex justify-center">
+                <div class="w-full max-w-md">
+                    <canvas id="radarChart"></canvas>
                 </div>
             </div>
         </section>
