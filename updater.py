@@ -90,26 +90,18 @@ def update_database():
         print("4/4 Syncing H2H...")
         new_rivalries = []
         for name, r_id in RIVALS.items():
-            URL_H2H = f"/tennis/v2/atp/h2h/matches/{SINNER_ID}/{r_id}"
-            h2h = api_call(URL_H2H)
+            URL_H2H = f"/tennis/v2/atp/h2h/info/{SINNER_ID}/{r_id}"
+            h2h_data = api_call(URL_H2H)
             
             p1_wins = 0
             p2_wins = 0
             
-            if h2h:
-                if isinstance(h2h, dict):
-                    # If it's a summary dictionary
-                    p1_wins = h2h.get('player1_wins', 0)
-                    p2_wins = h2h.get('player2_wins', 0)
-                elif isinstance(h2h, list):
-                    # If it's a list of past matches, we count the wins manually
-                    for match in h2h:
-                        # Assuming the API uses 'winner_id' to indicate the winner
-                        winner_id = match.get('winner_id')
-                        if str(winner_id) == str(SINNER_ID):
-                            p1_wins += 1
-                        elif str(winner_id) == str(r_id):
-                            p2_wins += 1
+            # The API returns a list of surfaces, we need to sum them up
+            if h2h_data and isinstance(h2h_data, list):
+                for surface in h2h_data:
+                    # We use int() because the API returns numbers as strings (e.g. "2")
+                    p1_wins += int(surface.get('player1wins', 0))
+                    p2_wins += int(surface.get('player2wins', 0))
 
             new_rivalries.append({
                 "name": name,
