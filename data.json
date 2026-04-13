@@ -9,6 +9,12 @@
     "first_return_won": 34,
     "break_points_converted": 42
   },
+  "next_match": {
+    "opponent": "TBD",
+    "tournament": "Madrid Open",
+    "round": "Round of 64",
+    "date": "2026-04-24T15:00:00Z"
+  },
   "tournaments": [
     {
       "name": "Australian Open",
@@ -36,19 +42,19 @@
       "name": "Carlos Alcaraz",
       "wins": 8,
       "losses": 10,
-      "country": "\ud83c\uddea\ud83c\uddf8"
+      "country": "🇪🇸"
     },
     {
       "name": "Novak Djokovic",
       "wins": 7,
       "losses": 5,
-      "country": "\ud83c\uddf7\ud83c\uddf8"
+      "country": "🇷🇸"
     },
     {
       "name": "Alexander Zverev",
       "wins": 9,
       "losses": 4,
-      "country": "\ud83c\udde9\ud83c\uddea"
+      "country": "🇩🇪"
     }
   ],
   "trophies": [
