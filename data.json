@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-13T05:18:10.138512+00:00",
+  "last_updated": "2026-04-13T22:05:23.523519+00:00",
   "ranking": 1,
   "total_points": 13400,
   "win_loss": "24 - 2",
@@ -11,8 +11,8 @@
   },
   "next_match": {
     "opponent": "TBD",
-    "tournament": "Madrid Open",
-    "round": "Round of 64",
+    "tournament": "Next Event",
+    "round": "TBD",
     "date": "2026-04-24T15:00:00Z"
   },
   "tournaments": [
@@ -42,19 +42,19 @@
       "name": "Carlos Alcaraz",
       "wins": 8,
       "losses": 10,
-      "country": "🇪🇸"
+      "country": "\ud83c\uddea\ud83c\uddf8"
     },
     {
       "name": "Novak Djokovic",
       "wins": 7,
       "losses": 5,
-      "country": "🇷🇸"
+      "country": "\ud83c\uddf7\ud83c\uddf8"
     },
     {
       "name": "Alexander Zverev",
       "wins": 9,
       "losses": 4,
-      "country": "🇩🇪"
+      "country": "\ud83c\udde9\ud83c\uddea"
     }
   ],
   "trophies": [
