@@ -9,10 +9,10 @@ HOST = "tennis-api-atp-wta-itf.p.rapidapi.com"
 HEADERS = {
     'X-RapidAPI-Key': API_KEY,
     'X-RapidAPI-Host': HOST,
-    'User-Agent': 'SinnerTrackerBot/5.0'
+    'User-Agent': 'SinnerTrackerBot/6.0'
 }
 
-# Matchstat IDs (Updated for 2026)
+# Matchstat IDs
 SINNER_ID = 47275
 RIVALS = {
     "Carlos Alcaraz": 68074,
@@ -20,16 +20,15 @@ RIVALS = {
     "Alexander Zverev": 24008
 }
 
-def api_call(endpoint):
-    # Notice the slash is included in the endpoint variable now
-    url = f"https://{HOST}{endpoint}"
+def api_call(endpoint_path):
+    url = f"https://{HOST}{endpoint_path}"
     req = urllib.request.Request(url, headers=HEADERS)
     try:
         with urllib.request.urlopen(req) as response:
             res = json.loads(response.read().decode('utf-8'))
-            return res.get('data', res) # Automatically extracts 'data' if it exists
+            return res.get('data', res)
     except Exception as e:
-        print(f"API Error on {endpoint}: {e}")
+        print(f"API Error on {endpoint_path}: {e}")
         return None
 
 def calculate_pct(part, total):
@@ -41,7 +40,6 @@ def update_database():
         print("CRITICAL: API_KEY not configured in GitHub Secrets!")
         return
 
-    # Load existing JSON (to protect tournaments and trophies)
     try:
         with open('data.json', 'r') as f:
             db = json.load(f)
@@ -50,8 +48,9 @@ def update_database():
 
     try:
         print("1/4 Syncing Ranking & ATP Points...")
-        # Applying the /tennis/v2/atp/ prefix to the ranking endpoint
-        rankings = api_call("/tennis/v2/atp/rankings/singles")
+        URL_RANKING = "/tennis/v2/atp/ranking/singles/"
+        
+        rankings = api_call(URL_RANKING)
         if rankings:
             for r in rankings:
                 if r.get('player', {}).get('id') == SINNER_ID:
@@ -60,7 +59,7 @@ def update_database():
                     break
 
         print("2/4 Syncing Win/Loss & Fox Stats...")
-        # EXACT path from your Python snippet
+        # This one is perfect and confirmed working!
         stats_data = api_call(f"/tennis/v2/atp/player/match-stats/{SINNER_ID}")
         if stats_data:
             serv = stats_data.get('serviceStats', {})
@@ -76,7 +75,9 @@ def update_database():
             }
 
         print("3/4 Syncing Next Match...")
-        fixtures = api_call(f"/tennis/v2/atp/player/fixtures/{SINNER_ID}")
+        URL_FIXTURES = f"/tennis/v2/atp/fixtures/player/{SINNER_ID}"
+        
+        fixtures = api_call(URL_FIXTURES)
         if fixtures and len(fixtures) > 0:
             next_m = fixtures[0]
             db['next_match'] = {
@@ -89,7 +90,9 @@ def update_database():
         print("4/4 Syncing H2H...")
         new_rivalries = []
         for name, r_id in RIVALS.items():
-            h2h = api_call(f"/tennis/v2/atp/h2h/{SINNER_ID}/{r_id}")
+            URL_H2H = f"/tennis/v2/atp/h2h/matches/{SINNER_ID}/{r_id}"
+            
+            h2h = api_call(URL_H2H)
             if h2h:
                 new_rivalries.append({
                     "name": name,
@@ -100,7 +103,6 @@ def update_database():
         if new_rivalries:
             db['rivalries'] = new_rivalries
 
-        # Save everything
         db['last_updated'] = datetime.datetime.now(datetime.timezone.utc).isoformat()
         with open('data.json', 'w') as f:
             json.dump(db, f, indent=2)
