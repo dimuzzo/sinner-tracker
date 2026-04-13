@@ -1,22 +1,24 @@
-/* Importing Montserrat Font */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap');
 
-/* Global resets and base styles */
 html {
     scroll-behavior: smooth;
 }
 
-/* Custom animations not easily handled by standard Tailwind classes */
+/* Smooth transition for theme switching */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 .custom-hover {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .custom-hover:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
-/* Custom styling for table rows */
-tbody tr:hover {
-    background-color: #f8fafc; /* sinner-white */
+/* Ensure chart canvas doesn't look weird during resize */
+canvas {
+    width: 100% !important;
 }
