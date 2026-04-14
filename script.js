@@ -1,4 +1,3 @@
-const BASE_POINTS = 7000;
 const QUALIFICATION_POINTS = 7200; // ATP Finals threshold
 let currentLang = 'en';
 
@@ -166,7 +165,7 @@ async function initDashboard(isRefresh = false) {
 
         if (data.tournaments) {
             renderTableAndPoints(data.tournaments);
-            renderChart(data.tournaments);
+            renderChart(data.tournaments, data.total_points);
         }
         
         if (data.stats) renderRadarChart(data.stats);
@@ -289,14 +288,24 @@ function renderTableAndPoints(tournaments) {
     tableBody.innerHTML = htmlContent;
 }
 
-function renderChart(tournaments) {
+function renderChart(tournaments, currentTotalPoints) {
     const ctxEl = document.getElementById('pointsChart');
     if(!ctxEl) return;
     const ctx = ctxEl.getContext('2d');
     const isDark = document.documentElement.classList.contains('dark');
     const labels = tournaments.map(t => t.name);
-    let runningTotal = BASE_POINTS;
-    const pointsData = tournaments.map(t => { runningTotal += (t.earned - t.defending); return runningTotal; });
+    
+    // Calculate the total Net Difference of the tournaments in the list
+    const totalNetDiff = tournaments.reduce((sum, t) => sum + (t.earned - t.defending), 0);
+    
+    // Reverse-engineer the exact starting points dynamically!
+    // (Fallback to BASE_POINTS if total_points is missing)
+    let runningTotal = (currentTotalPoints ? (currentTotalPoints - totalNetDiff) : BASE_POINTS);
+    
+    const pointsData = tournaments.map(t => { 
+        runningTotal += (t.earned - t.defending); 
+        return runningTotal; 
+    });
 
     if(window.sinnerChart) window.sinnerChart.destroy();
     window.sinnerChart = new Chart(ctx, {
