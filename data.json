@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-14T11:57:20.792569+00:00",
+  "last_updated": "2026-04-14T12:02:50.869631+00:00",
   "ranking": 1,
   "total_points": 13350,
   "win_loss": "24 - 2",
@@ -169,34 +169,34 @@
   },
   "roadmap": [
     {
-      "name": "Japan Open Tennis Championships",
-      "date": "2026-09-28T00:00:00.000Z",
-      "court": "Hard",
-      "country": "JPN"
+      "name": "Madrid Open",
+      "date": "2026-04-24T00:00:00Z",
+      "court": "Clay",
+      "country": "ESP"
     },
     {
-      "name": "China Open",
-      "date": "2026-09-28T00:00:00.000Z",
-      "court": "Hard",
-      "country": "CHN"
+      "name": "Internazionali d'Italia",
+      "date": "2026-05-08T00:00:00Z",
+      "court": "Clay",
+      "country": "ITA"
     },
     {
-      "name": "Shanghai Rolex Masters",
-      "date": "2026-10-05T00:00:00.000Z",
-      "court": "Hard",
-      "country": "CHN"
+      "name": "Roland Garros",
+      "date": "2026-05-26T00:00:00Z",
+      "court": "Clay",
+      "country": "FRA"
     },
     {
-      "name": "Almaty Open",
-      "date": "2026-10-19T00:00:00.000Z",
-      "court": "I.hard",
-      "country": "KAZ"
+      "name": "Halle Open",
+      "date": "2026-06-17T00:00:00Z",
+      "court": "Grass",
+      "country": "GER"
     },
     {
-      "name": "European Open",
-      "date": "2026-10-19T00:00:00.000Z",
-      "court": "I.hard",
-      "country": "BEL"
+      "name": "Wimbledon",
+      "date": "2026-07-01T00:00:00Z",
+      "court": "Grass",
+      "country": "GBR"
     }
   ]
 }
