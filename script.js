@@ -4,8 +4,8 @@ let currentLang = 'en';
 const translations = {
     en: {
         rankingTitle: "ATP Ranking", winLossTitle: "Win / Loss (YTD)", pointsTitle: "Total ATP Points",
-        pointsEvolution: "Points Evolution", foxStats: "The Fox Stats", trophyCabinet: "Trophy Cabinet 🏆",
-        rivalries: "Epic Rivalries ⚔️", tournaments: "Tournaments Breakdown", tournHeader: "Tournament",
+        pointsEvolution: "Points Evolution", foxStats: "The Fox Stats", trophyCabinet: "Trophy Cabinet",
+        rivalries: "Epic Rivalries", tournaments: "Tournaments Breakdown", tournHeader: "Tournament",
         defendingHeader: "Defending", earnedHeader: "Earned", netDiffHeader: "Net Diff", 
         footerText: "Sinner Tracker - Unofficial Fan Dashboard", opponent: "Opponent", sinner: "Sinner",
         nextMatchTitle: "Next Match", serveIn: "1st Serve In", bpSaved: "BP Saved", 
@@ -18,12 +18,12 @@ const translations = {
     },
     it: {
         rankingTitle: "Classifica ATP", winLossTitle: "Vittorie / Sconfitte", pointsTitle: "Punti Totali ATP",
-        pointsEvolution: "Evoluzione Punti", foxStats: "Le Statistiche", trophyCabinet: "Bacheca Trofei 🏆",
-        rivalries: "Rivalità Epiche ⚔️", tournaments: "Dettaglio Tornei", tournHeader: "Torneo",
+        pointsEvolution: "Evoluzione Punti", foxStats: "Le Statistiche", trophyCabinet: "Bacheca Trofei",
+        rivalries: "Rivalità Epiche", tournaments: "Dettaglio Tornei", tournHeader: "Torneo",
         defendingHeader: "Da Difendere", earnedHeader: "Guadagnati", netDiffHeader: "Differenza", 
         footerText: "Sinner Tracker - Dashboard Non Ufficiale", opponent: "Avversario", sinner: "Sinner",
-        nextMatchTitle: "Prossimo Match", serveIn: "1ª di Servizio", bpSaved: "Palle Break Salvate",
-        retWon: "Risposta Vinta", bpConv: "Break Convertiti", raceToTurin: "Corsa per Torino",
+        nextMatchTitle: "Prossimo Match", serveIn: "1ª di Servizio", bpSaved: "PB Salvate",
+        retWon: "Risposta Vinta", bpConv: "Break Conv.", raceToTurin: "Corsa per Torino",
         qualifying: "Qualificazione in corso...", qualified: "QUALIFICATO! 🎉", installApp: "Installa App",
         liveNow: "In Diretta", recentForm: "Forma", surfaceMastery: "Vittorie per Superficie",
         winsYTD: "Vittorie YTD",
@@ -265,13 +265,13 @@ function renderRadarChart(s) {
             responsive: true,
             maintainAspectRatio: false,
             layout: {
-                padding: { left: 20, right: 20, top: 15, bottom: 15 } 
+                padding: 40
             },
             scales: {
                 r: {
                     angleLines: { color: gridColor },
                     grid: { color: gridColor },
-                    pointLabels: { color: color, font: { size: 11, weight: 'bold' } },
+                    pointLabels: { color: color, font: { size: 9, weight: 'bold' } },
                     ticks: { display: false, stepSize: 20 },
                     suggestedMin: 0, suggestedMax: 100
                 }
