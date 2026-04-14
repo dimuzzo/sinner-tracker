@@ -146,50 +146,38 @@ def update_database():
         
         db['surface_mastery'] = surfaces_db
 
-        print("7/7 Syncing Tournament Roadmap...")
-        current_year = datetime.datetime.now(datetime.timezone.utc).year
-        URL_CALENDAR = f"/tennis/v2/atp/tournament/calendar/{current_year}"
-        calendar_data = api_call(URL_CALENDAR)
+        print("7/7 Syncing Tournament Roadmap (Elite Schedule)...")
+        now = datetime.datetime.now(datetime.timezone.utc)
+        current_year = now.year
+        
+        # Sinner's typical elite schedule (Slams, Masters 1000, select 500s)
+        elite_schedule = [
+            {"name": "Monte-Carlo Masters", "date": f"{current_year}-04-12T00:00:00Z", "court": "Clay", "country": "MON"},
+            {"name": "Madrid Open", "date": f"{current_year}-04-24T00:00:00Z", "court": "Clay", "country": "ESP"},
+            {"name": "Internazionali d'Italia", "date": f"{current_year}-05-08T00:00:00Z", "court": "Clay", "country": "ITA"},
+            {"name": "Roland Garros", "date": f"{current_year}-05-26T00:00:00Z", "court": "Clay", "country": "FRA"},
+            {"name": "Halle Open", "date": f"{current_year}-06-17T00:00:00Z", "court": "Grass", "country": "GER"},
+            {"name": "Wimbledon", "date": f"{current_year}-07-01T00:00:00Z", "court": "Grass", "country": "GBR"},
+            {"name": "Canadian Open", "date": f"{current_year}-08-06T00:00:00Z", "court": "Hard", "country": "CAN"},
+            {"name": "Cincinnati Open", "date": f"{current_year}-08-12T00:00:00Z", "court": "Hard", "country": "USA"},
+            {"name": "US Open", "date": f"{current_year}-08-26T00:00:00Z", "court": "Hard", "country": "USA"},
+            {"name": "China Open", "date": f"{current_year}-09-26T00:00:00Z", "court": "Hard", "country": "CHN"},
+            {"name": "Shanghai Masters", "date": f"{current_year}-10-02T00:00:00Z", "court": "Hard", "country": "CHN"},
+            {"name": "Paris Masters", "date": f"{current_year}-10-28T00:00:00Z", "court": "I.hard", "country": "FRA"},
+            {"name": "ATP Finals Turin", "date": f"{current_year}-11-10T00:00:00Z", "court": "I.hard", "country": "ITA"}
+        ]
+
         roadmap = []
-        
-        if calendar_data and isinstance(calendar_data, list):
-            future_tournaments = []
-            now = datetime.datetime.now(datetime.timezone.utc)
+        for t in elite_schedule:
+            # Parse the hardcoded date
+            t_date = datetime.datetime.strptime(t["date"][:10], "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc)
             
-            # Keywords of tournaments we NEVER want to miss
-            major_keywords = ["grand slam", "wimbledon", "roland garros", "us open", "australian open", "masters", "finals"]
-            
-            for t in calendar_data:
-                try:
-                    t_date_str = t.get('date', '')
-                    t_name = t.get('name', '').lower()
-                    
-                    if t_date_str:
-                        t_date = datetime.datetime.strptime(t_date_str[:10], "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc)
-                        
-                        # NEW FILTER LOGIC:
-                        # 1. Must be in the future
-                        # 2. EITHER has rankId >= 2 (ATP 500/1000)
-                        # 3. OR the name contains a major keyword (Safety net for Slams)
-                        is_major_name = any(key in t_name for key in major_keywords)
-                        
-                        if t_date >= now and (int(t.get('rankId', 0)) >= 2 or is_major_name):
-                            future_tournaments.append((t_date, t))
-                except Exception:
-                    continue
-                    
-            future_tournaments.sort(key=lambda x: x[0])
-            
-            # We take the next 5 events to make the roadmap look full
-            for d, t in future_tournaments[:5]:
-                roadmap.append({
-                    "name": t.get("name", "ATP Event").split('-')[0].strip(),
-                    "date": t.get("date"),
-                    "court": t.get("court", {}).get("name", "Hard"),
-                    "country": t.get("coutry", {}).get("acronym", "TBD")
-                })
-        
-        db['roadmap'] = roadmap
+            # If the tournament hasn't started yet, add it to the roadmap
+            if t_date >= now:
+                roadmap.append(t)
+                
+        # Take exactly the next 5 events
+        db['roadmap'] = roadmap[:5]
 
         # Calculate Race points automatically
         race_pts = sum(t.get('earned', 0) for t in db.get('tournaments', []))
