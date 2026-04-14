@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-14T10:15:52.816327+00:00",
+  "last_updated": "2026-04-14T10:39:51.116879+00:00",
   "ranking": 1,
   "total_points": 13350,
   "win_loss": "24 - 2",
@@ -47,19 +47,19 @@
       "name": "Carlos Alcaraz",
       "wins": 7,
       "losses": 11,
-      "country": "Spain"
+      "country": "ES"
     },
     {
       "name": "Novak Djokovic",
       "wins": 6,
       "losses": 5,
-      "country": "Serbia"
+      "country": "SR"
     },
     {
       "name": "Alexander Zverev",
       "wins": 9,
       "losses": 4,
-      "country": "Germany"
+      "country": "DE"
     }
   ],
   "trophies": [
@@ -161,5 +161,10 @@
       "result": "6-3 6-0"
     }
   ],
-  "race_points": 3900
+  "race_points": 3900,
+  "surface_mastery": {
+    "Hard": 19,
+    "Clay": 5,
+    "Grass": 0
+  }
 }
