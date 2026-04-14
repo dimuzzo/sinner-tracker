@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-14T04:48:58.680904+00:00",
+  "last_updated": "2026-04-14T10:15:52.816327+00:00",
   "ranking": 1,
   "total_points": 13350,
   "win_loss": "24 - 2",
@@ -13,7 +13,7 @@
     "opponent": "TBD",
     "tournament": "Next Tournament",
     "round": "TBD",
-    "date": "2026-04-14T10:00:00Z"
+    "date": null
   },
   "tournaments": [
     {
@@ -47,19 +47,19 @@
       "name": "Carlos Alcaraz",
       "wins": 7,
       "losses": 11,
-      "country": "\ud83c\uddea\ud83c\uddf8"
+      "country": "Spain"
     },
     {
       "name": "Novak Djokovic",
       "wins": 6,
       "losses": 5,
-      "country": "\ud83c\uddf7\ud83c\uddf8"
+      "country": "Serbia"
     },
     {
       "name": "Alexander Zverev",
       "wins": 9,
       "losses": 4,
-      "country": "\ud83c\udde9\ud83c\uddea"
+      "country": "Germany"
     }
   ],
   "trophies": [
@@ -88,5 +88,33 @@
       "year": 2026,
       "category": "Masters 1000"
     }
-  ]
+  ],
+  "recent_form": [
+    {
+      "win": true,
+      "opponent": "Carlos Alcaraz",
+      "result": "7-6(5) 6-3"
+    },
+    {
+      "win": true,
+      "opponent": "Alexander Zverev",
+      "result": "6-1 6-4"
+    },
+    {
+      "win": true,
+      "opponent": "Felix Auger Aliassime",
+      "result": "6-3 6-4"
+    },
+    {
+      "win": true,
+      "opponent": "Tomas Machac",
+      "result": "6-1 6-7(3) 6-3"
+    },
+    {
+      "win": true,
+      "opponent": "Ugo Humbert",
+      "result": "6-3 6-0"
+    }
+  ],
+  "race_points": 3900
 }
