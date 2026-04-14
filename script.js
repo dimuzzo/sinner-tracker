@@ -11,7 +11,7 @@ const translations = {
         nextMatchTitle: "Next Match", serveIn: "1st Serve In", bpSaved: "BP Saved", 
         retWon: "Return Won", bpConv: "BP Converted", raceToTurin: "Race to Turin",
         qualifying: "Qualifying...", qualified: "QUALIFIED! 🎉", installApp: "Install App",
-        liveNow: "Live Now", recentForm: "Form", surfaceMastery: "Surface Mastery (Wins YTD)",
+        liveNow: "Live Now", recentForm: "Form", surfaceMastery: "Surface Mastery (YTD)",
         winsYTD: "Wins YTD",
         roadmapTitle: "Roadmap", majorEvents: "Next Major Events",
         pigeon: "The Pigeon 🟢", nemesis: "The Nemesis 🔴"
