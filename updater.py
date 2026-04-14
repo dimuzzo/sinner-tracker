@@ -156,29 +156,37 @@ def update_database():
             future_tournaments = []
             now = datetime.datetime.now(datetime.timezone.utc)
             
+            # Keywords of tournaments we NEVER want to miss
+            major_keywords = ["grand slam", "wimbledon", "roland garros", "us open", "australian open", "masters", "finals"]
+            
             for t in calendar_data:
                 try:
                     t_date_str = t.get('date', '')
+                    t_name = t.get('name', '').lower()
+                    
                     if t_date_str:
-                        # Parse only the YYYY-MM-DD part
                         t_date = datetime.datetime.strptime(t_date_str[:10], "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc)
                         
-                        # Filter: Future tournaments AND rankId >= 2 (Includes 250s, 500s, Masters, Slams, Finals)
-                        if t_date >= now and int(t.get('rankId', 0)) >= 2:
+                        # NEW FILTER LOGIC:
+                        # 1. Must be in the future
+                        # 2. EITHER has rankId >= 2 (ATP 500/1000)
+                        # 3. OR the name contains a major keyword (Safety net for Slams)
+                        is_major_name = any(key in t_name for key in major_keywords)
+                        
+                        if t_date >= now and (int(t.get('rankId', 0)) >= 2 or is_major_name):
                             future_tournaments.append((t_date, t))
-                except Exception as e:
+                except Exception:
                     continue
                     
-            # Sort chronologically ascending
             future_tournaments.sort(key=lambda x: x[0])
             
-            # Take the next 5 events
+            # We take the next 5 events to make the roadmap look full
             for d, t in future_tournaments[:5]:
                 roadmap.append({
                     "name": t.get("name", "ATP Event").split('-')[0].strip(),
                     "date": t.get("date"),
                     "court": t.get("court", {}).get("name", "Hard"),
-                    "country": t.get("coutry", {}).get("acronym", "TBD") # Handling the API's typo
+                    "country": t.get("coutry", {}).get("acronym", "TBD")
                 })
         
         db['roadmap'] = roadmap
