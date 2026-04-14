@@ -265,13 +265,20 @@ function renderRadarChart(s) {
             responsive: true,
             maintainAspectRatio: false,
             layout: {
-                padding: 40
+                padding: 30
             },
             scales: {
                 r: {
                     angleLines: { color: gridColor },
                     grid: { color: gridColor },
-                    pointLabels: { color: color, font: { size: 9, weight: 'bold' } },
+                    pointLabels: { 
+                        color: color, 
+                        font: { 
+                            size: 10,
+                            weight: 'bold', 
+                            family: 'Montserrat' 
+                        } 
+                    },
                     ticks: { display: false, stepSize: 20 },
                     suggestedMin: 0, suggestedMax: 100
                 }
