@@ -222,11 +222,16 @@ function renderRadarChart(s) {
             }]
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: {
+                padding: { left: 20, right: 20, top: 15, bottom: 15 } 
+            },
             scales: {
                 r: {
                     angleLines: { color: gridColor },
                     grid: { color: gridColor },
-                    pointLabels: { color: color, font: { size: 12, weight: 'bold' } },
+                    pointLabels: { color: color, font: { size: 11, weight: 'bold' } },
                     ticks: { display: false, stepSize: 20 },
                     suggestedMin: 0, suggestedMax: 100
                 }
@@ -266,7 +271,9 @@ function renderDoughnutChart(surfaces) {
             }]
         },
         options: {
-            cutout: '75%', // Make it thin so the text fits nicely inside
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '75%',
             plugins: {
                 legend: {
                     position: 'bottom',
