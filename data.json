@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-14T11:21:57.614085+00:00",
+  "last_updated": "2026-04-14T11:31:42.809041+00:00",
   "ranking": 1,
   "total_points": 13350,
   "win_loss": "24 - 2",
@@ -169,22 +169,34 @@
   },
   "roadmap": [
     {
+      "name": "Japan Open Tennis Championships",
+      "date": "2026-09-28T00:00:00.000Z",
+      "court": "Hard",
+      "country": "JPN"
+    },
+    {
+      "name": "China Open",
+      "date": "2026-09-28T00:00:00.000Z",
+      "court": "Hard",
+      "country": "CHN"
+    },
+    {
       "name": "Shanghai Rolex Masters",
       "date": "2026-10-05T00:00:00.000Z",
       "court": "Hard",
       "country": "CHN"
     },
     {
-      "name": "Rolex Paris Masters",
-      "date": "2026-11-02T00:00:00.000Z",
+      "name": "Almaty Open",
+      "date": "2026-10-19T00:00:00.000Z",
       "court": "I.hard",
-      "country": "FRA"
+      "country": "KAZ"
     },
     {
-      "name": "Nitto ATP Finals",
-      "date": "2026-11-16T00:00:00.000Z",
+      "name": "European Open",
+      "date": "2026-10-19T00:00:00.000Z",
       "court": "I.hard",
-      "country": "ITA"
+      "country": "BEL"
     }
   ]
 }
