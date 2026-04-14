@@ -202,6 +202,19 @@ def update_database():
             "nemesis": nemesis
         }
 
+        print("9/9 Syncing Player Bio...")
+        bio_data = api_call(f"/tennis/v2/atp/player/profile/{SINNER_ID}")
+        if bio_data:
+            info = bio_data.get('information', {})
+            db['bio'] = {
+                "turned_pro": info.get('turnedPro', '2018'),
+                "weight": info.get('weight', '77'),
+                "height": info.get('height', '191'),
+                "birthplace": info.get('birthplace', 'San Candido, Italy'),
+                "plays": info.get('plays', 'Right-Handed'),
+                "coach": info.get('coach', 'Vagnozzi, Cahill')
+            }
+
         # Calculate Race points automatically
         race_pts = sum(t.get('earned', 0) for t in db.get('tournaments', []))
         db['race_points'] = race_pts

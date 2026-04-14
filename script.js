@@ -65,6 +65,35 @@ function toggleLanguage() {
     initDashboard(true); 
 }
 
+// --- COUNTDOWN LOGIC ---
+function updateSlamCountdown() {
+    // Roland Garros 2026 Target Date
+    const nextSlam = { name: "Roland Garros", date: "2026-05-26T10:00:00Z" };
+    const target = new Date(nextSlam.date).getTime();
+    
+    const timerFunc = () => {
+        const now = new Date().getTime();
+        const diff = target - now;
+        const container = document.getElementById('slam-countdown-container');
+
+        if (diff > 0) {
+            container.classList.remove('hidden');
+            document.getElementById('countdown-label').innerText = `Days until ${nextSlam.name}`;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            
+            document.getElementById('countdown-timer').innerText = `${days}d ${hours}h ${mins}m`;
+        } else {
+            container.classList.add('hidden');
+        }
+    };
+    
+    timerFunc();
+    setInterval(timerFunc, 60000);
+}
+
 // --- DASHBOARD CORE ---
 async function initDashboard(isRefresh = false) {
     try {
@@ -136,6 +165,15 @@ async function initDashboard(isRefresh = false) {
             }
         }
 
+        // --- PLAYER BIO LOGIC ---
+        if (data.bio) {
+            document.getElementById('bio-height').innerText = `${data.bio.height} cm`;
+            document.getElementById('bio-weight').innerText = `${data.bio.weight} kg`;
+            document.getElementById('bio-plays').innerText = data.bio.plays.split(',')[0];
+            document.getElementById('bio-pro').innerText = data.bio.turned_pro;
+            document.getElementById('bio-coach').innerText = data.bio.coach;
+        }
+
         // --- RACE TO TURIN LOGIC ---
         let racePoints = 0;
         if (data.tournaments && data.tournaments.length > 0) {
@@ -190,6 +228,8 @@ async function initDashboard(isRefresh = false) {
         }
 
         if (data.roadmap) renderRoadmap(data.roadmap);
+        
+        updateSlamCountdown();
     } catch (error) {
         console.error("Dashboard error:", error);
     }
@@ -317,8 +357,7 @@ function renderChart(tournaments, currentTotalPoints) {
     const totalNetDiff = tournaments.reduce((sum, t) => sum + (t.earned - t.defending), 0);
     
     // Reverse-engineer the exact starting points dynamically!
-    // (Fallback to BASE_POINTS if total_points is missing)
-    let runningTotal = (currentTotalPoints ? (currentTotalPoints - totalNetDiff) : BASE_POINTS);
+    let runningTotal = (currentTotalPoints ? (currentTotalPoints - totalNetDiff) : 7000);
     
     const pointsData = tournaments.map(t => { 
         runningTotal += (t.earned - t.defending); 
