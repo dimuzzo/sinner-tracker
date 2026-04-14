@@ -13,7 +13,8 @@ const translations = {
         retWon: "Return Won", bpConv: "BP Converted", raceToTurin: "Race to Turin",
         qualifying: "Qualifying...", qualified: "QUALIFIED! 🎉", installApp: "Install App",
         liveNow: "Live Now", recentForm: "Form", surfaceMastery: "Surface Mastery (Wins YTD)",
-        winsYTD: "Wins YTD"
+        winsYTD: "Wins YTD",
+        roadmapTitle: "Roadmap", majorEvents: "Next Major Events"
     },
     it: {
         rankingTitle: "Classifica ATP", winLossTitle: "Vittorie / Sconfitte", pointsTitle: "Punti Totali ATP",
@@ -25,7 +26,8 @@ const translations = {
         retWon: "Risposta Vinta", bpConv: "Break Convertiti", raceToTurin: "Corsa per Torino",
         qualifying: "Qualificazione in corso...", qualified: "QUALIFICATO! 🎉", installApp: "Installa App",
         liveNow: "In Diretta", recentForm: "Forma", surfaceMastery: "Vittorie per Superficie",
-        winsYTD: "Vittorie YTD"
+        winsYTD: "Vittorie YTD",
+        roadmapTitle: "Calendario", majorEvents: "Prossimi Grandi Eventi"
     }
 };
 
@@ -168,6 +170,8 @@ async function initDashboard(isRefresh = false) {
         
         renderTrophies(data.trophies || []);
         renderH2H(data.rivalries || []); 
+
+        if (data.roadmap) renderRoadmap(data.roadmap);
     } catch (error) {
         console.error("Dashboard error:", error);
     }
@@ -357,6 +361,54 @@ function renderH2H(rivalsData) {
             </div>
         </div>`;
     });
+    container.innerHTML = htmlContent;
+}
+
+function renderRoadmap(roadmapData) {
+    const container = document.getElementById('roadmap-container');
+    if (!container || !roadmapData || roadmapData.length === 0) return;
+    
+    let htmlContent = '';
+    
+    roadmapData.forEach((tourn, index) => {
+        // Format Date (e.g. "Oct 05")
+        const d = new Date(tourn.date);
+        const dateStr = d.toLocaleDateString(currentLang === 'en' ? 'en-US' : 'it-IT', { month: 'short', day: 'numeric' });
+        
+        // Define colors based on court type
+        let courtColor = 'bg-blue-500'; // Hard
+        let courtEmoji = '🔵';
+        if (tourn.court.toLowerCase().includes('clay')) {
+            courtColor = 'bg-orange-600';
+            courtEmoji = '🟠';
+        } else if (tourn.court.toLowerCase().includes('grass')) {
+            courtColor = 'bg-green-500';
+            courtEmoji = '🟢';
+        } else if (tourn.court.toLowerCase().includes('i.hard')) {
+            courtColor = 'bg-indigo-500';
+            courtEmoji = '🟣';
+        }
+
+        htmlContent += `
+            <div class="flex flex-row md:flex-col items-center md:text-center gap-4 group custom-hover">
+                <div class="flex-shrink-0 bg-gray-100 dark:bg-gray-800 text-sinner-black dark:text-gray-300 font-bold px-3 py-1.5 rounded-md text-sm border border-gray-200 dark:border-gray-600 shadow-sm z-10 w-20 text-center">
+                    ${dateStr}
+                </div>
+                
+                <div class="hidden md:flex w-6 h-6 rounded-full border-4 border-white dark:border-dark-card ${courtColor} shadow-md z-10 my-2 group-hover:scale-125 transition-transform"></div>
+                
+                <div class="flex flex-col flex-grow md:flex-grow-0 md:items-center bg-gray-50 dark:bg-gray-800/50 p-4 rounded-lg border border-gray-100 dark:border-gray-700 w-full shadow-sm">
+                    <span class="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1 flex items-center gap-1">
+                        ${courtEmoji} ${tourn.court} • ${tourn.country}
+                    </span>
+                    <h4 class="font-extrabold text-sm md:text-xs lg:text-sm text-sinner-black dark:text-white leading-tight">
+                        ${tourn.name}
+                    </h4>
+                </div>
+            </div>
+        `;
+    });
+    
     container.innerHTML = htmlContent;
 }
 

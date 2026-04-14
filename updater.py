@@ -146,6 +146,44 @@ def update_database():
         
         db['surface_mastery'] = surfaces_db
 
+        print("7/7 Syncing Tournament Roadmap...")
+        # Get current year dynamically
+        current_year = datetime.datetime.now(datetime.timezone.utc).year
+        URL_CALENDAR = f"/tennis/v2/atp/tournament/calendar/{current_year}"
+        calendar_data = api_call(URL_CALENDAR)
+        roadmap = []
+        
+        if calendar_data and isinstance(calendar_data, list):
+            future_tournaments = []
+            now = datetime.datetime.now(datetime.timezone.utc)
+            
+            for t in calendar_data:
+                try:
+                    t_date_str = t.get('date', '')
+                    if t_date_str:
+                        # Parse only the YYYY-MM-DD part to avoid timezone issues
+                        t_date = datetime.datetime.strptime(t_date_str[:10], "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc)
+                        
+                        # Filter: Only future tournaments AND major ones (Masters 1000, Slams, Finals have rankId >= 3)
+                        if t_date >= now and int(t.get('rankId', 0)) >= 3:
+                            future_tournaments.append((t_date, t))
+                except Exception as e:
+                    continue
+                    
+            # Sort chronologically ascending
+            future_tournaments.sort(key=lambda x: x[0])
+            
+            # Take the next 4 major events
+            for d, t in future_tournaments[:4]:
+                roadmap.append({
+                    "name": t.get("name", "ATP Event").split('-')[0].strip(), # Cleans up "Rolex Paris Masters - Paris"
+                    "date": t.get("date"),
+                    "court": t.get("court", {}).get("name", "Hard"),
+                    "country": t.get("coutry", {}).get("acronym", "TBD") # Handling the API's typo "coutry"
+                })
+        
+        db['roadmap'] = roadmap
+
         # Calculate Race points automatically
         race_pts = sum(t.get('earned', 0) for t in db.get('tournaments', []))
         db['race_points'] = race_pts
