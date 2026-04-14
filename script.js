@@ -11,7 +11,8 @@ const translations = {
         footerText: "Sinner Tracker - Unofficial Fan Dashboard", opponent: "Opponent", sinner: "Sinner",
         nextMatchTitle: "Next Match", serveIn: "1st Serve In", bpSaved: "BP Saved", 
         retWon: "Return Won", bpConv: "BP Converted", raceToTurin: "Race to Turin 🇮🇹",
-        qualifying: "Qualifying...", qualified: "QUALIFIED! 🎉", installApp: "Install App"
+        qualifying: "Qualifying...", qualified: "QUALIFIED! 🎉", installApp: "Install App",
+        liveNow: "Live Now"
     },
     it: {
         rankingTitle: "Classifica ATP", winLossTitle: "Vittorie / Sconfitte", pointsTitle: "Punti Totali ATP",
@@ -21,7 +22,8 @@ const translations = {
         footerText: "Sinner Tracker - Dashboard Non Ufficiale", opponent: "Avversario", sinner: "Sinner",
         nextMatchTitle: "Prossimo Match", serveIn: "1ª di Servizio", bpSaved: "Palle Break Salvate",
         retWon: "Risposta Vinta", bpConv: "Break Convertiti", raceToTurin: "Corsa per Torino 🇮🇹",
-        qualifying: "Qualificazione in corso...", qualified: "QUALIFICATO! 🎉", installApp: "Installa App"
+        qualifying: "Qualificazione in corso...", qualified: "QUALIFICATO! 🎉", installApp: "Installa App",
+        liveNow: "In Diretta"
     }
 };
 
@@ -62,16 +64,42 @@ async function initDashboard(isRefresh = false) {
         document.getElementById('win-loss-display').innerText = data.win_loss || '0 - 0';
         document.getElementById('total-points-display').innerText = data.total_points || '0';
         
-        // Next Match
+        // --- NEXT MATCH & LIVE LOGIC ---
         if (data.next_match) {
             document.getElementById('next-opponent-display').innerText = `vs ${data.next_match.opponent}`;
             document.getElementById('next-tournament-display').innerText = `${data.next_match.tournament} - ${data.next_match.round}`;
+            
             const matchDate = new Date(data.next_match.date);
-            const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-            document.getElementById('next-date-display').innerText = matchDate.toLocaleDateString(currentLang === 'it' ? 'it-IT' : 'en-US', options);
+            const now = new Date();
+            
+            // Assume a match lasts up to 3 hours (3 * 60 * 60 * 1000 ms)
+            const isLive = now >= matchDate && now <= new Date(matchDate.getTime() + 10800000);
+            
+            const card = document.getElementById('match-card');
+            const indicator = document.getElementById('live-indicator');
+            const titleLabel = document.getElementById('match-title-label');
+            const dateDisplay = document.getElementById('next-date-display');
+
+            if (isLive) {
+                // UI changes for LIVE state
+                card.classList.replace('border-blue-500', 'border-red-500');
+                indicator.classList.remove('hidden');
+                titleLabel.classList.add('hidden');
+                dateDisplay.innerText = translations[currentLang].liveNow;
+                dateDisplay.classList.add('text-red-400', 'font-bold');
+            } else {
+                // Reset UI for Normal state
+                card.classList.replace('border-red-500', 'border-blue-500');
+                indicator.classList.add('hidden');
+                titleLabel.classList.remove('hidden');
+                dateDisplay.classList.remove('text-red-400', 'font-bold');
+                
+                const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                dateDisplay.innerText = matchDate.toLocaleDateString(currentLang === 'it' ? 'it-IT' : 'en-US', options);
+            }
         }
 
-        // RACE TO TURIN LOGIC
+        // --- RACE TO TURIN LOGIC ---
         let racePoints = 0;
         if (data.tournaments && data.tournaments.length > 0) {
             racePoints = data.tournaments.reduce((sum, t) => sum + (t.earned || 0), 0);
@@ -242,35 +270,23 @@ let deferredPrompt;
 const installBtn = document.getElementById('install-btn');
 
 window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent the mini-infobar from appearing on mobile
     e.preventDefault();
-    // Stash the event so it can be triggered later
     deferredPrompt = e;
-    // Update UI notify the user they can install the PWA
     installBtn.classList.remove('hidden');
 });
 
 installBtn.addEventListener('click', async () => {
     if (deferredPrompt) {
-        // Show the install prompt
         deferredPrompt.prompt();
-        // Wait for the user to respond to the prompt
         const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-            console.log('User accepted the PWA install');
-        } else {
-            console.log('User dismissed the PWA install');
-        }
-        // We've used the prompt, and can't use it again, throw it away
+        console.log(`User ${outcome} the PWA install`);
         deferredPrompt = null;
         installBtn.classList.add('hidden');
     }
 });
 
 window.addEventListener('appinstalled', () => {
-    // Hide the app-provided install promotion
     installBtn.classList.add('hidden');
-    // Clear the deferredPrompt so it can be garbage collected
     deferredPrompt = null;
     console.log('PWA was installed successfully');
 });

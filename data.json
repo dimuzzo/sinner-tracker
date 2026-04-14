@@ -13,13 +13,18 @@
     "opponent": "TBD",
     "tournament": "Next Tournament",
     "round": "TBD",
-    "date": null
+    "date": "2026-04-14T10:00:00Z"
   },
   "tournaments": [
     {
       "name": "Australian Open",
       "defending": 2000,
       "earned": 800
+    },
+    {
+      "name": "Doha",
+      "defending": 0,
+      "earned": 100
     },
     {
       "name": "Indian Wells",
