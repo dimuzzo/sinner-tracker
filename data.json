@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-14T10:39:51.116879+00:00",
+  "last_updated": "2026-04-14T11:21:57.614085+00:00",
   "ranking": 1,
   "total_points": 13350,
   "win_loss": "24 - 2",
@@ -166,5 +166,25 @@
     "Hard": 19,
     "Clay": 5,
     "Grass": 0
-  }
+  },
+  "roadmap": [
+    {
+      "name": "Shanghai Rolex Masters",
+      "date": "2026-10-05T00:00:00.000Z",
+      "court": "Hard",
+      "country": "CHN"
+    },
+    {
+      "name": "Rolex Paris Masters",
+      "date": "2026-11-02T00:00:00.000Z",
+      "court": "I.hard",
+      "country": "FRA"
+    },
+    {
+      "name": "Nitto ATP Finals",
+      "date": "2026-11-16T00:00:00.000Z",
+      "court": "I.hard",
+      "country": "ITA"
+    }
+  ]
 }
