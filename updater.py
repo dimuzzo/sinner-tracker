@@ -9,7 +9,7 @@ HOST = "tennis-api-atp-wta-itf.p.rapidapi.com"
 HEADERS = {
     'X-RapidAPI-Key': API_KEY,
     'X-RapidAPI-Host': HOST,
-    'User-Agent': 'SinnerTrackerBot/7.0'
+    'User-Agent': 'SinnerTrackerBot/8.0'
 }
 
 # Matchstat IDs
@@ -47,9 +47,8 @@ def update_database():
         db = {"tournaments": [], "trophies": []}
 
     try:
-        print("1/4 Syncing Ranking & ATP Points...")
+        print("1/5 Syncing Ranking & ATP Points...")
         URL_RANKING = "/tennis/v2/atp/ranking/singles/"
-        
         rankings = api_call(URL_RANKING)
         if rankings:
             for r in rankings:
@@ -58,7 +57,7 @@ def update_database():
                     db['total_points'] = r.get('point', db.get('total_points'))
                     break
 
-        print("2/4 Syncing Win/Loss & Fox Stats...")
+        print("2/5 Syncing Win/Loss & Fox Stats...")
         stats_data = api_call(f"/tennis/v2/atp/player/match-stats/{SINNER_ID}")
         if stats_data:
             serv = stats_data.get('serviceStats', {})
@@ -73,9 +72,8 @@ def update_database():
                 "break_points_converted": calculate_pct(bpr.get('breakPointWonGm'), bpr.get('breakPointChanceGm'))
             }
 
-        print("3/4 Syncing Next Match...")
+        print("3/5 Syncing Next Match...")
         URL_FIXTURES = f"/tennis/v2/atp/fixtures/player/{SINNER_ID}"
-        
         fixtures = api_call(URL_FIXTURES)
         if fixtures and len(fixtures) > 0:
             next_m = fixtures[0]
@@ -86,12 +84,11 @@ def update_database():
                 "date": next_m.get('date', '2026-04-24T15:00:00Z')
             }
 
-        print("4/4 Syncing H2H...")
+        print("4/5 Syncing H2H...")
         new_rivalries = []
         for name, r_id in RIVALS.items():
             URL_H2H = f"/tennis/v2/atp/h2h/info/{SINNER_ID}/{r_id}"
             h2h = api_call(URL_H2H)
-            
             p1_wins = 0
             p2_wins = 0
             
@@ -104,13 +101,37 @@ def update_database():
                 "name": name,
                 "wins": p1_wins,
                 "losses": p2_wins,
-                "country": "🇪🇸" if "Alcaraz" in name else "🇷🇸" if "Djokovic" in name else "🇩🇪" if "Zverev" in name else "🏳️"
+                "country": "Spain" if "Alcaraz" in name else "Serbia" if "Djokovic" in name else "Germany" if "Zverev" in name else "🏳️"
             })
             
         if new_rivalries:
             db['rivalries'] = new_rivalries
 
-        # NEW: Automatically calculate Race points from the tournaments array
+        print("5/5 Syncing Recent Form...")
+        # Fetch past matches for the recent form indicator
+        past_matches = api_call(f"/tennis/v2/atp/player/past-matches/{SINNER_ID}")
+        recent_form = []
+        if past_matches and isinstance(past_matches, list):
+            # Take only the first 5 matches (most recent)
+            for m in past_matches[:5]:
+                p1 = m.get("player1", {})
+                p2 = m.get("player2", {})
+                
+                # Determine opponent name dynamically
+                opponent = p2.get("name") if p1.get("id") == SINNER_ID else p1.get("name")
+                
+                # Check if Sinner won
+                is_win = str(m.get("match_winner")) == str(SINNER_ID)
+                
+                recent_form.append({
+                    "win": is_win,
+                    "opponent": opponent,
+                    "result": m.get("result", "")
+                })
+        
+        db['recent_form'] = recent_form
+
+        # Calculate Race points automatically
         race_pts = sum(t.get('earned', 0) for t in db.get('tournaments', []))
         db['race_points'] = race_pts
 

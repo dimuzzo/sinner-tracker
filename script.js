@@ -10,9 +10,9 @@ const translations = {
         defendingHeader: "Defending", earnedHeader: "Earned", netDiffHeader: "Net Diff", 
         footerText: "Sinner Tracker - Unofficial Fan Dashboard", opponent: "Opponent", sinner: "Sinner",
         nextMatchTitle: "Next Match", serveIn: "1st Serve In", bpSaved: "BP Saved", 
-        retWon: "Return Won", bpConv: "BP Converted", raceToTurin: "Race to Turin 🇮🇹",
+        retWon: "Return Won", bpConv: "BP Converted", raceToTurin: "Race to Turin",
         qualifying: "Qualifying...", qualified: "QUALIFIED! 🎉", installApp: "Install App",
-        liveNow: "Live Now"
+        liveNow: "Live Now", recentForm: "Form"
     },
     it: {
         rankingTitle: "Classifica ATP", winLossTitle: "Vittorie / Sconfitte", pointsTitle: "Punti Totali ATP",
@@ -21,9 +21,9 @@ const translations = {
         defendingHeader: "Da Difendere", earnedHeader: "Guadagnati", netDiffHeader: "Differenza", 
         footerText: "Sinner Tracker - Dashboard Non Ufficiale", opponent: "Avversario", sinner: "Sinner",
         nextMatchTitle: "Prossimo Match", serveIn: "1ª di Servizio", bpSaved: "Palle Break Salvate",
-        retWon: "Risposta Vinta", bpConv: "Break Convertiti", raceToTurin: "Corsa per Torino 🇮🇹",
+        retWon: "Risposta Vinta", bpConv: "Break Convertiti", raceToTurin: "Corsa per Torino",
         qualifying: "Qualificazione in corso...", qualified: "QUALIFICATO! 🎉", installApp: "Installa App",
-        liveNow: "In Diretta"
+        liveNow: "In Diretta", recentForm: "Forma"
     }
 };
 
@@ -63,6 +63,32 @@ async function initDashboard(isRefresh = false) {
         document.getElementById('ranking-display').innerText = `#${data.ranking || '1'} 👑`;
         document.getElementById('win-loss-display').innerText = data.win_loss || '0 - 0';
         document.getElementById('total-points-display').innerText = data.total_points || '0';
+        
+        // --- RECENT FORM LOGIC ---
+        if (data.recent_form && data.recent_form.length > 0) {
+            const formContainer = document.getElementById('recent-form-display');
+            let htmlContent = '';
+            
+            // Reverse the array if you want the newest match on the right
+            // or keep it to show newest on the left. The API usually sends newest first.
+            data.recent_form.forEach(match => {
+                const colorClass = match.win ? 'bg-sinner-green' : 'bg-red-500';
+                const letter = match.win ? 'W' : 'L';
+                
+                // Tailwind tooltips using 'group' and 'group-hover'
+                htmlContent += `
+                    <div class="relative group cursor-pointer flex items-center justify-center w-6 h-6 rounded-full text-white text-[10px] font-black ${colorClass}">
+                        ${letter}
+                        <div class="absolute bottom-full mb-2 hidden group-hover:block w-max bg-sinner-black text-white text-xs p-2.5 rounded-md shadow-lg z-10 pointer-events-none">
+                            <span class="font-bold">${match.opponent}</span> <br> 
+                            <span class="text-gray-400 text-[10px]">${match.result}</span>
+                            <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 border-4 border-transparent border-t-sinner-black"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            formContainer.innerHTML = htmlContent;
+        }
         
         // --- NEXT MATCH & LIVE LOGIC ---
         if (data.next_match) {
