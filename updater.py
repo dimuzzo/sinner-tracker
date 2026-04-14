@@ -9,7 +9,7 @@ HOST = "tennis-api-atp-wta-itf.p.rapidapi.com"
 HEADERS = {
     'X-RapidAPI-Key': API_KEY,
     'X-RapidAPI-Host': HOST,
-    'User-Agent': 'SinnerTrackerBot/6.0'
+    'User-Agent': 'SinnerTrackerBot/7.0'
 }
 
 # Matchstat IDs
@@ -59,7 +59,6 @@ def update_database():
                     break
 
         print("2/4 Syncing Win/Loss & Fox Stats...")
-        # This one is perfect and confirmed working!
         stats_data = api_call(f"/tennis/v2/atp/player/match-stats/{SINNER_ID}")
         if stats_data:
             serv = stats_data.get('serviceStats', {})
@@ -91,15 +90,13 @@ def update_database():
         new_rivalries = []
         for name, r_id in RIVALS.items():
             URL_H2H = f"/tennis/v2/atp/h2h/info/{SINNER_ID}/{r_id}"
-            h2h_data = api_call(URL_H2H)
+            h2h = api_call(URL_H2H)
             
             p1_wins = 0
             p2_wins = 0
             
-            # The API returns a list of surfaces, we need to sum them up
-            if h2h_data and isinstance(h2h_data, list):
-                for surface in h2h_data:
-                    # We use int() because the API returns numbers as strings (e.g. "2")
+            if h2h and isinstance(h2h, list):
+                for surface in h2h:
                     p1_wins += int(surface.get('player1wins', 0))
                     p2_wins += int(surface.get('player2wins', 0))
 
@@ -112,6 +109,10 @@ def update_database():
             
         if new_rivalries:
             db['rivalries'] = new_rivalries
+
+        # NEW: Automatically calculate Race points from the tournaments array
+        race_pts = sum(t.get('earned', 0) for t in db.get('tournaments', []))
+        db['race_points'] = race_pts
 
         db['last_updated'] = datetime.datetime.now(datetime.timezone.utc).isoformat()
         with open('data.json', 'w') as f:

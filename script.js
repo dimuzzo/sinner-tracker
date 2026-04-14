@@ -1,4 +1,5 @@
 const BASE_POINTS = 7000;
+const QUALIFICATION_POINTS = 7200; // ATP Finals threshold
 let currentLang = 'en';
 
 const translations = {
@@ -9,7 +10,8 @@ const translations = {
         defendingHeader: "Defending", earnedHeader: "Earned", netDiffHeader: "Net Diff", 
         footerText: "Sinner Tracker - Unofficial Fan Dashboard", opponent: "Opponent", sinner: "Sinner",
         nextMatchTitle: "Next Match", serveIn: "1st Serve In", bpSaved: "BP Saved", 
-        retWon: "Return Won", bpConv: "BP Converted"
+        retWon: "Return Won", bpConv: "BP Converted", raceToTurin: "Race to Turin 🇮🇹",
+        qualifying: "Qualifying...", qualified: "QUALIFIED! 🎉"
     },
     it: {
         rankingTitle: "Classifica ATP", winLossTitle: "Vittorie / Sconfitte", pointsTitle: "Punti Totali ATP",
@@ -18,7 +20,8 @@ const translations = {
         defendingHeader: "Da Difendere", earnedHeader: "Guadagnati", netDiffHeader: "Differenza", 
         footerText: "Sinner Tracker - Dashboard Non Ufficiale", opponent: "Avversario", sinner: "Sinner",
         nextMatchTitle: "Prossimo Match", serveIn: "1ª di Servizio", bpSaved: "Palle Break Salvate",
-        retWon: "Risposta Vinta", bpConv: "Break Convertiti"
+        retWon: "Risposta Vinta", bpConv: "Break Convertiti", raceToTurin: "Corsa per Torino 🇮🇹",
+        qualifying: "Qualificazione in corso...", qualified: "QUALIFICATO! 🎉"
     }
 };
 
@@ -44,6 +47,7 @@ function toggleLanguage() {
         const key = el.getAttribute('data-i18n');
         if (translations[currentLang][key]) el.innerText = translations[currentLang][key];
     });
+    // Update race status translation
     initDashboard(true); 
 }
 
@@ -66,6 +70,35 @@ async function initDashboard(isRefresh = false) {
             const matchDate = new Date(data.next_match.date);
             const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
             document.getElementById('next-date-display').innerText = matchDate.toLocaleDateString(currentLang === 'it' ? 'it-IT' : 'en-US', options);
+        }
+
+        // RACE TO TURIN LOGIC
+        let racePoints = 0;
+        if (data.tournaments && data.tournaments.length > 0) {
+            // Calculate race points dynamically from the 2026 tournaments array
+            racePoints = data.tournaments.reduce((sum, t) => sum + (t.earned || 0), 0);
+        }
+        // Fallback to explicit race_points in json if provided by python
+        racePoints = data.race_points || racePoints;
+
+        document.getElementById('race-points-display').innerText = racePoints;
+        const racePct = Math.min((racePoints / QUALIFICATION_POINTS) * 100, 100).toFixed(1);
+        document.getElementById('race-pct-display').innerText = racePct + '%';
+        
+        // Timeout to allow CSS transition to play smoothly
+        setTimeout(() => {
+            document.getElementById('bar-race').style.width = racePct + '%';
+        }, 100);
+
+        const statusEl = document.getElementById('race-status');
+        if (racePoints >= QUALIFICATION_POINTS) {
+            statusEl.innerText = translations[currentLang].qualified;
+            statusEl.classList.add('text-sinner-green');
+            statusEl.classList.remove('text-gray-400', 'dark:text-gray-500');
+        } else {
+            statusEl.innerText = translations[currentLang].qualifying;
+            statusEl.classList.remove('text-sinner-green');
+            statusEl.classList.add('text-gray-400', 'dark:text-gray-500');
         }
 
         if (data.tournaments) {
