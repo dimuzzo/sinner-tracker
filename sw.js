@@ -1,11 +1,14 @@
-const CACHE_NAME = 'sinner-tracker-v4';
+const CACHE_NAME = 'sinner-tracker-v5';
 const DATA_TO_CACHE = [
   '/sinner-tracker/',
   '/sinner-tracker/index.html',
   '/sinner-tracker/style.css',
   '/sinner-tracker/script.js',
   '/sinner-tracker/data.json',
-  '/sinner-tracker/manifest.json'
+  '/sinner-tracker/manifest.json',
+  '/sinner-tracker/assets/icon-192.png',
+  '/sinner-tracker/assets/icon-512.png',
+  '/sinner-tracker/assets/social-cover.png'
 ];
 
 self.addEventListener('install', event => {
