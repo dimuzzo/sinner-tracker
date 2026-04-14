@@ -9,7 +9,7 @@ HOST = "tennis-api-atp-wta-itf.p.rapidapi.com"
 HEADERS = {
     'X-RapidAPI-Key': API_KEY,
     'X-RapidAPI-Host': HOST,
-    'User-Agent': 'SinnerTrackerBot/8.0'
+    'User-Agent': 'SinnerTrackerBot/9.0'
 }
 
 # Matchstat IDs
@@ -47,7 +47,7 @@ def update_database():
         db = {"tournaments": [], "trophies": []}
 
     try:
-        print("1/5 Syncing Ranking & ATP Points...")
+        print("1/6 Syncing Ranking & ATP Points...")
         URL_RANKING = "/tennis/v2/atp/ranking/singles/"
         rankings = api_call(URL_RANKING)
         if rankings:
@@ -57,7 +57,7 @@ def update_database():
                     db['total_points'] = r.get('point', db.get('total_points'))
                     break
 
-        print("2/5 Syncing Win/Loss & Fox Stats...")
+        print("2/6 Syncing Win/Loss & Fox Stats...")
         stats_data = api_call(f"/tennis/v2/atp/player/match-stats/{SINNER_ID}")
         if stats_data:
             serv = stats_data.get('serviceStats', {})
@@ -72,7 +72,7 @@ def update_database():
                 "break_points_converted": calculate_pct(bpr.get('breakPointWonGm'), bpr.get('breakPointChanceGm'))
             }
 
-        print("3/5 Syncing Next Match...")
+        print("3/6 Syncing Next Match...")
         URL_FIXTURES = f"/tennis/v2/atp/fixtures/player/{SINNER_ID}"
         fixtures = api_call(URL_FIXTURES)
         if fixtures and len(fixtures) > 0:
@@ -84,7 +84,7 @@ def update_database():
                 "date": next_m.get('date', '2026-04-24T15:00:00Z')
             }
 
-        print("4/5 Syncing H2H...")
+        print("4/6 Syncing H2H...")
         new_rivalries = []
         for name, r_id in RIVALS.items():
             URL_H2H = f"/tennis/v2/atp/h2h/info/{SINNER_ID}/{r_id}"
@@ -101,35 +101,50 @@ def update_database():
                 "name": name,
                 "wins": p1_wins,
                 "losses": p2_wins,
-                "country": "Spain" if "Alcaraz" in name else "Serbia" if "Djokovic" in name else "Germany" if "Zverev" in name else "🏳️"
+                "country": "ES" if "Alcaraz" in name else "SR" if "Djokovic" in name else "DE" if "Zverev" in name else "🏳️"
             })
             
         if new_rivalries:
             db['rivalries'] = new_rivalries
 
-        print("5/5 Syncing Recent Form...")
-        # Fetch past matches for the recent form indicator
+        print("5/6 Syncing Recent Form...")
         past_matches = api_call(f"/tennis/v2/atp/player/past-matches/{SINNER_ID}")
         recent_form = []
         if past_matches and isinstance(past_matches, list):
-            # Take only the first 5 matches (most recent)
             for m in past_matches[:5]:
                 p1 = m.get("player1", {})
                 p2 = m.get("player2", {})
-                
-                # Determine opponent name dynamically
                 opponent = p2.get("name") if p1.get("id") == SINNER_ID else p1.get("name")
-                
-                # Check if Sinner won
                 is_win = str(m.get("match_winner")) == str(SINNER_ID)
-                
                 recent_form.append({
                     "win": is_win,
                     "opponent": opponent,
                     "result": m.get("result", "")
                 })
-        
         db['recent_form'] = recent_form
+
+        print("6/6 Syncing Surface Mastery...")
+        # NEW: Fetch surface summary
+        surface_data = api_call(f"/tennis/v2/atp/player/surface-summary/{SINNER_ID}")
+        surfaces_db = {"Hard": 0, "Clay": 0, "Grass": 0}
+        
+        if surface_data and isinstance(surface_data, list) and len(surface_data) > 0:
+            # We take the most recent year (index 0) to match YTD stats
+            current_year_data = surface_data[0].get('surfaces', [])
+            
+            for s in current_year_data:
+                name = s.get("court", "")
+                wins = int(s.get("courtWins", 0))
+                
+                # Combine Hard and Indoor Hard
+                if "hard" in name.lower():
+                    surfaces_db["Hard"] += wins
+                elif "clay" in name.lower():
+                    surfaces_db["Clay"] += wins
+                elif "grass" in name.lower():
+                    surfaces_db["Grass"] += wins
+        
+        db['surface_mastery'] = surfaces_db
 
         # Calculate Race points automatically
         race_pts = sum(t.get('earned', 0) for t in db.get('tournaments', []))

@@ -69,13 +69,38 @@
       "category": "Grand Slam"
     },
     {
+      "title": "Australian Open",
+      "year": 2025,
+      "category": "Grand Slam"
+    },
+    {
+      "title": "Wimbledon",
+      "year": 2025,
+      "category": "Grand Slam"
+    },
+    {
       "title": "US Open",
       "year": 2024,
       "category": "Grand Slam"
     },
     {
-      "title": "Indian Wells",
+      "title": "Nitto ATP Finals",
+      "year": 2024,
+      "category": "ATP Finals"
+    },
+    {
+      "title": "Nitto ATP Finals",
+      "year": 2025,
+      "category": "ATP Finals"
+    },
+    {
+      "title": "Indian Wells Open",
       "year": 2026,
+      "category": "Masters 1000"
+    },
+    {
+      "title": "Miami Open",
+      "year": 2024,
       "category": "Masters 1000"
     },
     {
@@ -84,8 +109,28 @@
       "category": "Masters 1000"
     },
     {
-      "title": "Monte-Carlo",
+      "title": "Monte-Carlo Masters",
       "year": 2026,
+      "category": "Masters 1000"
+    },
+    {
+      "title": "Canada Open",
+      "year": 2023,
+      "category": "Masters 1000"
+    },
+    {
+      "title": "Cincinnati Open",
+      "year": 2024,
+      "category": "Masters 1000"
+    },
+    {
+      "title": "Shangai Masters",
+      "year": 2024,
+      "category": "Masters 1000"
+    },
+    {
+      "title": "Paris Masters",
+      "year": 2025,
       "category": "Masters 1000"
     }
   ],

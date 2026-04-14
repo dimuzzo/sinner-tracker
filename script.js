@@ -12,7 +12,8 @@ const translations = {
         nextMatchTitle: "Next Match", serveIn: "1st Serve In", bpSaved: "BP Saved", 
         retWon: "Return Won", bpConv: "BP Converted", raceToTurin: "Race to Turin",
         qualifying: "Qualifying...", qualified: "QUALIFIED! 🎉", installApp: "Install App",
-        liveNow: "Live Now", recentForm: "Form"
+        liveNow: "Live Now", recentForm: "Form", surfaceMastery: "Surface Mastery (Wins YTD)",
+        winsYTD: "Wins YTD"
     },
     it: {
         rankingTitle: "Classifica ATP", winLossTitle: "Vittorie / Sconfitte", pointsTitle: "Punti Totali ATP",
@@ -23,7 +24,8 @@ const translations = {
         nextMatchTitle: "Prossimo Match", serveIn: "1ª di Servizio", bpSaved: "Palle Break Salvate",
         retWon: "Risposta Vinta", bpConv: "Break Convertiti", raceToTurin: "Corsa per Torino",
         qualifying: "Qualificazione in corso...", qualified: "QUALIFICATO! 🎉", installApp: "Installa App",
-        liveNow: "In Diretta", recentForm: "Forma"
+        liveNow: "In Diretta", recentForm: "Forma", surfaceMastery: "Vittorie per Superficie",
+        winsYTD: "Vittorie YTD"
     }
 };
 
@@ -67,27 +69,24 @@ async function initDashboard(isRefresh = false) {
         // --- RECENT FORM LOGIC ---
         if (data.recent_form && data.recent_form.length > 0) {
             const formContainer = document.getElementById('recent-form-display');
-            let htmlContent = '';
-            
-            // Reverse the array if you want the newest match on the right
-            // or keep it to show newest on the left. The API usually sends newest first.
-            data.recent_form.forEach(match => {
-                const colorClass = match.win ? 'bg-sinner-green' : 'bg-red-500';
-                const letter = match.win ? 'W' : 'L';
-                
-                // Tailwind tooltips using 'group' and 'group-hover'
-                htmlContent += `
-                    <div class="relative group cursor-pointer flex items-center justify-center w-6 h-6 rounded-full text-white text-[10px] font-black ${colorClass}">
-                        ${letter}
-                        <div class="absolute bottom-full mb-2 hidden group-hover:block w-max bg-sinner-black text-white text-xs p-2.5 rounded-md shadow-lg z-10 pointer-events-none">
-                            <span class="font-bold">${match.opponent}</span> <br> 
-                            <span class="text-gray-400 text-[10px]">${match.result}</span>
-                            <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 border-4 border-transparent border-t-sinner-black"></div>
+            if (formContainer) { 
+                let htmlContent = '';
+                data.recent_form.forEach(match => {
+                    const colorClass = match.win ? 'bg-sinner-green' : 'bg-red-500';
+                    const letter = match.win ? 'W' : 'L';
+                    htmlContent += `
+                        <div class="relative group cursor-pointer flex items-center justify-center w-6 h-6 rounded-full text-white text-[10px] font-black ${colorClass}">
+                            ${letter}
+                            <div class="absolute bottom-full mb-2 hidden group-hover:block w-max bg-sinner-black text-white text-xs p-2.5 rounded-md shadow-lg z-10 pointer-events-none">
+                                <span class="font-bold">${match.opponent}</span> <br> 
+                                <span class="text-gray-400 text-[10px]">${match.result}</span>
+                                <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 border-4 border-transparent border-t-sinner-black"></div>
+                            </div>
                         </div>
-                    </div>
-                `;
-            });
-            formContainer.innerHTML = htmlContent;
+                    `;
+                });
+                formContainer.innerHTML = htmlContent;
+            }
         }
         
         // --- NEXT MATCH & LIVE LOGIC ---
@@ -98,7 +97,6 @@ async function initDashboard(isRefresh = false) {
             const matchDate = new Date(data.next_match.date);
             const now = new Date();
             
-            // Assume a match lasts up to 3 hours (3 * 60 * 60 * 1000 ms)
             const isLive = now >= matchDate && now <= new Date(matchDate.getTime() + 10800000);
             
             const card = document.getElementById('match-card');
@@ -107,21 +105,23 @@ async function initDashboard(isRefresh = false) {
             const dateDisplay = document.getElementById('next-date-display');
 
             if (isLive) {
-                // UI changes for LIVE state
                 card.classList.replace('border-blue-500', 'border-red-500');
                 indicator.classList.remove('hidden');
                 titleLabel.classList.add('hidden');
                 dateDisplay.innerText = translations[currentLang].liveNow;
                 dateDisplay.classList.add('text-red-400', 'font-bold');
             } else {
-                // Reset UI for Normal state
                 card.classList.replace('border-red-500', 'border-blue-500');
                 indicator.classList.add('hidden');
                 titleLabel.classList.remove('hidden');
                 dateDisplay.classList.remove('text-red-400', 'font-bold');
                 
                 const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-                dateDisplay.innerText = matchDate.toLocaleDateString(currentLang === 'it' ? 'it-IT' : 'en-US', options);
+                if (data.next_match.date) {
+                    dateDisplay.innerText = matchDate.toLocaleDateString(currentLang === 'it' ? 'it-IT' : 'en-US', options);
+                } else {
+                    dateDisplay.innerText = "";
+                }
             }
         }
 
@@ -137,18 +137,21 @@ async function initDashboard(isRefresh = false) {
         document.getElementById('race-pct-display').innerText = racePct + '%';
         
         setTimeout(() => {
-            document.getElementById('bar-race').style.width = racePct + '%';
+            const bar = document.getElementById('bar-race');
+            if(bar) bar.style.width = racePct + '%';
         }, 100);
 
         const statusEl = document.getElementById('race-status');
-        if (racePoints >= QUALIFICATION_POINTS) {
-            statusEl.innerText = translations[currentLang].qualified;
-            statusEl.classList.add('text-sinner-green');
-            statusEl.classList.remove('text-gray-400', 'dark:text-gray-500');
-        } else {
-            statusEl.innerText = translations[currentLang].qualifying;
-            statusEl.classList.remove('text-sinner-green');
-            statusEl.classList.add('text-gray-400', 'dark:text-gray-500');
+        if (statusEl) {
+            if (racePoints >= QUALIFICATION_POINTS) {
+                statusEl.innerText = translations[currentLang].qualified;
+                statusEl.classList.add('text-sinner-green');
+                statusEl.classList.remove('text-gray-400', 'dark:text-gray-500');
+            } else {
+                statusEl.innerText = translations[currentLang].qualifying;
+                statusEl.classList.remove('text-sinner-green');
+                statusEl.classList.add('text-gray-400', 'dark:text-gray-500');
+            }
         }
 
         if (data.tournaments) {
@@ -158,6 +161,11 @@ async function initDashboard(isRefresh = false) {
         
         if (data.stats) renderRadarChart(data.stats);
         
+        // --- SURFACE MASTERY LOGIC ---
+        if (data.surface_mastery) {
+            renderDoughnutChart(data.surface_mastery);
+        }
+        
         renderTrophies(data.trophies || []);
         renderH2H(data.rivalries || []); 
     } catch (error) {
@@ -166,7 +174,9 @@ async function initDashboard(isRefresh = false) {
 }
 
 function renderRadarChart(s) {
-    const ctx = document.getElementById('radarChart').getContext('2d');
+    const ctxEl = document.getElementById('radarChart');
+    if(!ctxEl) return;
+    const ctx = ctxEl.getContext('2d');
     const isDark = document.documentElement.classList.contains('dark');
     const color = isDark ? '#94a3b8' : '#64748b';
     const gridColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
@@ -204,6 +214,52 @@ function renderRadarChart(s) {
     });
 }
 
+function renderDoughnutChart(surfaces) {
+    const ctxEl = document.getElementById('doughnutChart');
+    if(!ctxEl) return;
+    
+    // Update center text (Total Wins)
+    const totalWins = (surfaces.Hard || 0) + (surfaces.Clay || 0) + (surfaces.Grass || 0);
+    const centerText = document.getElementById('total-wins-center');
+    if(centerText) centerText.innerText = totalWins;
+
+    const ctx = ctxEl.getContext('2d');
+    const isDark = document.documentElement.classList.contains('dark');
+
+    if (window.sinnerDoughnut) window.sinnerDoughnut.destroy();
+    window.sinnerDoughnut = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Hard', 'Clay', 'Grass'],
+            datasets: [{
+                data: [surfaces.Hard || 0, surfaces.Clay || 0, surfaces.Grass || 0],
+                backgroundColor: [
+                    '#3b82f6', // Blue for Hard
+                    '#ea580c', // Dark Orange for Clay
+                    '#22c55e'  // Green for Grass
+                ],
+                borderWidth: isDark ? 2 : 0,
+                borderColor: isDark ? '#1e293b' : '#ffffff', // Match dark-card background
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            cutout: '75%', // Make it thin so the text fits nicely inside
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: isDark ? '#94a3b8' : '#64748b',
+                        padding: 20,
+                        usePointStyle: true,
+                        pointStyle: 'circle'
+                    }
+                }
+            }
+        }
+    });
+}
+
 function renderTableAndPoints(tournaments) {
     const tableBody = document.getElementById('tournament-data');
     if (!tableBody) return;
@@ -222,7 +278,9 @@ function renderTableAndPoints(tournaments) {
 }
 
 function renderChart(tournaments) {
-    const ctx = document.getElementById('pointsChart').getContext('2d');
+    const ctxEl = document.getElementById('pointsChart');
+    if(!ctxEl) return;
+    const ctx = ctxEl.getContext('2d');
     const isDark = document.documentElement.classList.contains('dark');
     const labels = tournaments.map(t => t.name);
     let runningTotal = BASE_POINTS;
@@ -255,14 +313,30 @@ function renderTrophies(trophiesData) {
     const cabinet = document.getElementById('trophy-cabinet');
     if (!cabinet) return;
     let htmlContent = '';
+    
     trophiesData.forEach(t => {
-        let style = t.category === "Grand Slam" ? "bg-gradient-to-br from-yellow-50 to-orange-100 dark:from-yellow-900/20 dark:to-orange-900/20 border-yellow-400" : "bg-white dark:bg-dark-card border-sinner-black dark:border-gray-600";
+        // Default style for Masters 1000, ATP 500, etc.
+        let style = "bg-white dark:bg-dark-card border-sinner-black dark:border-gray-600";
+        let icon = '🏆';
+
+        // Special style for Grand Slams
+        if (t.category === "Grand Slam") {
+            style = "bg-gradient-to-br from-yellow-50 to-orange-100 dark:from-yellow-900/20 dark:to-orange-900/20 border-yellow-400";
+            icon = '👑';
+        } 
+        // Special style for ATP Finals
+        else if (t.category === "ATP Finals") {
+            style = "bg-gradient-to-br from-blue-50 to-cyan-100 dark:from-blue-900/20 dark:to-cyan-900/20 border-turin-blue";
+            icon = '💎'; 
+        }
+
         htmlContent += `<div class="p-5 rounded-xl shadow-md border-b-4 text-center ${style} transition hover:-translate-y-1">
-            <div class="text-4xl mb-3">${t.category === "Grand Slam" ? '👑' : '🏆'}</div>
+            <div class="text-4xl mb-3">${icon}</div>
             <h4 class="font-bold text-sm mb-1">${t.title}</h4>
             <p class="text-sinner-orange font-black">${t.year}</p>
         </div>`;
     });
+    
     cabinet.innerHTML = htmlContent;
 }
 
@@ -295,24 +369,26 @@ document.addEventListener('DOMContentLoaded', () => {
 let deferredPrompt;
 const installBtn = document.getElementById('install-btn');
 
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    installBtn.classList.remove('hidden');
-});
+if(installBtn) {
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.classList.remove('hidden');
+    });
 
-installBtn.addEventListener('click', async () => {
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log(`User ${outcome} the PWA install`);
-        deferredPrompt = null;
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User ${outcome} the PWA install`);
+            deferredPrompt = null;
+            installBtn.classList.add('hidden');
+        }
+    });
+
+    window.addEventListener('appinstalled', () => {
         installBtn.classList.add('hidden');
-    }
-});
-
-window.addEventListener('appinstalled', () => {
-    installBtn.classList.add('hidden');
-    deferredPrompt = null;
-    console.log('PWA was installed successfully');
-});
+        deferredPrompt = null;
+        console.log('PWA was installed successfully');
+    });
+}
