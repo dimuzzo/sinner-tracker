@@ -13,7 +13,8 @@ const translations = {
         qualifying: "Qualifying...", qualified: "QUALIFIED! 🎉", installApp: "Install App",
         liveNow: "Live Now", recentForm: "Form", surfaceMastery: "Surface Mastery (Wins YTD)",
         winsYTD: "Wins YTD",
-        roadmapTitle: "Roadmap", majorEvents: "Next Major Events"
+        roadmapTitle: "Roadmap", majorEvents: "Next Major Events",
+        pigeon: "The Pigeon 🟢", nemesis: "The Nemesis 🔴"
     },
     it: {
         rankingTitle: "Classifica ATP", winLossTitle: "Vittorie / Sconfitte", pointsTitle: "Punti Totali ATP",
@@ -26,7 +27,8 @@ const translations = {
         qualifying: "Qualificazione in corso...", qualified: "QUALIFICATO! 🎉", installApp: "Installa App",
         liveNow: "In Diretta", recentForm: "Forma", surfaceMastery: "Vittorie per Superficie",
         winsYTD: "Vittorie YTD",
-        roadmapTitle: "Calendario", majorEvents: "Prossimi Grandi Eventi"
+        roadmapTitle: "Calendario", majorEvents: "Prossimi Grandi Eventi",
+        pigeon: "Il Figlioccio 🟢", nemesis: "La Bestia Nera 🔴"
     }
 };
 
@@ -177,6 +179,15 @@ async function initDashboard(isRefresh = false) {
         
         renderTrophies(data.trophies || []);
         renderH2H(data.rivalries || []); 
+
+        // --- SPECIAL H2H LOGIC ---
+        if (data.special_h2h) {
+            document.getElementById('pigeon-name').innerText = data.special_h2h.pigeon.name;
+            document.getElementById('pigeon-score').innerText = `${data.special_h2h.pigeon.wins} - ${data.special_h2h.pigeon.losses}`;
+            
+            document.getElementById('nemesis-name').innerText = data.special_h2h.nemesis.name;
+            document.getElementById('nemesis-score').innerText = `${data.special_h2h.nemesis.wins} - ${data.special_h2h.nemesis.losses}`;
+        }
 
         if (data.roadmap) renderRoadmap(data.roadmap);
     } catch (error) {

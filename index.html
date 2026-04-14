@@ -168,7 +168,28 @@
 
         <section class="mb-12">
             <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="rivalries">Epic Rivalries ⚔️</h2>
-            <div id="h2h-container" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <div id="h2h-container" class="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+                
+                <div class="flex flex-col gap-4">
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20 p-4 rounded-xl shadow-md border border-green-200 dark:border-green-800 flex items-center justify-between custom-hover">
+                        <div>
+                            <span class="text-[10px] uppercase font-bold text-green-600 dark:text-green-400 tracking-wider" data-i18n="pigeon">The Pigeon 🟢</span>
+                            <h4 id="pigeon-name" class="font-bold text-sm text-sinner-black dark:text-white mt-0.5">Loading...</h4>
+                        </div>
+                        <span id="pigeon-score" class="font-black text-lg text-green-700 dark:text-green-300">0-0</span>
+                    </div>
+
+                    <div class="bg-gradient-to-br from-red-50 to-rose-100 dark:from-red-900/20 dark:to-rose-900/20 p-4 rounded-xl shadow-md border border-red-200 dark:border-red-800 flex items-center justify-between custom-hover">
+                        <div>
+                            <span class="text-[10px] uppercase font-bold text-red-600 dark:text-red-400 tracking-wider" data-i18n="nemesis">The Nemesis 🔴</span>
+                            <h4 id="nemesis-name" class="font-bold text-sm text-sinner-black dark:text-white mt-0.5">Loading...</h4>
+                        </div>
+                        <span id="nemesis-score" class="font-black text-lg text-red-700 dark:text-red-300">0-0</span>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section class="mb-12">

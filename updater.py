@@ -9,7 +9,7 @@ HOST = "tennis-api-atp-wta-itf.p.rapidapi.com"
 HEADERS = {
     'X-RapidAPI-Key': API_KEY,
     'X-RapidAPI-Host': HOST,
-    'User-Agent': 'SinnerTrackerBot/9.0'
+    'User-Agent': 'SinnerTrackerBot/10.0'
 }
 
 # Matchstat IDs
@@ -47,7 +47,7 @@ def update_database():
         db = {"tournaments": [], "trophies": []}
 
     try:
-        print("1/6 Syncing Ranking & ATP Points...")
+        print("1/8 Syncing Ranking & ATP Points...")
         URL_RANKING = "/tennis/v2/atp/ranking/singles/"
         rankings = api_call(URL_RANKING)
         if rankings:
@@ -57,7 +57,7 @@ def update_database():
                     db['total_points'] = r.get('point', db.get('total_points'))
                     break
 
-        print("2/6 Syncing Win/Loss & Fox Stats...")
+        print("2/8 Syncing Win/Loss & Fox Stats...")
         stats_data = api_call(f"/tennis/v2/atp/player/match-stats/{SINNER_ID}")
         if stats_data:
             serv = stats_data.get('serviceStats', {})
@@ -72,7 +72,7 @@ def update_database():
                 "break_points_converted": calculate_pct(bpr.get('breakPointWonGm'), bpr.get('breakPointChanceGm'))
             }
 
-        print("3/6 Syncing Next Match...")
+        print("3/8 Syncing Next Match...")
         URL_FIXTURES = f"/tennis/v2/atp/fixtures/player/{SINNER_ID}"
         fixtures = api_call(URL_FIXTURES)
         if fixtures and len(fixtures) > 0:
@@ -84,7 +84,7 @@ def update_database():
                 "date": next_m.get('date', '2026-04-24T15:00:00Z')
             }
 
-        print("4/6 Syncing H2H...")
+        print("4/8 Syncing H2H...")
         new_rivalries = []
         for name, r_id in RIVALS.items():
             URL_H2H = f"/tennis/v2/atp/h2h/info/{SINNER_ID}/{r_id}"
@@ -107,7 +107,7 @@ def update_database():
         if new_rivalries:
             db['rivalries'] = new_rivalries
 
-        print("5/6 Syncing Recent Form...")
+        print("5/8 Syncing Recent Form...")
         past_matches = api_call(f"/tennis/v2/atp/player/past-matches/{SINNER_ID}")
         recent_form = []
         if past_matches and isinstance(past_matches, list):
@@ -123,34 +123,26 @@ def update_database():
                 })
         db['recent_form'] = recent_form
 
-        print("6/6 Syncing Surface Mastery...")
-        # NEW: Fetch surface summary
+        print("6/8 Syncing Surface Mastery...")
         surface_data = api_call(f"/tennis/v2/atp/player/surface-summary/{SINNER_ID}")
         surfaces_db = {"Hard": 0, "Clay": 0, "Grass": 0}
         
         if surface_data and isinstance(surface_data, list) and len(surface_data) > 0:
-            # We take the most recent year (index 0) to match YTD stats
             current_year_data = surface_data[0].get('surfaces', [])
-            
             for s in current_year_data:
                 name = s.get("court", "")
                 wins = int(s.get("courtWins", 0))
-                
-                # Combine Hard and Indoor Hard
                 if "hard" in name.lower():
                     surfaces_db["Hard"] += wins
                 elif "clay" in name.lower():
                     surfaces_db["Clay"] += wins
                 elif "grass" in name.lower():
                     surfaces_db["Grass"] += wins
-        
         db['surface_mastery'] = surfaces_db
 
-        print("7/7 Syncing Tournament Roadmap (Elite Schedule)...")
+        print("7/8 Syncing Tournament Roadmap...")
         now = datetime.datetime.now(datetime.timezone.utc)
         current_year = now.year
-        
-        # Sinner's typical elite schedule (Slams, Masters 1000, select 500s)
         elite_schedule = [
             {"name": "Monte-Carlo Masters", "date": f"{current_year}-04-12T00:00:00Z", "court": "Clay", "country": "MON"},
             {"name": "Madrid Open", "date": f"{current_year}-04-24T00:00:00Z", "court": "Clay", "country": "ESP"},
@@ -166,18 +158,49 @@ def update_database():
             {"name": "Paris Masters", "date": f"{current_year}-10-28T00:00:00Z", "court": "I.hard", "country": "FRA"},
             {"name": "ATP Finals Turin", "date": f"{current_year}-11-10T00:00:00Z", "court": "I.hard", "country": "ITA"}
         ]
-
         roadmap = []
         for t in elite_schedule:
-            # Parse the hardcoded date
             t_date = datetime.datetime.strptime(t["date"][:10], "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc)
-            
-            # If the tournament hasn't started yet, add it to the roadmap
             if t_date >= now:
                 roadmap.append(t)
-                
-        # Take exactly the next 5 events
         db['roadmap'] = roadmap[:5]
+
+        print("8/8 Syncing Pigeon & Nemesis...")
+        # NEW: Fetch interesting H2H, handle API typo
+        h2h_data = api_call(f"/tennis/v2/atp/player/intersting-h2h/{SINNER_ID}")
+        
+        pigeon = {"name": "TBD", "diff": -999, "wins": 0, "losses": 0}
+        nemesis = {"name": "TBD", "diff": 999, "wins": 0, "losses": 0}
+
+        if h2h_data and isinstance(h2h_data, list):
+            for match in h2h_data:
+                p1 = match.get("player1", {})
+                p2 = match.get("player2", {})
+                
+                # Determine who is Sinner and who is the opponent
+                if p1.get("id") == SINNER_ID:
+                    sinner_wins = p1.get("wins", 0)
+                    opp_wins = p2.get("wins", 0)
+                    opp_name = p2.get("name", "Unknown")
+                else:
+                    sinner_wins = p2.get("wins", 0)
+                    opp_wins = p1.get("wins", 0)
+                    opp_name = p1.get("name", "Unknown")
+
+                diff = sinner_wins - opp_wins
+
+                # Pigeon: Highest positive difference
+                if diff > pigeon["diff"]:
+                    pigeon = {"name": opp_name, "diff": diff, "wins": sinner_wins, "losses": opp_wins}
+                
+                # Nemesis: Lowest negative difference
+                if diff < nemesis["diff"]:
+                    nemesis = {"name": opp_name, "diff": diff, "wins": sinner_wins, "losses": opp_wins}
+
+        db['special_h2h'] = {
+            "pigeon": pigeon,
+            "nemesis": nemesis
+        }
 
         # Calculate Race points automatically
         race_pts = sum(t.get('earned', 0) for t in db.get('tournaments', []))
