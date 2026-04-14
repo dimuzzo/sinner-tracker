@@ -35,32 +35,32 @@
 </head>
 <body class="bg-sinner-white dark:bg-dark-bg text-sinner-black dark:text-gray-100 antialiased transition-colors duration-300">
 
-    <header class="bg-sinner-black text-sinner-white py-4 px-6 shadow-md sticky top-0 z-50">
+    <header class="bg-sinner-black text-sinner-white py-3 px-4 shadow-md sticky top-0 z-50">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <img src="assets/icon-192.png" alt="Logo" class="w-10 h-10 rounded-lg shadow-sm">
-                <h1 class="text-2xl font-black tracking-widest uppercase text-sinner-orange">Sinner Tracker</h1>
+            <div class="flex items-center space-x-2">
+                <img src="assets/icon-192.png" alt="Logo" class="w-8 h-8 rounded-lg shadow-sm">
+                <h1 class="text-xl font-black tracking-widest uppercase text-sinner-orange hidden sm:block">Sinner Tracker</h1>
+                <h1 class="text-xl font-black tracking-widest uppercase text-sinner-orange sm:hidden">Sinner</h1>
             </div>
-            <div class="flex items-center space-x-3">
-                <button id="install-btn" class="hidden bg-sinner-green hover:bg-green-600 text-white font-bold py-1.5 px-4 rounded-md text-sm transition shadow-md flex items-center gap-2">
-                    <span class="text-lg">📱</span> <span data-i18n="installApp">Install App</span>
+            <div class="flex items-center space-x-2">
+                <button id="install-btn" class="hidden bg-sinner-green hover:bg-green-600 text-white font-bold py-1 px-2 rounded text-xs transition shadow-md flex items-center gap-1">
+                    <span class="text-sm">📱</span> <span data-i18n="installApp" class="hidden sm:inline">Install App</span>
                 </button>
                 
-                <button onclick="toggleDarkMode()" class="p-2 rounded-md hover:bg-gray-800 transition text-xl" id="dark-mode-btn">🌙</button>
+                <button onclick="toggleDarkMode()" class="p-1 rounded-md hover:bg-gray-800 transition text-lg" id="dark-mode-btn">🌙</button>
                 
-                <button onclick="toggleLanguage()" class="bg-sinner-orange hover:bg-orange-600 text-white font-bold py-1.5 px-4 rounded-md text-sm transition">EN / IT</button>
+                <button id="lang-btn" onclick="toggleLanguage()" class="bg-sinner-orange hover:bg-orange-600 text-white font-bold py-1 px-3 rounded text-xs transition">IT</button>
             </div>
         </div>
     </header>
 
     <main class="max-w-6xl mx-auto p-6 mt-6">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-md border-t-4 border-sinner-orange custom-hover flex items-center justify-between">
+            <<div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-md border-t-4 border-sinner-orange custom-hover flex items-center justify-between">
                 <div>
                     <h3 class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider" data-i18n="rankingTitle">ATP Ranking</h3>
                     <p id="ranking-display" class="text-4xl lg:text-5xl font-black mt-2">#1 👑</p>
                 </div>
-                <img src="assets/icon-192.png" alt="Sinner" class="w-16 h-16 rounded-full border-2 border-sinner-orange object-cover">
             </div>
 
             <div id="match-card" class="bg-gradient-to-br from-sinner-black to-gray-800 text-white p-6 rounded-xl shadow-md border-t-4 border-blue-500 custom-hover relative overflow-hidden transition-colors duration-500">
@@ -173,18 +173,20 @@
 
         <section class="mb-12">
             <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="tournaments">Tournaments Breakdown</h2>
-            <div class="bg-white dark:bg-dark-card shadow-md rounded-xl overflow-hidden border border-gray-100 dark:border-gray-700">
-                <table class="w-full text-left border-collapse">
-                    <thead class="bg-sinner-black dark:bg-gray-800 text-sinner-white text-sm uppercase tracking-wider">
-                        <tr>
-                            <th class="py-4 px-6" data-i18n="tournHeader">Tournament</th>
-                            <th class="py-4 px-6 text-center" data-i18n="defendingHeader">Defending</th>
-                            <th class="py-4 px-6 text-center" data-i18n="earnedHeader">Earned</th>
-                            <th class="py-4 px-6 text-center" data-i18n="netDiffHeader">Net Diff</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tournament-data" class="text-sm font-semibold text-gray-800 dark:text-gray-200"></tbody>
-                </table>
+            <div class="bg-white dark:bg-dark-card shadow-md rounded-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div class="overflow-x-auto w-full">
+                    <table class="w-full text-left border-collapse min-w-[500px]">
+                        <thead class="bg-sinner-black dark:bg-gray-800 text-sinner-white text-xs md:text-sm uppercase tracking-wider">
+                            <tr>
+                                <th class="py-3 px-4" data-i18n="tournHeader">Tournament</th>
+                                <th class="py-3 px-4 text-center" data-i18n="defendingHeader">Defending</th>
+                                <th class="py-3 px-4 text-center" data-i18n="earnedHeader">Earned</th>
+                                <th class="py-3 px-4 text-center" data-i18n="netDiffHeader">Net Diff</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tournament-data" class="text-sm font-semibold text-gray-800 dark:text-gray-200"></tbody>
+                    </table>
+                </div>
             </div>
         </section>
     </main>

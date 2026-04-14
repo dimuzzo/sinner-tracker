@@ -49,10 +49,18 @@ function toggleDarkMode() {
 // --- LANGUAGE LOGIC ---
 function toggleLanguage() {
     currentLang = currentLang === 'en' ? 'it' : 'en';
+    
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (translations[currentLang][key]) el.innerText = translations[currentLang][key];
     });
+    
+    // Cambia il testo del bottone dinamicamente
+    const langBtn = document.getElementById('lang-btn');
+    if (langBtn) {
+        langBtn.innerText = currentLang === 'en' ? 'IT' : 'EN';
+    }
+
     initDashboard(true); 
 }
 
@@ -272,10 +280,10 @@ function renderTableAndPoints(tournaments) {
         const diff = t.earned - t.defending;
         htmlContent += `
             <tr class="border-b border-gray-100 dark:border-gray-700">
-                <td class="py-4 px-6 text-sinner-orange font-bold">${t.name}</td>
-                <td class="py-4 px-6 text-center text-gray-400">${t.defending}</td>
-                <td class="py-4 px-6 text-center font-bold">${t.earned}</td>
-                <td class="py-4 px-6 text-center font-black ${diff >= 0 ? 'text-sinner-green' : 'text-red-500'}">${diff >= 0 ? '+' : ''}${diff}</td>
+                <td class="py-3 px-4 text-sinner-orange font-bold">${t.name}</td>
+                <td class="py-3 px-4 text-center text-gray-400">${t.defending}</td>
+                <td class="py-3 px-4 text-center font-bold">${t.earned}</td>
+                <td class="py-3 px-4 text-center font-black ${diff >= 0 ? 'text-sinner-green' : 'text-red-500'}">${diff >= 0 ? '+' : ''}${diff}</td>
             </tr>`;
     });
     tableBody.innerHTML = htmlContent;
