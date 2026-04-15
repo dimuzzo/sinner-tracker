@@ -14,7 +14,9 @@ const translations = {
         liveNow: "Live Now", recentForm: "Form", surfaceMastery: "Surface Mastery (YTD)",
         winsYTD: "Wins YTD",
         roadmapTitle: "Roadmap", majorEvents: "Next Major Events",
-        pigeon: "The Pigeon 🟢", nemesis: "The Nemesis 🔴"
+        pigeon: "The Pigeon 🟢", nemesis: "The Nemesis 🔴",
+        bioTitle: "Player Identity Card", bioHeight: "Height", bioWeight: "Weight", bioPlays: "Plays", 
+        bioPro: "Pro Since", bioCoaches: "Coaching Team"
     },
     it: {
         rankingTitle: "Classifica ATP", winLossTitle: "Vittorie / Sconfitte", pointsTitle: "Punti Totali ATP",
@@ -28,7 +30,9 @@ const translations = {
         liveNow: "In Diretta", recentForm: "Forma", surfaceMastery: "Vittorie per Superficie",
         winsYTD: "Vittorie YTD",
         roadmapTitle: "Calendario", majorEvents: "Prossimi Grandi Eventi",
-        pigeon: "Il Figlioccio 🟢", nemesis: "La Bestia Nera 🔴"
+        pigeon: "Il Figlioccio 🟢", nemesis: "La Bestia Nera 🔴",
+        bioTitle: "Carta d'Identità", bioHeight: "Altezza", bioWeight: "Peso", bioPlays: "Mano",
+        bioPro: "Pro dal", bioCoaches: "Team Tecnico"
     }
 };
 
@@ -169,7 +173,11 @@ async function initDashboard(isRefresh = false) {
         if (data.bio) {
             document.getElementById('bio-height').innerText = `${data.bio.height} cm`;
             document.getElementById('bio-weight').innerText = `${data.bio.weight} kg`;
-            document.getElementById('bio-plays').innerText = data.bio.plays.split(',')[0];
+            
+            const plays = data.bio.plays.split(',')[0];
+            document.getElementById('bio-plays').innerText = currentLang === 'it' ? 
+                (plays.includes('Right') ? 'Destro' : 'Mancino') : plays;
+                
             document.getElementById('bio-pro').innerText = data.bio.turned_pro;
             document.getElementById('bio-coach').innerText = data.bio.coach;
         }
