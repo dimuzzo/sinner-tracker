@@ -47,7 +47,7 @@ def update_database():
         db = {"tournaments": [], "trophies": []}
 
     try:
-        print("1/8 Syncing Ranking & ATP Points...")
+        print("1/9 Syncing Ranking & ATP Points...")
         URL_RANKING = "/tennis/v2/atp/ranking/singles/"
         rankings = api_call(URL_RANKING)
         if rankings:
@@ -57,7 +57,7 @@ def update_database():
                     db['total_points'] = r.get('point', db.get('total_points'))
                     break
 
-        print("2/8 Syncing Win/Loss & Fox Stats...")
+        print("2/9 Syncing Win/Loss & Fox Stats...")
         stats_data = api_call(f"/tennis/v2/atp/player/match-stats/{SINNER_ID}")
         if stats_data:
             serv = stats_data.get('serviceStats', {})
@@ -72,19 +72,30 @@ def update_database():
                 "break_points_converted": calculate_pct(bpr.get('breakPointWonGm'), bpr.get('breakPointChanceGm'))
             }
 
-        print("3/8 Syncing Next Match...")
+        print("3/9 Syncing Next Match...")
         URL_FIXTURES = f"/tennis/v2/atp/fixtures/player/{SINNER_ID}"
         fixtures = api_call(URL_FIXTURES)
+        
         if fixtures and len(fixtures) > 0:
             next_m = fixtures[0]
+            
+            api_date = next_m.get('date')
+            
             db['next_match'] = {
                 "opponent": next_m.get('opponent_name', 'TBD'),
                 "tournament": next_m.get('tournament', 'Next Tournament'),
                 "round": next_m.get('round', 'TBD'),
-                "date": next_m.get('date', '2026-04-24T15:00:00Z')
+                "date": api_date
+            }
+        else:
+            db['next_match'] = {
+                "opponent": "TBD",
+                "tournament": "Off Season / TBD",
+                "round": "TBD",
+                "date": None
             }
 
-        print("4/8 Syncing H2H...")
+        print("4/9 Syncing H2H...")
         new_rivalries = []
         for name, r_id in RIVALS.items():
             URL_H2H = f"/tennis/v2/atp/h2h/info/{SINNER_ID}/{r_id}"
@@ -107,7 +118,7 @@ def update_database():
         if new_rivalries:
             db['rivalries'] = new_rivalries
 
-        print("5/8 Syncing Recent Form...")
+        print("5/9 Syncing Recent Form...")
         past_matches = api_call(f"/tennis/v2/atp/player/past-matches/{SINNER_ID}")
         recent_form = []
         if past_matches and isinstance(past_matches, list):
@@ -123,7 +134,7 @@ def update_database():
                 })
         db['recent_form'] = recent_form
 
-        print("6/8 Syncing Surface Mastery...")
+        print("6/9 Syncing Surface Mastery...")
         surface_data = api_call(f"/tennis/v2/atp/player/surface-summary/{SINNER_ID}")
         surfaces_db = {"Hard": 0, "Clay": 0, "Grass": 0}
         
@@ -140,7 +151,7 @@ def update_database():
                     surfaces_db["Grass"] += wins
         db['surface_mastery'] = surfaces_db
 
-        print("7/8 Syncing Tournament Roadmap...")
+        print("7/9 Syncing Tournament Roadmap...")
         now = datetime.datetime.now(datetime.timezone.utc)
         current_year = now.year
         elite_schedule = [
@@ -165,8 +176,8 @@ def update_database():
                 roadmap.append(t)
         db['roadmap'] = roadmap[:5]
 
-        print("8/8 Syncing Pigeon & Nemesis...")
-        # NEW: Fetch interesting H2H, handle API typo
+        print("8/9 Syncing Pigeon & Nemesis...")
+        # Fetch interesting H2H, handle API typo
         h2h_data = api_call(f"/tennis/v2/atp/player/intersting-h2h/{SINNER_ID}")
         
         pigeon = {"name": "TBD", "diff": -999, "wins": 0, "losses": 0}

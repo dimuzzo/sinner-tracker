@@ -134,10 +134,7 @@ async function initDashboard(isRefresh = false) {
         }
         
         // --- NEXT MATCH & LIVE LOGIC ---
-        if (data.next_match) {
-            document.getElementById('next-opponent-display').innerText = `vs ${data.next_match.opponent}`;
-            document.getElementById('next-tournament-display').innerText = `${data.next_match.tournament} - ${data.next_match.round}`;
-            
+        if (data.next_match && data.next_match.date) {
             const matchDate = new Date(data.next_match.date);
             const now = new Date();
             
@@ -145,13 +142,11 @@ async function initDashboard(isRefresh = false) {
             
             const card = document.getElementById('match-card');
             const indicator = document.getElementById('live-indicator');
-            const titleLabel = document.getElementById('match-title-label');
             const dateDisplay = document.getElementById('next-date-display');
 
             if (isLive) {
                 card.classList.replace('border-blue-500', 'border-red-500');
                 indicator.classList.remove('hidden');
-                titleLabel.classList.add('hidden');
                 dateDisplay.innerText = translations[currentLang].liveNow;
                 dateDisplay.classList.add('text-red-400', 'font-bold');
             } else {
