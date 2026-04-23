@@ -72,22 +72,56 @@ def update_database():
                 "break_points_converted": calculate_pct(bpr.get('breakPointWonGm'), bpr.get('breakPointChanceGm'))
             }
 
-        print("3/9 Syncing Next Match...")
-        URL_FIXTURES = f"/tennis/v2/atp/fixtures/player/{SINNER_ID}"
-        fixtures = api_call(URL_FIXTURES)
+        print("3/9 Syncing Next Match (Scanning Daily Fixtures + Calendar Map)...")
         
-        if fixtures and len(fixtures) > 0:
-            next_m = fixtures[0]
+        current_year = datetime.datetime.now(datetime.timezone.utc).year
+        calendar_data = api_call(f"/tennis/v2/atp/tournament/calendar/{current_year}")
+        tournament_map = {}
+        if calendar_data and isinstance(calendar_data, list):
+            for t in calendar_data:
+                t_id = str(t.get('id'))
+                t_name = t.get('name', 'ATP Event').split('-')[0].strip()
+                tournament_map[t_id] = t_name
+
+        MAX_DAYS_AHEAD = 14
+        next_match_data = None
+        search_date = datetime.datetime.now(datetime.timezone.utc)
+        
+        for i in range(MAX_DAYS_AHEAD):
+            date_str = search_date.strftime("%Y-%m-%d")
+            print(f"  - Scanning fixtures for {date_str}...")
             
-            api_date = next_m.get('date')
+            daily_fixtures = api_call(f"/tennis/v2/atp/fixtures/{date_str}")
             
-            db['next_match'] = {
-                "opponent": next_m.get('opponent_name', 'TBD'),
-                "tournament": next_m.get('tournament', 'Next Tournament'),
-                "round": next_m.get('round', 'TBD'),
-                "date": api_date
-            }
+            if daily_fixtures and isinstance(daily_fixtures, list):
+                for match in daily_fixtures:
+                    if str(match.get('player1Id')) == str(SINNER_ID) or str(match.get('player2Id')) == str(SINNER_ID):
+                        if str(match.get('player1Id')) == str(SINNER_ID):
+                            opponent_name = match.get('player2', {}).get('name', 'TBD')
+                        else:
+                            opponent_name = match.get('player1', {}).get('name', 'TBD')
+                        
+                        t_id = str(match.get('tournamentId'))
+                        real_tournament_name = tournament_map.get(t_id, f"Tournament #{t_id}")
+                        
+                        next_match_data = {
+                            "opponent": opponent_name,
+                            "tournament": real_tournament_name,
+                            "round": f"Round {match.get('roundId', '')}",
+                            "date": match.get('date', f"{date_str}T00:00:00Z")
+                        }
+                        break
+            
+            if next_match_data:
+                break
+            
+            search_date += datetime.timedelta(days=1)
+
+        if next_match_data:
+            print(f"  -> Found match vs {next_match_data['opponent']} at {next_match_data['tournament']}")
+            db['next_match'] = next_match_data
         else:
+            print("  -> No upcoming match found in the next 14 days.")
             db['next_match'] = {
                 "opponent": "TBD",
                 "tournament": "Off Season / TBD",
