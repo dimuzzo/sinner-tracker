@@ -134,32 +134,39 @@ async function initDashboard(isRefresh = false) {
         }
         
         // --- NEXT MATCH & LIVE LOGIC ---
-        if (data.next_match && data.next_match.date) {
+        if (data.next_match) {
+            document.getElementById('next-opponent-display').innerText = `vs ${data.next_match.opponent}`;
+            
+            const roundText = data.next_match.round && data.next_match.round !== "TBD" ? ` - ${data.next_match.round}` : "";
+            document.getElementById('next-tournament-display').innerText = `${data.next_match.tournament}${roundText}`;
+            
             const matchDate = new Date(data.next_match.date);
             const now = new Date();
             
-            const isLive = now >= matchDate && now <= new Date(matchDate.getTime() + 10800000);
+            const isLive = data.next_match.date ? (now >= matchDate && now <= new Date(matchDate.getTime() + 10800000)) : false;
             
             const card = document.getElementById('match-card');
             const indicator = document.getElementById('live-indicator');
+            const titleLabel = document.getElementById('match-title-label'); 
             const dateDisplay = document.getElementById('next-date-display');
 
             if (isLive) {
-                card.classList.replace('border-blue-500', 'border-red-500');
-                indicator.classList.remove('hidden');
-                dateDisplay.innerText = translations[currentLang].liveNow;
-                dateDisplay.classList.add('text-red-400', 'font-bold');
+                if (card) card.classList.replace('border-blue-500', 'border-red-500');
+                if (indicator) indicator.classList.remove('hidden');
+                if (titleLabel) titleLabel.classList.add('hidden');
+                if (dateDisplay) {
+                    dateDisplay.innerText = translations[currentLang].liveNow;
+                    dateDisplay.classList.add('text-red-400', 'font-bold');
+                }
             } else {
-                card.classList.replace('border-red-500', 'border-blue-500');
-                indicator.classList.add('hidden');
-                titleLabel.classList.remove('hidden');
-                dateDisplay.classList.remove('text-red-400', 'font-bold');
+                if (card) card.classList.replace('border-red-500', 'border-blue-500');
+                if (indicator) indicator.classList.add('hidden');
+                if (titleLabel) titleLabel.classList.remove('hidden');
                 
-                const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-                if (data.next_match.date) {
-                    dateDisplay.innerText = matchDate.toLocaleDateString(currentLang === 'it' ? 'it-IT' : 'en-US', options);
-                } else {
-                    dateDisplay.innerText = "";
+                if (dateDisplay) {
+                    dateDisplay.classList.remove('text-red-400', 'font-bold');
+                    const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                    dateDisplay.innerText = data.next_match.date ? matchDate.toLocaleString(currentLang === 'it' ? 'it-IT' : 'en-US', options) : "";
                 }
             }
         }
