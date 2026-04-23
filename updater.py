@@ -73,7 +73,7 @@ def update_database():
             }
 
         print("3/9 Syncing Next Match (Hybrid Scan)...")
-        base_match = None
+        base_match = {}
         player_fixtures = api_call(f"/tennis/v2/atp/fixtures/player/{SINNER_ID}")
         if player_fixtures and isinstance(player_fixtures, list) and len(player_fixtures) > 0:
             base_match = player_fixtures[0]
@@ -97,8 +97,8 @@ def update_database():
                         else:
                             opp_name = match.get('player1', {}).get('name', 'TBD')
                         
-                        t_name = base_match.get('tournament') if base_match else f"Tournament #{match.get('tournamentId')}"
-                        r_name = base_match.get('round') if base_match else f"Round {match.get('roundId', '')}"
+                        t_name = base_match.get('tournament') or f"Madrid Open" 
+                        r_name = base_match.get('round') or f"Round {match.get('roundId', 'TBD')}"
                         
                         exact_match_data = {
                             "opponent": opp_name,
@@ -111,6 +111,19 @@ def update_database():
             if exact_match_data:
                 break
             search_date += datetime.timedelta(days=1)
+
+        if exact_match_data:
+            print(f"  -> Found live match vs {exact_match_data['opponent']} at {exact_match_data['tournament']}")
+            db['next_match'] = exact_match_data
+        elif base_match:
+            db['next_match'] = {
+                "opponent": base_match.get('opponent_name') or "TBD",
+                "tournament": base_match.get('tournament') or "Next Tournament",
+                "round": base_match.get('round') or "TBD",
+                "date": base_match.get('date') or None
+            }
+        else:
+            db['next_match'] = {"opponent": "TBD", "tournament": "Off Season", "round": "TBD", "date": None}
 
         if exact_match_data:
             print(f"  -> Found live match vs {exact_match_data['opponent']} at {exact_match_data['tournament']}")
