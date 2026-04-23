@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-23T04:53:44.409769+00:00",
+  "last_updated": "2026-04-23T17:52:54.015767+00:00",
   "ranking": 1,
   "total_points": 13350,
   "win_loss": "24 - 2",
@@ -10,10 +10,10 @@
     "break_points_converted": 43
   },
   "next_match": {
-    "opponent": "TBD",
-    "tournament": "Next Tournament",
-    "round": "TBD",
-    "date": null
+    "opponent": "Benjamin Bonzi",
+    "tournament": "Tournament #21325",
+    "round": "Round 5",
+    "date": "2026-04-24T17:00:00.000Z"
   },
   "tournaments": [
     {
