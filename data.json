@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-23T18:18:04.740519+00:00",
+  "last_updated": "2026-04-23T18:22:59.851465+00:00",
   "ranking": 1,
   "total_points": 13350,
   "win_loss": "24 - 2",
@@ -11,8 +11,8 @@
   },
   "next_match": {
     "opponent": "Benjamin Bonzi",
-    "tournament": null,
-    "round": null,
+    "tournament": "Madrid Open",
+    "round": "Round 5",
     "date": "2026-04-24T17:00:00.000Z"
   },
   "tournaments": [
