@@ -165,7 +165,7 @@ async function initDashboard(isRefresh = false) {
                 
                 if (dateDisplay) {
                     dateDisplay.classList.remove('text-red-400', 'font-bold');
-                    const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                    const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
                     dateDisplay.innerText = data.next_match.date ? matchDate.toLocaleString(currentLang === 'it' ? 'it-IT' : 'en-US', options) : "";
                 }
             }
