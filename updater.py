@@ -118,26 +118,13 @@ def update_database():
         elif base_match:
             db['next_match'] = {
                 "opponent": base_match.get('opponent_name') or "TBD",
-                "tournament": base_match.get('tournament') or "Next Tournament",
+                "tournament": base_match.get('tournament') or "Madrid Open",
                 "round": base_match.get('round') or "TBD",
                 "date": base_match.get('date') or None
             }
         else:
             db['next_match'] = {"opponent": "TBD", "tournament": "Off Season", "round": "TBD", "date": None}
-
-        if exact_match_data:
-            print(f"  -> Found live match vs {exact_match_data['opponent']} at {exact_match_data['tournament']}")
-            db['next_match'] = exact_match_data
-        elif base_match:
-            db['next_match'] = {
-                "opponent": base_match.get('opponent_name', 'TBD'),
-                "tournament": base_match.get('tournament', 'Next Tournament'),
-                "round": base_match.get('round', 'TBD'),
-                "date": base_match.get('date', None)
-            }
-        else:
-            db['next_match'] = {"opponent": "TBD", "tournament": "Off Season", "round": "TBD", "date": None}
-
+            
         print("4/9 Syncing H2H...")
         new_rivalries = []
         for name, r_id in RIVALS.items():
