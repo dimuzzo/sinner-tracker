@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-26T05:15:58.115143+00:00",
+  "last_updated": "2026-04-27T05:28:29.651827+00:00",
   "ranking": 1,
   "total_points": 13350,
   "win_loss": "24 - 2",
@@ -10,10 +10,10 @@
     "break_points_converted": 43
   },
   "next_match": {
-    "opponent": "Elmer Moller",
+    "opponent": "Cameron Norrie",
     "tournament": "Madrid Open",
-    "round": "Round 6",
-    "date": "2026-04-26T17:00:00.000Z"
+    "round": "Round 7",
+    "date": "2026-04-28T11:00:00.000Z"
   },
   "tournaments": [
     {
@@ -137,6 +137,11 @@
   "recent_form": [
     {
       "win": true,
+      "opponent": "Elmer Moller",
+      "result": "6-2 6-3"
+    },
+    {
+      "win": true,
       "opponent": "Benjamin Bonzi",
       "result": "6-7(6) 6-1 6-4"
     },
@@ -154,17 +159,12 @@
       "win": true,
       "opponent": "Felix Auger Aliassime",
       "result": "6-3 6-4"
-    },
-    {
-      "win": true,
-      "opponent": "Tomas Machac",
-      "result": "6-1 6-7(3) 6-3"
     }
   ],
   "race_points": 3900,
   "surface_mastery": {
     "Hard": 19,
-    "Clay": 6,
+    "Clay": 7,
     "Grass": 0
   },
   "roadmap": [
