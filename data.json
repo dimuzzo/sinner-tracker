@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-27T05:28:29.651827+00:00",
+  "last_updated": "2026-04-28T05:34:46.783715+00:00",
   "ranking": 1,
   "total_points": 13350,
   "win_loss": "24 - 2",
@@ -10,10 +10,10 @@
     "break_points_converted": 43
   },
   "next_match": {
-    "opponent": "Cameron Norrie",
+    "opponent": "TBD",
     "tournament": "Madrid Open",
-    "round": "Round 7",
-    "date": "2026-04-28T11:00:00.000Z"
+    "round": "TBD",
+    "date": null
   },
   "tournaments": [
     {
