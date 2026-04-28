@@ -1,4 +1,4 @@
-const QUALIFICATION_POINTS = 7200; // ATP Finals threshold
+const QUALIFICATION_POINTS = 7730; // ATP Finals threshold
 let currentLang = 'en';
 
 const translations = {
