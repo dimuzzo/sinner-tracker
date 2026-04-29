@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-28T09:02:06.824581+00:00",
+  "last_updated": "2026-04-29T05:30:32.569084+00:00",
   "ranking": 1,
   "total_points": 13350,
   "win_loss": "24 - 2",
@@ -10,10 +10,10 @@
     "break_points_converted": 43
   },
   "next_match": {
-    "opponent": "Cameron Norrie",
+    "opponent": "TBD",
     "tournament": "Madrid Open",
-    "round": "Round 16",
-    "date": "2026-04-28T09:00:00.000Z"
+    "round": "TBD",
+    "date": null
   },
   "tournaments": [
     {
@@ -137,6 +137,11 @@
   "recent_form": [
     {
       "win": true,
+      "opponent": "Cameron Norrie",
+      "result": "6-2 7-5"
+    },
+    {
+      "win": true,
       "opponent": "Elmer Moller",
       "result": "6-2 6-3"
     },
@@ -154,17 +159,12 @@
       "win": true,
       "opponent": "Alexander Zverev",
       "result": "6-1 6-4"
-    },
-    {
-      "win": true,
-      "opponent": "Felix Auger Aliassime",
-      "result": "6-3 6-4"
     }
   ],
   "race_points": 3900,
   "surface_mastery": {
     "Hard": 19,
-    "Clay": 7,
+    "Clay": 8,
     "Grass": 0
   },
   "roadmap": [
