@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-29T05:30:32.569084+00:00",
+  "last_updated": "2026-04-30T05:34:17.888781+00:00",
   "ranking": 1,
   "total_points": 13350,
   "win_loss": "24 - 2",
@@ -10,10 +10,10 @@
     "break_points_converted": 43
   },
   "next_match": {
-    "opponent": "TBD",
+    "opponent": "Arthur Fils",
     "tournament": "Madrid Open",
-    "round": "TBD",
-    "date": null
+    "round": "Round 10",
+    "date": "2026-05-01T14:00:00.000Z"
   },
   "tournaments": [
     {
@@ -137,6 +137,11 @@
   "recent_form": [
     {
       "win": true,
+      "opponent": "Rafael Jodar",
+      "result": "6-2 7-6(0)"
+    },
+    {
+      "win": true,
       "opponent": "Cameron Norrie",
       "result": "6-2 7-5"
     },
@@ -154,17 +159,12 @@
       "win": true,
       "opponent": "Carlos Alcaraz",
       "result": "7-6(5) 6-3"
-    },
-    {
-      "win": true,
-      "opponent": "Alexander Zverev",
-      "result": "6-1 6-4"
     }
   ],
   "race_points": 3900,
   "surface_mastery": {
     "Hard": 19,
-    "Clay": 8,
+    "Clay": 9,
     "Grass": 0
   },
   "roadmap": [
