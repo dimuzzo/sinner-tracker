@@ -1,8 +1,8 @@
 {
   "last_updated": "2026-05-04T05:39:17.171648+00:00",
   "ranking": 1,
-  "total_points": 13350,
-  "win_loss": "24 - 2",
+  "total_points": 14350,
+  "win_loss": "30 - 2",
   "stats": {
     "first_serve_in": 60,
     "break_points_saved": 66,
@@ -38,6 +38,11 @@
     },
     {
       "name": "Monte-Carlo",
+      "defending": 0,
+      "earned": 1000
+    },
+    {
+      "name": "Madrid Open",
       "defending": 0,
       "earned": 1000
     }
@@ -114,6 +119,11 @@
       "category": "Masters 1000"
     },
     {
+      "title": "Madrid Open",
+      "year": 2026,
+      "category": "Masters 1000"
+    },
+    {
       "title": "Canada Open",
       "year": 2023,
       "category": "Masters 1000"
@@ -135,10 +145,10 @@
     }
   ],
   "recent_form": [],
-  "race_points": 3900,
+  "race_points": 4910,
   "surface_mastery": {
-    "Hard": 0,
-    "Clay": 0,
+    "Hard": 19,
+    "Clay": 11,
     "Grass": 0
   },
   "roadmap": [
