@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-04T05:39:17.171648+00:00",
+  "last_updated": "2026-05-05T05:18:24.689470+00:00",
   "ranking": 1,
   "total_points": 14350,
   "win_loss": "30 - 2",
@@ -145,10 +145,10 @@
     }
   ],
   "recent_form": [],
-  "race_points": 4910,
+  "race_points": 4900,
   "surface_mastery": {
-    "Hard": 19,
-    "Clay": 11,
+    "Hard": 0,
+    "Clay": 0,
     "Grass": 0
   },
   "roadmap": [
