@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-07T05:35:41.950146+00:00",
+  "last_updated": "2026-05-08T04:56:06.260083+00:00",
   "ranking": 1,
   "total_points": 14350,
   "win_loss": "30 - 2",
@@ -153,12 +153,6 @@
   },
   "roadmap": [
     {
-      "name": "Internazionali d'Italia",
-      "date": "2026-05-08T00:00:00Z",
-      "court": "Clay",
-      "country": "ITA"
-    },
-    {
       "name": "Roland Garros",
       "date": "2026-05-26T00:00:00Z",
       "court": "Clay",
@@ -181,6 +175,12 @@
       "date": "2026-08-06T00:00:00Z",
       "court": "Hard",
       "country": "CAN"
+    },
+    {
+      "name": "Cincinnati Open",
+      "date": "2026-08-12T00:00:00Z",
+      "court": "Hard",
+      "country": "USA"
     }
   ],
   "special_h2h": {
