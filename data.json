@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-12T05:41:55.428341+00:00",
+  "last_updated": "2026-05-13T05:52:58.468551+00:00",
   "ranking": 1,
   "total_points": 14350,
   "win_loss": "30 - 2",
@@ -10,10 +10,10 @@
     "break_points_converted": 43
   },
   "next_match": {
-    "opponent": "TBD",
-    "tournament": "Off Season",
-    "round": "TBD",
-    "date": null
+    "opponent": "Andrey Rublev",
+    "tournament": "Internazionali d'Italia",
+    "round": "Round 9",
+    "date": "2026-05-14T14:00:00.000Z"
   },
   "tournaments": [
     {
@@ -50,20 +50,20 @@
   "rivalries": [
     {
       "name": "Carlos Alcaraz",
-      "wins": 0,
-      "losses": 0,
+      "wins": 7,
+      "losses": 11,
       "country": "ES"
     },
     {
       "name": "Novak Djokovic",
-      "wins": 0,
-      "losses": 0,
+      "wins": 6,
+      "losses": 5,
       "country": "SR"
     },
     {
       "name": "Alexander Zverev",
-      "wins": 0,
-      "losses": 0,
+      "wins": 10,
+      "losses": 4,
       "country": "DE"
     }
   ],
@@ -144,11 +144,37 @@
       "category": "Masters 1000"
     }
   ],
-  "recent_form": [],
+  "recent_form": [
+    {
+      "win": true,
+      "opponent": "Andrea Pellegrino",
+      "result": "6-2 6-3"
+    },
+    {
+      "win": true,
+      "opponent": "Alexei Popyrin",
+      "result": "6-2 6-0"
+    },
+    {
+      "win": true,
+      "opponent": "Sebastian Ofner",
+      "result": "6-3 6-4"
+    },
+    {
+      "win": true,
+      "opponent": "Alexander Zverev",
+      "result": "6-1 6-2"
+    },
+    {
+      "win": true,
+      "opponent": "Arthur Fils",
+      "result": "6-2 6-4"
+    }
+  ],
   "race_points": 4900,
   "surface_mastery": {
-    "Hard": 0,
-    "Clay": 0,
+    "Hard": 19,
+    "Clay": 14,
     "Grass": 0
   },
   "roadmap": [
@@ -185,16 +211,16 @@
   ],
   "special_h2h": {
     "pigeon": {
-      "name": "TBD",
-      "diff": -999,
-      "wins": 0,
+      "name": "Alex De Minaur",
+      "diff": 13,
+      "wins": 13,
       "losses": 0
     },
     "nemesis": {
-      "name": "TBD",
-      "diff": 999,
-      "wins": 0,
-      "losses": 0
+      "name": "Carlos Alcaraz",
+      "diff": -4,
+      "wins": 7,
+      "losses": 11
     }
   },
   "bio": {
