@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-13T05:52:58.468551+00:00",
+  "last_updated": "2026-05-14T05:52:00.441462+00:00",
   "ranking": 1,
   "total_points": 14350,
   "win_loss": "30 - 2",
@@ -10,10 +10,10 @@
     "break_points_converted": 43
   },
   "next_match": {
-    "opponent": "Andrey Rublev",
+    "opponent": "TBD",
     "tournament": "Internazionali d'Italia",
-    "round": "Round 9",
-    "date": "2026-05-14T14:00:00.000Z"
+    "round": "TBD",
+    "date": null
   },
   "tournaments": [
     {
