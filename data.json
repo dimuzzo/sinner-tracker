@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-14T05:52:00.441462+00:00",
+  "last_updated": "2026-05-15T05:58:31.899689+00:00",
   "ranking": 1,
   "total_points": 14350,
   "win_loss": "30 - 2",
@@ -10,10 +10,10 @@
     "break_points_converted": 43
   },
   "next_match": {
-    "opponent": "TBD",
+    "opponent": "Daniil Medvedev",
     "tournament": "Internazionali d'Italia",
-    "round": "TBD",
-    "date": null
+    "round": "Round 10",
+    "date": "2026-05-15T20:00:00.000Z"
   },
   "tournaments": [
     {
@@ -147,6 +147,11 @@
   "recent_form": [
     {
       "win": true,
+      "opponent": "Andrey Rublev",
+      "result": "6-2 6-4"
+    },
+    {
+      "win": true,
       "opponent": "Andrea Pellegrino",
       "result": "6-2 6-3"
     },
@@ -164,17 +169,12 @@
       "win": true,
       "opponent": "Alexander Zverev",
       "result": "6-1 6-2"
-    },
-    {
-      "win": true,
-      "opponent": "Arthur Fils",
-      "result": "6-2 6-4"
     }
   ],
   "race_points": 4900,
   "surface_mastery": {
     "Hard": 19,
-    "Clay": 14,
+    "Clay": 15,
     "Grass": 0
   },
   "roadmap": [
