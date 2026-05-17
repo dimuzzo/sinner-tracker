@@ -97,7 +97,7 @@ def update_database():
                         else:
                             opp_name = match.get('player1', {}).get('name', 'TBD')
                         
-                        t_name = base_match.get('tournament') or f"Internazionali d'Italia" 
+                        t_name = base_match.get('tournament') or f"TBD" 
                         r_name = base_match.get('round') or f"Round {match.get('roundId', 'TBD')}"
                         
                         exact_match_data = {
@@ -118,7 +118,7 @@ def update_database():
         elif base_match:
             db['next_match'] = {
                 "opponent": base_match.get('opponent_name') or "TBD",
-                "tournament": base_match.get('tournament') or "Internazionali d'Italia",
+                "tournament": base_match.get('tournament') or "TBD",
                 "round": base_match.get('round') or "TBD",
                 "date": base_match.get('date') or None
             }

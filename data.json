@@ -1,7 +1,7 @@
 {
   "last_updated": "2026-05-04T05:39:17.171648+00:00",
   "ranking": 1,
-  "total_points": 14350,
+  "total_points": 14700,
   "win_loss": "30 - 2",
   "stats": {
     "first_serve_in": 60,
@@ -44,6 +44,11 @@
     {
       "name": "Madrid Open",
       "defending": 0,
+      "earned": 1000
+    },
+    {
+      "name": "Internazionali d'Italia",
+      "defending": 650,
       "earned": 1000
     }
   ],
@@ -124,6 +129,11 @@
       "category": "Masters 1000"
     },
     {
+      "title": "Internazionali d'Italia",
+      "year": 2026,
+      "category": "Masters 1000"
+    },
+    {
       "title": "Canada Open",
       "year": 2023,
       "category": "Masters 1000"
@@ -145,7 +155,7 @@
     }
   ],
   "recent_form": [],
-  "race_points": 4910,
+  "race_points": 5900,
   "surface_mastery": {
     "Hard": 19,
     "Clay": 11,
