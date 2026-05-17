@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-16T05:30:44.961056+00:00",
+  "last_updated": "2026-05-17T05:52:46.411338+00:00",
   "ranking": 1,
   "total_points": 14350,
   "win_loss": "30 - 2",
@@ -10,10 +10,10 @@
     "break_points_converted": 43
   },
   "next_match": {
-    "opponent": "Daniil Medvedev",
+    "opponent": "Casper Ruud",
     "tournament": "Internazionali d'Italia",
-    "round": "Round 10",
-    "date": "2026-05-16T16:00:00.000Z"
+    "round": "Round 12",
+    "date": "2026-05-17T18:00:00.000Z"
   },
   "tournaments": [
     {
@@ -147,6 +147,11 @@
   "recent_form": [
     {
       "win": true,
+      "opponent": "Daniil Medvedev",
+      "result": "6-2 5-7 6-4"
+    },
+    {
+      "win": true,
       "opponent": "Andrey Rublev",
       "result": "6-2 6-4"
     },
@@ -164,17 +169,12 @@
       "win": true,
       "opponent": "Sebastian Ofner",
       "result": "6-3 6-4"
-    },
-    {
-      "win": true,
-      "opponent": "Alexander Zverev",
-      "result": "6-1 6-2"
     }
   ],
   "race_points": 4900,
   "surface_mastery": {
     "Hard": 19,
-    "Clay": 15,
+    "Clay": 16,
     "Grass": 0
   },
   "roadmap": [
