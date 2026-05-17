@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-04T05:39:17.171648+00:00",
+  "last_updated": "2026-05-17T05:52:46.411338+00:00",
   "ranking": 1,
   "total_points": 14700,
   "win_loss": "30 - 2",
@@ -10,10 +10,10 @@
     "break_points_converted": 43
   },
   "next_match": {
-    "opponent": "TBD",
-    "tournament": "Off Season",
-    "round": "TBD",
-    "date": null
+    "opponent": "Casper Ruud",
+    "tournament": "Internazionali d'Italia",
+    "round": "Round 12",
+    "date": "2026-05-17T18:00:00.000Z"
   },
   "tournaments": [
     {
@@ -55,20 +55,20 @@
   "rivalries": [
     {
       "name": "Carlos Alcaraz",
-      "wins": 0,
-      "losses": 0,
+      "wins": 7,
+      "losses": 11,
       "country": "ES"
     },
     {
       "name": "Novak Djokovic",
-      "wins": 0,
-      "losses": 0,
+      "wins": 6,
+      "losses": 5,
       "country": "SR"
     },
     {
       "name": "Alexander Zverev",
-      "wins": 0,
-      "losses": 0,
+      "wins": 10,
+      "losses": 4,
       "country": "DE"
     }
   ],
@@ -154,20 +154,40 @@
       "category": "Masters 1000"
     }
   ],
-  "recent_form": [],
-  "race_points": 5900,
+  "recent_form": [
+    {
+      "win": true,
+      "opponent": "Daniil Medvedev",
+      "result": "6-2 5-7 6-4"
+    },
+    {
+      "win": true,
+      "opponent": "Andrey Rublev",
+      "result": "6-2 6-4"
+    },
+    {
+      "win": true,
+      "opponent": "Andrea Pellegrino",
+      "result": "6-2 6-3"
+    },
+    {
+      "win": true,
+      "opponent": "Alexei Popyrin",
+      "result": "6-2 6-0"
+    },
+    {
+      "win": true,
+      "opponent": "Sebastian Ofner",
+      "result": "6-3 6-4"
+    }
+  ],
+  "race_points": 4900,
   "surface_mastery": {
     "Hard": 19,
-    "Clay": 11,
+    "Clay": 16,
     "Grass": 0
   },
   "roadmap": [
-    {
-      "name": "Internazionali d'Italia",
-      "date": "2026-05-08T00:00:00Z",
-      "court": "Clay",
-      "country": "ITA"
-    },
     {
       "name": "Roland Garros",
       "date": "2026-05-26T00:00:00Z",
@@ -191,20 +211,26 @@
       "date": "2026-08-06T00:00:00Z",
       "court": "Hard",
       "country": "CAN"
+    },
+    {
+      "name": "Cincinnati Open",
+      "date": "2026-08-12T00:00:00Z",
+      "court": "Hard",
+      "country": "USA"
     }
   ],
   "special_h2h": {
     "pigeon": {
-      "name": "TBD",
-      "diff": -999,
-      "wins": 0,
+      "name": "Alex De Minaur",
+      "diff": 13,
+      "wins": 13,
       "losses": 0
     },
     "nemesis": {
-      "name": "TBD",
-      "diff": 999,
-      "wins": 0,
-      "losses": 0
+      "name": "Carlos Alcaraz",
+      "diff": -4,
+      "wins": 7,
+      "losses": 11
     }
   },
   "bio": {
