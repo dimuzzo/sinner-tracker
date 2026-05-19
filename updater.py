@@ -33,7 +33,7 @@ def api_call(endpoint_path):
 
 def calculate_pct(part, total):
     if not total or total == 0: return 0
-    return round((part / total) * 100)
+    return round((part / total) * 100, 1)
 
 def update_database():
     if not API_KEY or API_KEY == "YOUR_API_KEY":

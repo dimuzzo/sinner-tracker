@@ -2,7 +2,7 @@
   "last_updated": "2026-05-19T06:12:49.972870+00:00",
   "ranking": 1,
   "total_points": 14700,
-  "win_loss": "30 - 2",
+  "win_loss": "36 - 2",
   "stats": {
     "first_serve_in": 60,
     "break_points_saved": 66,
@@ -73,6 +73,11 @@
     }
   ],
   "trophies": [
+    {
+      "title": "Career Golden Masters",
+      "year": 2026,
+      "category": "Grand Slam" 
+    },
     {
       "title": "Australian Open",
       "year": 2024,
