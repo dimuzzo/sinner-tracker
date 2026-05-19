@@ -16,7 +16,8 @@ const translations = {
         roadmapTitle: "Roadmap", majorEvents: "Next Major Events",
         pigeon: "The Pigeon 🟢", nemesis: "The Nemesis 🔴",
         bioTitle: "Player Identity Card", bioHeight: "Height", bioWeight: "Weight", bioPlays: "Plays", 
-        bioPro: "Pro Since", bioCoaches: "Coaching Team"
+        bioPro: "Pro Since", bioCoaches: "Coaching Team",
+        goldenMastersTitle: "Career Golden Masters", goldenMastersSub: "All 9 ATP Masters 1000 Titles Conquered"
     },
     it: {
         rankingTitle: "Classifica ATP", winLossTitle: "Vittorie / Sconfitte", pointsTitle: "Punti Totali ATP",
@@ -32,7 +33,8 @@ const translations = {
         roadmapTitle: "Calendario", majorEvents: "Prossimi Grandi Eventi",
         pigeon: "Il Figlioccio 🟢", nemesis: "La Bestia Nera 🔴",
         bioTitle: "Carta d'Identità", bioHeight: "Altezza", bioWeight: "Peso", bioPlays: "Mano",
-        bioPro: "Pro dal", bioCoaches: "Team Tecnico"
+        bioPro: "Pro dal", bioCoaches: "Team Tecnico",
+        goldenMastersTitle: "Career Golden Masters", goldenMastersSub: "Tutti e 9 i titoli Masters 1000 conquistati"
     }
 };
 
