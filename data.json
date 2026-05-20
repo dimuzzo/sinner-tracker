@@ -1,13 +1,13 @@
 {
-  "last_updated": "2026-05-19T06:12:49.972870+00:00",
+  "last_updated": "2026-05-20T06:13:31.011809+00:00",
   "ranking": 1,
   "total_points": 14700,
   "win_loss": "36 - 2",
   "stats": {
-    "first_serve_in": 60,
-    "break_points_saved": 66,
-    "first_return_won": 67,
-    "break_points_converted": 43
+    "first_serve_in": 59.7,
+    "break_points_saved": 65.7,
+    "first_return_won": 67.0,
+    "break_points_converted": 43.0
   },
   "next_match": {
     "opponent": "TBD",
@@ -76,7 +76,7 @@
     {
       "title": "Career Golden Masters",
       "year": 2026,
-      "category": "Grand Slam" 
+      "category": "Grand Slam"
     },
     {
       "title": "Australian Open",
