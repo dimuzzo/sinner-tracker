@@ -1,19 +1,19 @@
 {
-  "last_updated": "2026-05-26T06:11:35.915634+00:00",
+  "last_updated": "2026-05-27T06:25:08.760614+00:00",
   "ranking": 1,
   "total_points": 14750,
   "win_loss": "36 - 2",
   "stats": {
     "first_serve_in": 59.7,
     "break_points_saved": 65.7,
-    "first_return_won": 67.0,
+    "first_return_won": 66.9,
     "break_points_converted": 43.0
   },
   "next_match": {
-    "opponent": "TBD",
+    "opponent": "Juan Manuel Cerundolo",
     "tournament": "TBD",
-    "round": "TBD",
-    "date": null
+    "round": "Round 5",
+    "date": "2026-05-28T12:00:00.000Z"
   },
   "tournaments": [
     {
@@ -162,6 +162,11 @@
   "recent_form": [
     {
       "win": true,
+      "opponent": "Clement Tabur",
+      "result": "6-1 6-3 6-4"
+    },
+    {
+      "win": true,
       "opponent": "Casper Ruud",
       "result": "6-4 6-4"
     },
@@ -179,17 +184,12 @@
       "win": true,
       "opponent": "Andrea Pellegrino",
       "result": "6-2 6-3"
-    },
-    {
-      "win": true,
-      "opponent": "Alexei Popyrin",
-      "result": "6-2 6-0"
     }
   ],
   "race_points": 5900,
   "surface_mastery": {
     "Hard": 19,
-    "Clay": 17,
+    "Clay": 18,
     "Grass": 0
   },
   "roadmap": [
