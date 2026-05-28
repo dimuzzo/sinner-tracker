@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-28T06:17:11.985780+00:00",
+  "last_updated": "2026-05-28T10:57:51.208360+00:00",
   "ranking": 1,
   "total_points": 14750,
   "win_loss": "36 - 2",
@@ -12,7 +12,8 @@
   "next_match": {
     "opponent": "TBD",
     "tournament": "TBD",
-    "round": "TBD",
+    "round": "1st Round",
+    "countryAcr": "ITA",
     "date": null
   },
   "tournaments": [
@@ -245,5 +246,6 @@
     "birthplace": "San Candido, Italy",
     "plays": "Right-Handed, Two-Handed Backhand",
     "coach": "Simone Vagnozzi, Darren Cahill"
-  }
+  },
+  "current_streak": 10
 }
