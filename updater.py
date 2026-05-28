@@ -72,7 +72,14 @@ def update_database():
                 "break_points_converted": calculate_pct(bpr.get('breakPointWonGm'), bpr.get('breakPointChanceGm'))
             }
 
-        print("3/9 Syncing Next Match (Hybrid Scan)...")
+        print("3/9 Syncing Next Match (Tournament Banner & Dual Timezone)...")
+        # Round translation dictionary based on RapidAPI 'roundList'
+        ROUND_MAP = {
+            1: "Q1", 2: "Q2", 3: "Q3", 4: "1st Round", 5: "2nd Round", 
+            6: "3rd Round", 7: "4th Round", 8: "Round Robin", 9: "Quarterfinals", 
+            10: "Semifinals", 11: "Bronze Medal", 12: "Final", 24: "Quarterfinals"
+        }
+
         base_match = {}
         player_fixtures = api_call(f"/tennis/v2/atp/fixtures/player/{SINNER_ID}")
         if player_fixtures and isinstance(player_fixtures, list) and len(player_fixtures) > 0:
@@ -84,46 +91,58 @@ def update_database():
         
         for i in range(MAX_DAYS_AHEAD):
             date_str = search_date.strftime("%Y-%m-%d")
-            print(f"  - Scanning fixtures for {date_str}...")
-            
             daily_fixtures = api_call(f"/tennis/v2/atp/fixtures/{date_str}")
             
             if daily_fixtures and isinstance(daily_fixtures, list):
                 for match in daily_fixtures:
                     if str(match.get('player1Id')) == str(SINNER_ID) or str(match.get('player2Id')) == str(SINNER_ID):
-                        
+                        # Identify opponent
                         if str(match.get('player1Id')) == str(SINNER_ID):
                             opp_name = match.get('player2', {}).get('name', 'TBD')
                         else:
                             opp_name = match.get('player1', {}).get('name', 'TBD')
                         
-                        t_name = base_match.get('tournament') or f"TBD" 
-                        r_name = base_match.get('round') or f"Round {match.get('roundId', 'TBD')}"
+                        # Get better tournament info if available via tournament ID
+                        t_id = match.get('tournamentId')
+                        t_info = api_call(f"/tennis/v2/atp/tournament/info/{t_id}") if t_id else None
+                        
+                        t_name = "Tournament"
+                        t_country = "ITA" # Default
+                        
+                        if t_info and isinstance(t_info, dict):
+                            t_name = t_info.get('name', base_match.get('tournament') or f"Event #{t_id}")
+                            t_country = t_info.get('country', {}).get('acronym', 'ITA')
+                        else:
+                            t_name = base_match.get('tournament') or f"Event #{t_id}"
+
+                        # Translate Round ID to human-readable string
+                        r_id = match.get('roundId')
+                        r_name = ROUND_MAP.get(r_id, base_match.get('round') or f"Round {r_id}")
                         
                         exact_match_data = {
                             "opponent": opp_name,
-                            "tournament": t_name,
+                            "tournament": t_name.split('-')[0].strip(), # Cleans "Australian Open - Melbourne" to "Australian Open"
                             "round": r_name,
+                            "countryAcr": t_country,
                             "date": match.get('date', f"{date_str}T00:00:00Z")
                         }
                         break
-            
-            if exact_match_data:
-                break
+            if exact_match_data: break
             search_date += datetime.timedelta(days=1)
 
         if exact_match_data:
-            print(f"  -> Found live match vs {exact_match_data['opponent']} at {exact_match_data['tournament']}")
             db['next_match'] = exact_match_data
         elif base_match:
+            r_id = base_match.get('roundId')
             db['next_match'] = {
                 "opponent": base_match.get('opponent_name') or "TBD",
                 "tournament": base_match.get('tournament') or "TBD",
-                "round": base_match.get('round') or "TBD",
+                "round": ROUND_MAP.get(r_id, base_match.get('round') or "TBD"),
+                "countryAcr": "ITA",
                 "date": base_match.get('date') or None
             }
         else:
-            db['next_match'] = {"opponent": "TBD", "tournament": "Off Season", "round": "TBD", "date": None}
+            db['next_match'] = {"opponent": "TBD", "tournament": "Off Season", "round": "TBD", "countryAcr": "ITA", "date": None}
             
         print("4/9 Syncing H2H...")
         new_rivalries = []

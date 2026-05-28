@@ -73,8 +73,8 @@ function toggleLanguage() {
 
 // --- COUNTDOWN LOGIC ---
 function updateSlamCountdown() {
-    // Roland Garros 2026 Target Date
-    const nextSlam = { name: "Roland Garros", date: "2026-05-26T10:00:00Z" };
+    // Wimbledon 2026
+    const nextSlam = { name: "Wimbledon", date: "2026-07-01T10:00:00Z" };
     const target = new Date(nextSlam.date).getTime();
     
     const timerFunc = () => {
@@ -135,42 +135,60 @@ async function initDashboard(isRefresh = false) {
             }
         }
         
-        // --- NEXT MATCH & LIVE LOGIC ---
+        // --- NEXT MATCH & DUAL TIMEZONE LOGIC ---
         if (data.next_match) {
             document.getElementById('next-opponent-display').innerText = `vs ${data.next_match.opponent}`;
+            document.getElementById('next-tournament-display').innerText = data.next_match.tournament;
+            document.getElementById('next-round-display').innerText = data.next_match.round;
+            document.getElementById('local-country-code').innerText = data.next_match.countryAcr || "LOC";
             
-            const roundText = data.next_match.round && data.next_match.round !== "TBD" ? ` - ${data.next_match.round}` : "";
-            document.getElementById('next-tournament-display').innerText = `${data.next_match.tournament}${roundText}`;
-            
-            const matchDate = new Date(data.next_match.date);
-            const now = new Date();
-            
-            const isLive = data.next_match.date ? (now >= matchDate && now <= new Date(matchDate.getTime() + 10800000)) : false;
-            
-            const card = document.getElementById('match-card');
-            const indicator = document.getElementById('live-indicator');
-            const titleLabel = document.getElementById('match-title-label'); 
-            const dateDisplay = document.getElementById('next-date-display');
-
-            if (isLive) {
-                if (card) card.classList.replace('border-blue-500', 'border-red-500');
-                if (indicator) indicator.classList.remove('hidden');
-                if (titleLabel) titleLabel.classList.add('hidden');
-                if (dateDisplay) {
-                    dateDisplay.innerText = translations[currentLang].liveNow;
-                    dateDisplay.classList.add('text-red-400', 'font-bold');
-                }
-            } else {
-                if (card) card.classList.replace('border-red-500', 'border-blue-500');
-                if (indicator) indicator.classList.add('hidden');
-                if (titleLabel) titleLabel.classList.remove('hidden');
+            if (data.next_match.date) {
+                const matchDate = new Date(data.next_match.date);
+                const now = new Date();
+                const isLive = (now >= matchDate && now <= new Date(matchDate.getTime() + 10800000));
                 
-                if (dateDisplay) {
-                    dateDisplay.classList.remove('text-red-400', 'font-bold');
-                    const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
-                    dateDisplay.innerText = data.next_match.date ? matchDate.toLocaleString(currentLang === 'it' ? 'it-IT' : 'en-US', options) : "";
+                const banner = document.getElementById('tournament-banner');
+                const indicator = document.getElementById('live-indicator');
+                
+                if (isLive) {
+                    banner.classList.replace('border-turin-blue', 'border-red-500');
+                    indicator.classList.remove('hidden');
+                } else {
+                    banner.classList.replace('border-red-500', 'border-turin-blue');
+                    indicator.classList.add('hidden');
                 }
+
+                // Timezone Dictionary mapping Country Acronym to IANA Timezone
+                const tzMap = {
+                    "AUS": "Australia/Melbourne", "ESP": "Europe/Madrid", 
+                    "FRA": "Europe/Paris", "GBR": "Europe/London", 
+                    "USA": "America/New_York", "ITA": "Europe/Rome",
+                    "MON": "Europe/Monaco", "CHN": "Asia/Shanghai",
+                    "GER": "Europe/Berlin", "CAN": "America/Toronto"
+                };
+                
+                const tzAcr = data.next_match.countryAcr;
+                const localTZ = tzMap[tzAcr] || "UTC"; // Fallback to UTC if unknown
+
+                // User Time (Your Time) - 24H Format
+                const userTimeOpts = { hour: '2-digit', minute: '2-digit', hour12: false };
+                document.getElementById('next-date-user').innerText = matchDate.toLocaleTimeString(currentLang === 'it' ? 'it-IT' : 'en-US', userTimeOpts);
+                
+                // Tournament Local Time - 24H Format
+                const localTimeOpts = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: localTZ };
+                document.getElementById('next-date-local').innerText = matchDate.toLocaleTimeString(currentLang === 'it' ? 'it-IT' : 'en-US', localTimeOpts);
+                
+                // Day of the week
+                const dayOpts = { weekday: 'long', month: 'short', day: 'numeric' };
+                document.getElementById('next-date-day').innerText = matchDate.toLocaleDateString(currentLang === 'it' ? 'it-IT' : 'en-US', dayOpts);
             }
+        }
+
+        // --- TITLES YTD LOGIC ---
+        if (data.trophies) {
+            const currentYear = new Date().getFullYear();
+            const titlesThisYear = data.trophies.filter(t => t.year === currentYear).length;
+            document.getElementById('titles-ytd-display').innerText = titlesThisYear;
         }
 
         // --- PLAYER BIO LOGIC ---

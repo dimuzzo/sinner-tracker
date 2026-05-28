@@ -55,46 +55,65 @@
     </header>
 
     <main class="max-w-6xl mx-auto p-6 mt-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-md border-t-4 border-sinner-orange custom-hover flex items-center justify-between">
-                <div>
-                    <h3 class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider" data-i18n="rankingTitle">ATP Ranking</h3>
-                    <p id="ranking-display" class="text-4xl lg:text-5xl font-black mt-2">#1 👑</p>
+        <div id="tournament-banner" class="mb-6 bg-gradient-to-br from-sinner-black to-gray-800 text-white rounded-2xl shadow-xl border-t-4 border-turin-blue p-6 md:p-8 relative overflow-hidden custom-hover">
+            <div class="absolute -right-10 -top-10 opacity-5 text-9xl">🎾</div>
+            
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="bg-turin-blue text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full" id="next-round-display">Loading...</span>
+                        <div id="live-indicator" class="hidden flex items-center gap-1.5 bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest animate-pulse">
+                            <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span> Live
+                        </div>
+                    </div>
+                    <h2 id="next-tournament-display" class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 uppercase tracking-tight">Current Event</h2>
+                    <p id="next-opponent-display" class="text-xl md:text-2xl text-sinner-orange font-extrabold mt-2">vs TBD</p>
+                </div>
+                
+                <div class="bg-gray-900/50 backdrop-blur-sm rounded-xl p-4 border border-gray-700 min-w-[200px]">
+                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-3 border-b border-gray-700 pb-2">Match Schedule</p>
+                    
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs font-bold text-gray-300">Local Time (<span id="local-country-code">...</span>)</span>
+                        <span id="next-date-local" class="text-sm font-black text-white">--:--</span>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-gray-300">Your Time</span>
+                        <span id="next-date-user" class="text-sm font-black text-sinner-orange">--:--</span>
+                    </div>
+                    <p id="next-date-day" class="text-right text-[10px] text-gray-500 mt-2 uppercase font-bold"></p>
                 </div>
             </div>
+        </div>
 
-            <div id="match-card" class="bg-gradient-to-br from-sinner-black to-gray-800 text-white p-6 rounded-xl shadow-md border-t-4 border-blue-500 custom-hover relative overflow-hidden transition-colors duration-500">
-                <div class="absolute -right-2 -top-2 opacity-10 text-6xl">🎾</div>
-                <div class="flex justify-between items-center mb-2">
-                    <h3 id="match-title-label" class="text-gray-400 text-xs font-bold uppercase tracking-wider" data-i18n="nextMatchTitle">Next Match</h3>
-                    <div id="live-indicator" class="hidden flex items-center gap-1.5 bg-red-500/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest animate-pulse">
-                        <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span> <span data-i18n="liveNow">Live Now</span>
-                    </div>
-                </div>
-                <p id="next-opponent-display" class="text-2xl font-black truncate">vs TBD</p>
-                <div class="mt-3 text-sm text-gray-300">
-                    <p id="next-tournament-display" class="font-semibold text-sinner-orange">Loading...</p>
-                    <p id="next-date-display" class="text-xs mt-1 text-gray-400"></p>
-                </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-md border-t-4 border-sinner-orange custom-hover">
+                <h3 class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider" data-i18n="rankingTitle">ATP Ranking</h3>
+                <p id="ranking-display" class="text-4xl font-black mt-2">#1 👑</p>
+            </div>
+
+            <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-md border-t-4 border-yellow-400 custom-hover">
+                <h3 class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider">Titles YTD</h3>
+                <p id="titles-ytd-display" class="text-4xl font-black mt-2 text-yellow-500">0</p>
             </div>
 
             <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-md border-t-4 border-sinner-green custom-hover">
                 <div class="flex justify-between items-start">
                     <div>
                         <h3 class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider" data-i18n="winLossTitle">Win / Loss (YTD)</h3>
-                        <p id="win-loss-display" class="text-4xl lg:text-5xl font-black mt-2">0 - 0</p>
+                        <p id="win-loss-display" class="text-4xl font-black mt-2">0 - 0</p>
                     </div>
                 </div>
                 <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center gap-2">
-                    <span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider mr-2" data-i18n="recentForm">Form</span>
-                    <div id="recent-form-display" class="flex gap-1.5">
-                        </div>
+                    <span class="text-[10px] uppercase font-bold text-gray-400 mr-2">Form</span>
+                    <div id="recent-form-display" class="flex gap-1.5"></div>
                 </div>
             </div>
 
             <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-md border-t-4 border-sinner-black dark:border-gray-500 custom-hover">
                 <h3 class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider" data-i18n="pointsTitle">Total ATP Points</h3>
-                <p id="total-points-display" class="text-4xl lg:text-5xl font-black mt-2">0</p>
+                <p id="total-points-display" class="text-4xl font-black mt-2">0</p>
             </div>
         </div>
 
