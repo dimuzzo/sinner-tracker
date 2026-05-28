@@ -167,21 +167,34 @@ def update_database():
         if new_rivalries:
             db['rivalries'] = new_rivalries
 
-        print("5/9 Syncing Recent Form...")
+        print("5/9 Syncing Recent Form & Fox Streak...")
         past_matches = api_call(f"/tennis/v2/atp/player/past-matches/{SINNER_ID}")
         recent_form = []
+        current_streak = 0
+        streak_broken = False
+
         if past_matches and isinstance(past_matches, list):
-            for m in past_matches[:5]:
+            for m in past_matches:
                 p1 = m.get("player1", {})
                 p2 = m.get("player2", {})
                 opponent = p2.get("name") if p1.get("id") == SINNER_ID else p1.get("name")
                 is_win = str(m.get("match_winner")) == str(SINNER_ID)
-                recent_form.append({
-                    "win": is_win,
-                    "opponent": opponent,
-                    "result": m.get("result", "")
-                })
+                
+                if len(recent_form) < 5:
+                    recent_form.append({
+                        "win": is_win,
+                        "opponent": opponent,
+                        "result": m.get("result", "")
+                    })
+                
+                if not streak_broken:
+                    if is_win:
+                        current_streak += 1
+                    else:
+                        streak_broken = True
+
         db['recent_form'] = recent_form
+        db['current_streak'] = current_streak
 
         print("6/9 Syncing Surface Mastery...")
         surface_data = api_call(f"/tennis/v2/atp/player/surface-summary/{SINNER_ID}")

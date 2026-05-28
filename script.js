@@ -17,7 +17,9 @@ const translations = {
         pigeon: "The Pigeon 🟢", nemesis: "The Nemesis 🔴",
         bioTitle: "Player Identity Card", bioHeight: "Height", bioWeight: "Weight", bioPlays: "Plays", 
         bioPro: "Pro Since", bioCoaches: "Coaching Team",
-        goldenMastersTitle: "Career Golden Masters", goldenMastersSub: "All 9 ATP Masters 1000 Titles Conquered"
+        goldenMastersTitle: "Career Golden Masters", goldenMastersSub: "All 9 ATP Masters 1000 Titles Conquered",
+        titlesYTD: "Titles YTD", currentEvent: "Current Event", matchSchedule: "Match Schedule",
+        localTime: "Local Time", yourTime: "Your Time", winStreak: "Win Streak", daysUntil: "Days until"
     },
     it: {
         rankingTitle: "Classifica ATP", winLossTitle: "Vittorie / Sconfitte", pointsTitle: "Punti Totali ATP",
@@ -34,7 +36,9 @@ const translations = {
         pigeon: "Il Figlioccio 🟢", nemesis: "La Bestia Nera 🔴",
         bioTitle: "Carta d'Identità", bioHeight: "Altezza", bioWeight: "Peso", bioPlays: "Mano",
         bioPro: "Pro dal", bioCoaches: "Team Tecnico",
-        goldenMastersTitle: "Career Golden Masters", goldenMastersSub: "Tutti e 9 i titoli Masters 1000 conquistati"
+        goldenMastersTitle: "Career Golden Masters", goldenMastersSub: "Tutti e 9 i titoli Masters 1000 conquistati",
+        titlesYTD: "Titoli YTD", currentEvent: "Torneo in Corso", matchSchedule: "Orari Programmati",
+        localTime: "Ora Locale", yourTime: "Tuo Orario", winStreak: "Vittorie di Fila", daysUntil: "Giorni a"
     }
 };
 
@@ -84,7 +88,7 @@ function updateSlamCountdown() {
 
         if (diff > 0) {
             container.classList.remove('hidden');
-            document.getElementById('countdown-label').innerText = `Days until ${nextSlam.name}`;
+            document.getElementById('countdown-label').innerText = `${translations[currentLang].daysUntil} ${nextSlam.name}`;
             
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -152,6 +156,7 @@ async function initDashboard(isRefresh = false) {
                 
                 if (isLive) {
                     banner.classList.replace('border-turin-blue', 'border-red-500');
+                    indicator.innerHTML = `<span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span> ${translations[currentLang].liveNow}`;
                     indicator.classList.remove('hidden');
                 } else {
                     banner.classList.replace('border-red-500', 'border-turin-blue');
@@ -258,6 +263,54 @@ async function initDashboard(isRefresh = false) {
         }
 
         if (data.roadmap) renderRoadmap(data.roadmap);
+
+        // --- FOX STREAK LOGIC ---
+        const streakBadge = document.getElementById('streak-badge');
+        const streakCount = document.getElementById('streak-count');
+        if (data.current_streak && data.current_streak >= 3) {
+            if(streakCount) streakCount.innerText = data.current_streak;
+            if (streakBadge) {
+                streakBadge.innerHTML = `🔥 <span id="streak-count">${data.current_streak}</span> ${translations[currentLang].winStreak}`;
+                streakBadge.classList.remove('hidden');
+            }
+        } else {
+            if (streakBadge) streakBadge.classList.add('hidden');
+        }
+
+        // --- INSTAGRAM SHARE LOGIC ---
+        const shareBtn = document.getElementById('share-btn');
+        if (shareBtn) {
+            const newShareBtn = shareBtn.cloneNode(true);
+            shareBtn.parentNode.replaceChild(newShareBtn, shareBtn);
+            
+            newShareBtn.addEventListener('click', async () => {
+                const banner = document.getElementById('tournament-banner');
+                
+                newShareBtn.innerText = "⏳";
+                newShareBtn.style.opacity = "0"; 
+                
+                try {
+                    const canvas = await html2canvas(banner, {
+                        scale: 3,
+                        backgroundColor: '#171717', 
+                        useCORS: true
+                    });
+                    
+                    newShareBtn.innerText = "📸";
+                    newShareBtn.style.opacity = "1";
+                    
+                    const image = canvas.toDataURL("image/jpeg", 0.95);
+                    const link = document.createElement('a');
+                    link.href = image;
+                    link.download = `SinnerTracker-Banner.jpg`;
+                    link.click();
+                } catch (e) {
+                    console.error("Errore screenshot:", e);
+                    newShareBtn.innerText = "📸";
+                    newShareBtn.style.opacity = "1";
+                }
+            });
+        }
         
         updateSlamCountdown();
     } catch (error) {
