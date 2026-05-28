@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sinner-tracker-v5';
+const CACHE_NAME = 'sinner-tracker-v6';
 const DATA_TO_CACHE = [
   '/sinner-tracker/',
   '/sinner-tracker/index.html',
@@ -8,7 +8,8 @@ const DATA_TO_CACHE = [
   '/sinner-tracker/manifest.json',
   '/sinner-tracker/assets/icon-192.png',
   '/sinner-tracker/assets/icon-512.png',
-  '/sinner-tracker/assets/social-cover.png'
+  '/sinner-tracker/assets/social-cover.png',
+  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'
 ];
 
 self.addEventListener('install', event => {

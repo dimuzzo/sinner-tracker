@@ -71,11 +71,11 @@
                         <span class="bg-turin-blue text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full" id="next-round-display">Loading...</span>
                         
                         <div id="live-indicator" class="hidden flex items-center gap-1.5 bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest animate-pulse">
-                            <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span> Live
+                            <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span> <span data-i18n="liveNow">Live</span>
                         </div>
 
                         <div id="streak-badge" class="hidden flex items-center gap-1.5 bg-orange-500/20 text-orange-400 border border-orange-500/30 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
-                            🔥 <span id="streak-count">0</span> Win Streak
+                            🔥 <span id="streak-count">0</span> <span data-i18n="winStreak">Win Streak</span>
                         </div>
                     </div>
                     <h2 id="next-tournament-display" class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 uppercase tracking-tight" data-i18n="currentEvent">Current Event</h2>
@@ -86,7 +86,7 @@
                     <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-3 border-b border-gray-700 pb-2" data-i18n="matchSchedule">Match Schedule</p>
                     
                     <div class="flex justify-between items-center mb-2">
-                        <span class="text-xs font-bold text-gray-300"><span data-i18n="localTime">Local Time (<span id="local-country-code">...</span>)</span>
+                        <span class="text-xs font-bold text-gray-300" data-i18n="localTime">Local Time (<span id="local-country-code">...</span>)</span>
                         <span id="next-date-local" class="text-sm font-black text-white">--:--</span>
                     </div>
                     
