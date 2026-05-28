@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-27T06:25:08.760614+00:00",
+  "last_updated": "2026-05-28T06:17:11.985780+00:00",
   "ranking": 1,
   "total_points": 14750,
   "win_loss": "36 - 2",
@@ -10,10 +10,10 @@
     "break_points_converted": 43.0
   },
   "next_match": {
-    "opponent": "Juan Manuel Cerundolo",
+    "opponent": "TBD",
     "tournament": "TBD",
-    "round": "Round 5",
-    "date": "2026-05-28T12:00:00.000Z"
+    "round": "TBD",
+    "date": null
   },
   "tournaments": [
     {
