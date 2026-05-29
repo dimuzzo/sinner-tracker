@@ -1,11 +1,11 @@
 {
-  "last_updated": "2026-05-28T10:57:51.208360+00:00",
+  "last_updated": "2026-05-29T06:19:19.168153+00:00",
   "ranking": 1,
   "total_points": 14750,
   "win_loss": "36 - 2",
   "stats": {
-    "first_serve_in": 59.7,
-    "break_points_saved": 65.7,
+    "first_serve_in": 59.8,
+    "break_points_saved": 65.5,
     "first_return_won": 66.9,
     "break_points_converted": 43.0
   },
@@ -162,6 +162,11 @@
   ],
   "recent_form": [
     {
+      "win": false,
+      "opponent": "Juan Manuel Cerundolo",
+      "result": "3-6 2-6 7-5 6-1 6-1"
+    },
+    {
       "win": true,
       "opponent": "Clement Tabur",
       "result": "6-1 6-3 6-4"
@@ -180,11 +185,6 @@
       "win": true,
       "opponent": "Andrey Rublev",
       "result": "6-2 6-4"
-    },
-    {
-      "win": true,
-      "opponent": "Andrea Pellegrino",
-      "result": "6-2 6-3"
     }
   ],
   "race_points": 5900,
@@ -247,5 +247,5 @@
     "plays": "Right-Handed, Two-Handed Backhand",
     "coach": "Simone Vagnozzi, Darren Cahill"
   },
-  "current_streak": 10
+  "current_streak": 0
 }
