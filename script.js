@@ -192,7 +192,9 @@ async function initDashboard(isRefresh = false) {
         // --- TITLES YTD LOGIC ---
         if (data.trophies) {
             const currentYear = new Date().getFullYear();
-            const titlesThisYear = data.trophies.filter(t => t.year === currentYear).length;
+            const titlesThisYear = data.trophies.filter(t => 
+                t.year === currentYear && t.title !== "Career Golden Masters"
+            ).length;
             document.getElementById('titles-ytd-display').innerText = titlesThisYear;
         }
 

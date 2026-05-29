@@ -1,7 +1,7 @@
 {
   "last_updated": "2026-05-29T06:19:19.168153+00:00",
   "ranking": 1,
-  "total_points": 14750,
+  "total_points": 13500,
   "win_loss": "36 - 2",
   "stats": {
     "first_serve_in": 59.8,
@@ -51,6 +51,11 @@
       "name": "Internazionali d'Italia",
       "defending": 650,
       "earned": 1000
+    },
+    {
+      "name": "Roland Garros",
+      "defending": 1300,
+      "earned": 50
     }
   ],
   "rivalries": [
@@ -187,7 +192,7 @@
       "result": "6-2 6-4"
     }
   ],
-  "race_points": 5900,
+  "race_points": 5950,
   "surface_mastery": {
     "Hard": 19,
     "Clay": 18,
