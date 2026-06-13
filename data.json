@@ -1,7 +1,7 @@
 {
-  "last_updated": "2026-06-12T06:46:44.554383+00:00",
+  "last_updated": "2026-06-13T06:21:30.623881+00:00",
   "ranking": 1,
-  "total_points": 14750,
+  "total_points": 13500,
   "win_loss": "36 - 2",
   "stats": {
     "first_serve_in": 59.8,
@@ -11,8 +11,8 @@
   },
   "next_match": {
     "opponent": "TBD",
-    "tournament": "Off Season",
-    "round": "TBD",
+    "tournament": "TBD",
+    "round": "1st Round",
     "countryAcr": "ITA",
     "date": null
   },
@@ -61,20 +61,20 @@
   "rivalries": [
     {
       "name": "Carlos Alcaraz",
-      "wins": 0,
-      "losses": 0,
+      "wins": 7,
+      "losses": 11,
       "country": "ES"
     },
     {
       "name": "Novak Djokovic",
-      "wins": 0,
-      "losses": 0,
+      "wins": 6,
+      "losses": 5,
       "country": "SR"
     },
     {
       "name": "Alexander Zverev",
-      "wins": 0,
-      "losses": 0,
+      "wins": 10,
+      "losses": 4,
       "country": "DE"
     }
   ],
@@ -165,11 +165,37 @@
       "category": "Masters 1000"
     }
   ],
-  "recent_form": [],
+  "recent_form": [
+    {
+      "win": false,
+      "opponent": "Juan Manuel Cerundolo",
+      "result": "3-6 2-6 7-5 6-1 6-1"
+    },
+    {
+      "win": true,
+      "opponent": "Clement Tabur",
+      "result": "6-1 6-3 6-4"
+    },
+    {
+      "win": true,
+      "opponent": "Casper Ruud",
+      "result": "6-4 6-4"
+    },
+    {
+      "win": true,
+      "opponent": "Daniil Medvedev",
+      "result": "6-2 5-7 6-4"
+    },
+    {
+      "win": true,
+      "opponent": "Andrey Rublev",
+      "result": "6-2 6-4"
+    }
+  ],
   "race_points": 5950,
   "surface_mastery": {
-    "Hard": 0,
-    "Clay": 0,
+    "Hard": 19,
+    "Clay": 18,
     "Grass": 0
   },
   "roadmap": [
@@ -206,16 +232,16 @@
   ],
   "special_h2h": {
     "pigeon": {
-      "name": "TBD",
-      "diff": -999,
-      "wins": 0,
+      "name": "Alex De Minaur",
+      "diff": 13,
+      "wins": 13,
       "losses": 0
     },
     "nemesis": {
-      "name": "TBD",
-      "diff": 999,
-      "wins": 0,
-      "losses": 0
+      "name": "Carlos Alcaraz",
+      "diff": -4,
+      "wins": 7,
+      "losses": 11
     }
   },
   "bio": {
