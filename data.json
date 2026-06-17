@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-16T07:31:31.749404+00:00",
+  "last_updated": "2026-06-17T07:16:58.188246+00:00",
   "ranking": 1,
   "total_points": 13500,
   "win_loss": "36 - 2",
@@ -200,12 +200,6 @@
   },
   "roadmap": [
     {
-      "name": "Halle Open",
-      "date": "2026-06-17T00:00:00Z",
-      "court": "Grass",
-      "country": "GER"
-    },
-    {
       "name": "Wimbledon",
       "date": "2026-07-01T00:00:00Z",
       "court": "Grass",
@@ -228,6 +222,12 @@
       "date": "2026-08-26T00:00:00Z",
       "court": "Hard",
       "country": "USA"
+    },
+    {
+      "name": "China Open",
+      "date": "2026-09-26T00:00:00Z",
+      "court": "Hard",
+      "country": "CHN"
     }
   ],
   "special_h2h": {
