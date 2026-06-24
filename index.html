@@ -34,9 +34,9 @@
         }
     </script>
 </head>
-<body class="bg-sinner-white dark:bg-dark-bg text-sinner-black dark:text-gray-100 antialiased transition-colors duration-300">
+<body class="bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-100 via-gray-100 to-slate-200 dark:from-slate-800 dark:via-dark-bg dark:to-slate-900 text-sinner-black dark:text-gray-100 antialiased transition-colors duration-500 min-h-screen">
 
-    <header class="bg-sinner-black text-sinner-white py-3 px-4 shadow-md sticky top-0 z-50">
+    <header class="bg-sinner-black/90 glass-effect text-sinner-white py-3 px-4 shadow-lg sticky top-0 z-50 border-b border-white/10">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-2">
                 <img src="assets/icon-192.png" alt="Logo" class="w-8 h-8 rounded-lg shadow-sm">
@@ -56,7 +56,8 @@
     </header>
 
     <main class="max-w-6xl mx-auto p-6 mt-6">
-        <div id="tournament-banner" class="mb-6 bg-gradient-to-br from-sinner-black to-gray-800 text-white rounded-2xl shadow-xl border-t-4 border-turin-blue p-6 md:p-8 relative overflow-hidden custom-hover">
+        <!-- CURRENT TOURNAMENT BANNER -->
+        <div id="tournament-banner" class="animate-fade-in mb-6 bg-gradient-to-br from-sinner-black/95 to-gray-800/95 glass-effect text-white rounded-2xl shadow-xl border-t-4 border-turin-blue p-6 md:p-8 relative overflow-hidden custom-hover">
             <div class="absolute right-4 top-4 z-20" data-html2canvas-ignore>
                 <button id="share-btn" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white p-2 rounded-full shadow-lg transition-all" title="Share to IG Stories">
                     📸
@@ -99,38 +100,40 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-md border-t-4 border-sinner-orange custom-hover">
+        <!-- HERO STATS GRID -->
+        <div class="animate-fade-in delay-100 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-6 rounded-xl shadow-md border-t-4 border-sinner-orange custom-hover">
                 <h3 class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider" data-i18n="rankingTitle">ATP Ranking</h3>
                 <p id="ranking-display" class="text-4xl font-black mt-2">#1 👑</p>
             </div>
 
-            <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-md border-t-4 border-yellow-400 custom-hover">
+            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-6 rounded-xl shadow-md border-t-4 border-yellow-400 custom-hover">
                 <h3 class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider" data-i18n="titlesYTD">Titles YTD</h3>
                 <p id="titles-ytd-display" class="text-4xl font-black mt-2 text-yellow-500">0</p>
             </div>
 
-            <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-md border-t-4 border-sinner-green custom-hover">
+            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-6 rounded-xl shadow-md border-t-4 border-sinner-green custom-hover">
                 <div class="flex justify-between items-start">
                     <div>
                         <h3 class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider" data-i18n="winLossTitle">Win / Loss (YTD)</h3>
                         <p id="win-loss-display" class="text-4xl font-black mt-2">0 - 0</p>
                     </div>
                 </div>
-                <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center gap-2">
+                <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex items-center gap-2">
                     <span class="text-[10px] uppercase font-bold text-gray-400 mr-2">Form</span>
                     <div id="recent-form-display" class="flex gap-1.5"></div>
                 </div>
             </div>
 
-            <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-md border-t-4 border-sinner-black dark:border-gray-500 custom-hover">
+            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-6 rounded-xl shadow-md border-t-4 border-sinner-black dark:border-gray-500 custom-hover">
                 <h3 class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider" data-i18n="pointsTitle">Total ATP Points</h3>
                 <p id="total-points-display" class="text-4xl font-black mt-2">0</p>
             </div>
         </div>
 
-        <div class="mb-12 bg-gradient-to-r from-yellow-300 via-yellow-500 to-yellow-600 rounded-xl p-1 shadow-[0_0_30px_rgba(234,179,8,0.4)] hover:shadow-[0_0_40px_rgba(234,179,8,0.6)] transition-shadow duration-500">
-            <div class="bg-sinner-black rounded-lg p-6 text-center flex flex-col md:flex-row items-center justify-center gap-4 relative overflow-hidden">
+        <!-- GOLDEN MASTERS BANNER -->
+        <div class="animate-fade-in delay-200 mb-12 bg-gradient-to-r from-yellow-300/90 via-yellow-500/90 to-yellow-600/90 glass-effect rounded-xl p-1 shadow-[0_0_30px_rgba(234,179,8,0.4)] hover:shadow-[0_0_40px_rgba(234,179,8,0.6)] transition-shadow duration-500">
+            <div class="bg-sinner-black/95 rounded-lg p-6 text-center flex flex-col md:flex-row items-center justify-center gap-4 relative overflow-hidden">
                 <div class="absolute inset-0 bg-yellow-500/10 animate-pulse"></div>
                 
                 <span class="text-5xl relative z-10">👑</span>
@@ -146,8 +149,9 @@
             </div>
         </div>
 
-        <div id="slam-countdown-container" class="mb-12 hidden">
-            <div class="bg-gradient-to-r from-sinner-orange to-orange-600 rounded-xl p-6 text-white flex justify-between items-center shadow-lg relative overflow-hidden">
+        <!-- SLAM COUNTDOWN -->
+        <div id="slam-countdown-container" class="animate-fade-in delay-300 mb-12 hidden">
+            <div class="bg-gradient-to-r from-sinner-orange/90 to-orange-600/90 glass-effect rounded-xl p-6 text-white flex justify-between items-center shadow-lg relative overflow-hidden">
                 <div class="relative z-10">
                     <h4 class="text-[11px] font-black uppercase tracking-widest opacity-90 mb-1" id="countdown-label">Days until Next Slam</h4>
                     <p class="text-3xl font-black tracking-tighter" id="countdown-timer">00d 00h 00m</p>
@@ -156,8 +160,9 @@
             </div>
         </div>
 
-        <section class="mb-12">
-            <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-md border-l-4 border-turin-blue custom-hover">
+        <!-- RACE TO TURIN -->
+        <section class="animate-fade-in mb-12">
+            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-6 rounded-xl shadow-md border-l-4 border-turin-blue custom-hover">
                 <div class="flex justify-between items-end mb-3">
                     <div>
                         <h3 class="text-turin-blue dark:text-blue-400 text-sm font-bold uppercase tracking-wider" data-i18n="raceToTurin">Race to Turin</h3>
@@ -167,66 +172,70 @@
                         <span id="race-pct-display" class="text-2xl font-black text-turin-blue dark:text-blue-400">0%</span>
                     </div>
                 </div>
-                <div class="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-4 overflow-hidden relative shadow-inner">
+                <div class="w-full bg-gray-200/50 dark:bg-gray-800/50 rounded-full h-4 overflow-hidden relative shadow-inner">
                     <div id="bar-race" class="bg-gradient-to-r from-blue-400 to-turin-blue h-4 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
                 </div>
                 <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 text-right font-semibold uppercase tracking-wide" id="race-status">Qualifying...</p>
             </div>
         </section>
 
-        <section class="mb-16">
+        <!-- PLAYER IDENTITY CARD -->
+        <section class="animate-fade-in mb-16">
             <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-6" data-i18n="bioTitle">Player Identity Card</h2>
-            <div class="bg-white dark:bg-dark-card rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
-                <div class="grid grid-cols-2 md:grid-cols-6 divide-x divide-y md:divide-y-0 divide-gray-100 dark:divide-gray-700">
+            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+                <div class="grid grid-cols-2 md:grid-cols-6 divide-x divide-y md:divide-y-0 divide-gray-200/50 dark:divide-gray-700/50">
                     <div class="p-5 text-center">
-                        <p class="text-[10px] text-gray-400 uppercase font-bold mb-1" data-i18n="bioHeight">Height</p>
+                        <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold mb-1" data-i18n="bioHeight">Height</p>
                         <p id="bio-height" class="text-lg font-black italic">--</p>
                     </div>
                     <div class="p-5 text-center">
-                        <p class="text-[10px] text-gray-400 uppercase font-bold mb-1" data-i18n="bioWeight">Weight</p>
+                        <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold mb-1" data-i18n="bioWeight">Weight</p>
                         <p id="bio-weight" class="text-lg font-black italic">--</p>
                     </div>
                     <div class="p-5 text-center">
-                        <p class="text-[10px] text-gray-400 uppercase font-bold mb-1" data-i18n="bioPlays">Plays</p>
+                        <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold mb-1" data-i18n="bioPlays">Plays</p>
                         <p id="bio-plays" class="text-sm font-black uppercase italic">--</p>
                     </div>
                     <div class="p-5 text-center">
-                        <p class="text-[10px] text-gray-400 uppercase font-bold mb-1" data-i18n="bioPro">Pro Since</p>
+                        <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold mb-1" data-i18n="bioPro">Pro Since</p>
                         <p id="bio-pro" class="text-lg font-black italic">--</p>
                     </div>
-                    <div class="p-5 text-center md:col-span-2 bg-gray-50 dark:bg-gray-800/30">
-                        <p class="text-[10px] text-gray-400 uppercase font-bold mb-1" data-i18n="bioCoaches">Coaching Team</p>
+                    <div class="p-5 text-center md:col-span-2 bg-gray-50/30 dark:bg-gray-800/20">
+                        <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold mb-1" data-i18n="bioCoaches">Coaching Team</p>
                         <p id="bio-coach" class="text-sm font-black italic">--</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="mb-16">
+        <!-- ROADMAP -->
+        <section class="animate-fade-in mb-16">
             <div class="flex justify-between items-end mb-4">
                 <h2 class="text-2xl font-extrabold uppercase tracking-wide" data-i18n="roadmapTitle">Roadmap</h2>
-                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider" data-i18n="majorEvents">Next Major Events</span>
+                <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-i18n="majorEvents">Next Major Events</span>
             </div>
             
-            <div class="bg-white dark:bg-dark-card p-6 md:p-8 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 relative">
-                <div class="hidden md:block absolute top-1/2 left-10 right-10 h-1 bg-gray-100 dark:bg-gray-700 -translate-y-1/2 z-0"></div>
+            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-6 md:p-8 rounded-xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 relative">
+                <div class="hidden md:block absolute top-1/2 left-10 right-10 h-1 bg-gray-200/50 dark:bg-gray-700/50 -translate-y-1/2 z-0"></div>
                 
                 <div id="roadmap-container" class="grid grid-cols-1 md:grid-cols-5 gap-6 relative z-10">
-                    </div>
+                </div>
             </div>
         </section>
 
-        <section class="mb-12">
+        <!-- POINTS EVOLUTION -->
+        <section class="animate-fade-in mb-12">
             <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="pointsEvolution">Points Evolution</h2>
-            <div class="bg-white dark:bg-dark-card p-6 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
+            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-6 rounded-xl shadow-lg border border-gray-200/50 dark:border-gray-700/50">
                 <canvas id="pointsChart" style="max-height: 350px;"></canvas>
             </div>
         </section>
 
-        <section class="mb-12 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+        <!-- FOX STATS & SURFACE MASTERY -->
+        <section class="animate-fade-in mb-12 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
             <div class="flex flex-col">
                 <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="foxStats">The Fox Stats</h2>
-                <div class="bg-white dark:bg-dark-card p-4 md:p-6 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 flex justify-center items-center flex-grow">
+                <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-4 md:p-6 rounded-xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 flex justify-center items-center flex-grow">
                     <div class="relative w-full max-w-[320px] md:max-w-[420px] aspect-square">
                         <canvas id="radarChart"></canvas>
                     </div>
@@ -235,31 +244,33 @@
 
             <div class="flex flex-col mt-4 md:mt-0">
                 <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="surfaceMastery">Surface Mastery</h2>
-                <div class="bg-white dark:bg-dark-card p-4 md:p-6 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 flex flex-col justify-center items-center flex-grow relative">
+                <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-4 md:p-6 rounded-xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 flex flex-col justify-center items-center flex-grow relative">
                     <div class="relative w-full max-w-[280px] md:max-w-[350px] aspect-square">
                         <canvas id="doughnutChart"></canvas>
                         <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none mt-2">
                             <span class="text-3xl md:text-4xl font-black text-gray-800 dark:text-white" id="total-wins-center">0</span>
-                            <span class="text-[10px] md:text-xs uppercase font-bold text-gray-400 tracking-widest mt-1" data-i18n="winsYTD">Wins YTD</span>
+                            <span class="text-[10px] md:text-xs uppercase font-bold text-gray-500 tracking-widest mt-1" data-i18n="winsYTD">Wins YTD</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="mt-20 mb-12">
+        <!-- TROPHY CABINET -->
+        <section class="animate-fade-in mt-20 mb-12">
             <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="trophyCabinet">Trophy Cabinet</h2>
             <div id="trophy-cabinet" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
         </section>
 
-        <section class="mb-12">
+        <!-- EPIC RIVALRIES -->
+        <section class="animate-fade-in mb-12">
             <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="rivalries">Epic Rivalries</h2>
             
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 <div id="h2h-container" class="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6"></div>
                 
                 <div class="flex flex-col gap-4">
-                    <div class="bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20 p-4 rounded-xl shadow-md border border-green-200 dark:border-green-800 flex items-center justify-between custom-hover">
+                    <div class="bg-gradient-to-br from-green-50/80 to-emerald-100/80 dark:from-green-900/40 dark:to-emerald-900/40 glass-effect p-4 rounded-xl shadow-md border border-green-200/50 dark:border-green-800/50 flex items-center justify-between custom-hover">
                         <div>
                             <span class="text-[10px] uppercase font-bold text-green-600 dark:text-green-400 tracking-wider" data-i18n="pigeon">The Pigeon 🟢</span>
                             <h4 id="pigeon-name" class="font-bold text-sm text-sinner-black dark:text-white mt-0.5">Loading...</h4>
@@ -267,7 +278,7 @@
                         <span id="pigeon-score" class="font-black text-lg text-green-700 dark:text-green-300">0-0</span>
                     </div>
 
-                    <div class="bg-gradient-to-br from-red-50 to-rose-100 dark:from-red-900/20 dark:to-rose-900/20 p-4 rounded-xl shadow-md border border-red-200 dark:border-red-800 flex items-center justify-between custom-hover">
+                    <div class="bg-gradient-to-br from-red-50/80 to-rose-100/80 dark:from-red-900/40 dark:to-rose-900/40 glass-effect p-4 rounded-xl shadow-md border border-red-200/50 dark:border-red-800/50 flex items-center justify-between custom-hover">
                         <div>
                             <span class="text-[10px] uppercase font-bold text-red-600 dark:text-red-400 tracking-wider" data-i18n="nemesis">The Nemesis 🔴</span>
                             <h4 id="nemesis-name" class="font-bold text-sm text-sinner-black dark:text-white mt-0.5">Loading...</h4>
@@ -278,12 +289,13 @@
             </div>
         </section>
 
-        <section class="mb-12">
+        <!-- TOURNAMENTS BREAKDOWN -->
+        <section class="animate-fade-in mb-12">
             <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="tournaments">Tournaments Breakdown</h2>
-            <div class="bg-white dark:bg-dark-card shadow-md rounded-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect shadow-md rounded-xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
                 <div class="overflow-x-auto w-full">
                     <table class="w-full text-left border-collapse min-w-[500px]">
-                        <thead class="bg-sinner-black dark:bg-gray-800 text-sinner-white text-xs md:text-sm uppercase tracking-wider">
+                        <thead class="bg-sinner-black/90 text-sinner-white text-xs md:text-sm uppercase tracking-wider">
                             <tr>
                                 <th class="py-3 px-4" data-i18n="tournHeader">Tournament</th>
                                 <th class="py-3 px-4 text-center" data-i18n="defendingHeader">Defending</th>
@@ -298,7 +310,7 @@
         </section>
     </main>
 
-    <footer class="bg-sinner-black text-gray-400 py-6 text-center text-sm mt-12 shadow-inner">
+    <footer class="bg-sinner-black/90 glass-effect text-gray-400 py-6 text-center text-sm mt-12 shadow-inner border-t border-white/10">
         <p data-i18n="footerText">Sinner Tracker 2026 - Unofficial Fan Dashboard</p>
     </footer>
 
