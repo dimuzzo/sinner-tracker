@@ -380,14 +380,15 @@ function renderDoughnutChart(surfaces) {
             }]
         },
         options: {
-            responsive: true, maintainAspectRatio: true, cutout: '82%',
+            responsive: true, maintainAspectRatio: true, cutout: '78%',
             plugins: {
                 legend: {
                     position: 'bottom',
                     labels: {
                         color: isDark ? '#94a3b8' : '#64748b',
-                        padding: 16, usePointStyle: true, pointStyle: 'circle',
-                        font: { family: 'Montserrat', size: 13, weight: 'bold' }
+                        padding: 20, usePointStyle: true, pointStyle: 'circle',
+                        font: { family: 'Montserrat', size: 12, weight: 'bold' },
+                        boxWidth: 8,
                     }
                 }
             }
