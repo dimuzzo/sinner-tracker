@@ -53,20 +53,20 @@ body {
   letter-spacing: 0.02em;
 }
 .label-xs {
-  font-size: 0.6rem;
+  font-size: 0.72rem;
   font-weight: 800;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 .label-sm {
-  font-size: 0.7rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 .stat-value {
   font-family: var(--font-display);
-  font-size: clamp(2.2rem, 5vw, 3rem);
+  font-size: clamp(2.6rem, 5vw, 3.4rem);
   font-weight: 900;
   line-height: 1;
   letter-spacing: -0.02em;
@@ -83,7 +83,7 @@ body {
 }
 .section-header h2 {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: 1.6rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -99,9 +99,9 @@ body {
   background: linear-gradient(to right, var(--border-dark), transparent);
 }
 .section-sub {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-muted-light);
   margin-left: auto;
@@ -331,7 +331,7 @@ body {
 }
 .bio-value {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: 1.55rem;
   font-weight: 900;
   letter-spacing: -0.01em;
   margin-top: 0.3rem;
@@ -409,7 +409,7 @@ body {
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
 }
 .trophy-name {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -417,12 +417,12 @@ body {
 }
 .year-badge {
   display: inline-block;
-  padding: 0.15rem 0.5rem;
+  padding: 0.2rem 0.55rem;
   background: rgba(249,115,22,0.15);
   color: var(--orange);
   border: 1px solid rgba(249,115,22,0.3);
   border-radius: 0.35rem;
-  font-size: 0.62rem;
+  font-size: 0.72rem;
   font-weight: 900;
   letter-spacing: 0.05em;
 }
@@ -493,7 +493,7 @@ body {
   border-color: var(--border-dark);
 }
 .roadmap-date {
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -503,7 +503,7 @@ body {
 .dark .roadmap-date { color: var(--text-muted-dark); }
 .roadmap-name {
   font-family: var(--font-display);
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.02em;
@@ -517,9 +517,9 @@ body {
 .data-table th {
   background: #0d0d0d;
   color: #f8fafc;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 800;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   padding: 0.875rem 1rem;
   text-align: left;
@@ -527,7 +527,7 @@ body {
 .data-table td {
   padding: 0.875rem 1rem;
   border-bottom: 1px solid var(--border-light);
-  font-size: 0.875rem;
+  font-size: 0.95rem;
   font-weight: 600;
 }
 .dark .data-table td { border-color: var(--border-dark); }
@@ -582,6 +582,31 @@ body {
   inset: 0;
   background: radial-gradient(ellipse at center, rgba(250,204,21,0.12) 0%, transparent 65%);
   pointer-events: none;
+}
+.golden-banner .inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.5rem;
+}
+@media (min-width: 640px) {
+  .golden-banner .inner {
+    flex-direction: row;
+    text-align: left;
+    gap: 1.25rem;
+  }
+}
+.golden-banner .inner .text-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+@media (min-width: 640px) {
+  .golden-banner .inner .text-block { align-items: flex-start; }
 }
 
 /* =========================================

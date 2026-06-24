@@ -338,7 +338,7 @@ function renderRadarChart(s) {
                 r: {
                     angleLines:  { color: gridColor },
                     grid:        { color: gridColor },
-                    pointLabels: { color: textColor, font: { size: 10, weight: 'bold', family: 'Montserrat' } },
+                    pointLabels: { color: textColor, font: { size: 12, weight: 'bold', family: 'Montserrat' } },
                     ticks:       { display: false, stepSize: 25 },
                     suggestedMin: 0, suggestedMax: 100,
                 }
@@ -387,7 +387,7 @@ function renderDoughnutChart(surfaces) {
                     labels: {
                         color: isDark ? '#94a3b8' : '#64748b',
                         padding: 16, usePointStyle: true, pointStyle: 'circle',
-                        font: { family: 'Montserrat', size: 11, weight: 'bold' }
+                        font: { family: 'Montserrat', size: 13, weight: 'bold' }
                     }
                 }
             }
@@ -425,7 +425,7 @@ function renderChart(tournaments, currentTotalPoints) {
                 backgroundColor: isDark ? 'rgba(249,115,22,0.06)' : 'rgba(249,115,22,0.08)',
                 fill: true, tension: 0.42, borderWidth: 3,
                 pointBackgroundColor: '#f97316',
-                pointRadius: 4, pointHoverRadius: 6,
+                pointRadius: 5, pointHoverRadius: 7,
             }]
         },
         options: {
@@ -434,11 +434,11 @@ function renderChart(tournaments, currentTotalPoints) {
             scales: {
                 y: {
                     grid: { color: axisColor },
-                    ticks: { color: labelColor, font: { family: 'Montserrat', size: 10 } }
+                    ticks: { color: labelColor, font: { family: 'Montserrat', size: 12, weight: 'bold' } }
                 },
                 x: {
                     grid: { display: false },
-                    ticks: { color: labelColor, font: { family: 'Montserrat', size: 9 }, maxRotation: 35 }
+                    ticks: { color: labelColor, font: { family: 'Montserrat', size: 11, weight: '600' }, maxRotation: 30 }
                 }
             }
         }
