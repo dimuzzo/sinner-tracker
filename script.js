@@ -482,28 +482,61 @@ function renderChart(tournaments, currentTotalPoints) {
 function renderTrophies(trophiesData) {
     const cabinet = document.getElementById('trophy-cabinet');
     if (!cabinet) return;
-    let htmlContent = '';
-    
-    trophiesData.forEach(t => {
-        // Default style for Masters 1000, ATP 500, etc.
-        let style = "bg-white dark:bg-dark-card border-sinner-black dark:border-gray-600";
-        let icon = '🏆';
 
-        // Special style for Grand Slams
-        if (t.category === "Grand Slam") {
-            style = "bg-gradient-to-br from-yellow-50 to-orange-100 dark:from-yellow-900/20 dark:to-orange-900/20 border-yellow-400";
+    // Group trophies by Title
+    const groupedTrophies = {};
+    trophiesData.forEach(t => {
+        if (!groupedTrophies[t.title]) {
+            groupedTrophies[t.title] = {
+                title: t.title,
+                category: t.category,
+                years: []
+            };
+        }
+        groupedTrophies[t.title].years.push(t.year);
+    });
+
+    // Sort trophies: Career Golden Masters first, then by most recent year
+    const sortedTrophies = Object.values(groupedTrophies).sort((a, b) => {
+        if (a.title === "Career Golden Masters") return -1;
+        if (b.title === "Career Golden Masters") return 1;
+        return Math.max(...b.years) - Math.max(...a.years);
+    });
+
+    let htmlContent = '';
+    sortedTrophies.forEach(t => {
+        // Sort years in descending order for display
+        t.years.sort((a, b) => b - a);
+
+        let style = "bg-white/60 dark:bg-dark-card/60 backdrop-blur-md border-gray-200/50 dark:border-gray-700/50";
+        let icon = '🏆';
+        let glow = "hover:shadow-[0_10px_30px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_10px_30px_rgba(0,0,0,0.3)]";
+
+        if (t.category === "Grand Slam" && t.title !== "Career Golden Masters") {
+            style = "bg-gradient-to-br from-yellow-50/80 to-orange-50/80 dark:from-yellow-900/40 dark:to-orange-900/40 border-yellow-400/30";
             icon = '👑';
-        } 
-        // Special style for ATP Finals
-        else if (t.category === "ATP Finals") {
-            style = "bg-gradient-to-br from-blue-50 to-cyan-100 dark:from-blue-900/20 dark:to-cyan-900/20 border-turin-blue";
-            icon = '💎'; 
+            glow = "hover:shadow-[0_0_25px_rgba(250,204,21,0.2)]";
+        } else if (t.category === "ATP Finals") {
+            style = "bg-gradient-to-br from-blue-50/80 to-cyan-50/80 dark:from-blue-900/40 dark:to-cyan-900/40 border-turin-blue/30";
+            icon = '💎';
+            glow = "hover:shadow-[0_0_25px_rgba(37,99,235,0.2)]";
+        } else if (t.title === "Career Golden Masters") {
+            style = "bg-gradient-to-br from-yellow-300 via-yellow-500 to-yellow-600 border-yellow-300 text-white shadow-lg";
+            icon = '✨';
+            glow = "hover:shadow-[0_0_35px_rgba(234,179,8,0.5)] scale-105";
         }
 
-        htmlContent += `<div class="p-5 rounded-xl shadow-md border-b-4 text-center ${style} transition hover:-translate-y-1">
-            <div class="text-4xl mb-3">${icon}</div>
-            <h4 class="font-bold text-sm mb-1">${t.title}</h4>
-            <p class="text-sinner-orange font-black">${t.year}</p>
+        // Creation for years badges
+        const yearsBadges = t.years.map(y => 
+            `<span class="px-2.5 py-1 bg-sinner-orange/90 backdrop-blur-sm text-white text-[11px] font-black rounded-lg shadow-sm border border-white/20">${y}</span>`
+        ).join('');
+
+        htmlContent += `<div class="p-6 rounded-2xl border text-center ${style} transition-all duration-500 transform hover:-translate-y-2 ${glow}">
+            <div class="text-5xl mb-4 drop-shadow-md transform transition-transform group-hover:scale-110">${icon}</div>
+            <h4 class="font-black text-sm mb-3 uppercase tracking-wide ${t.title === 'Career Golden Masters' ? 'text-white' : 'text-sinner-black dark:text-gray-100'}">${t.title}</h4>
+            <div class="flex flex-wrap justify-center gap-1.5 mt-auto">
+                ${yearsBadges}
+            </div>
         </div>`;
     });
     
