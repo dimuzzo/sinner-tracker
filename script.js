@@ -380,7 +380,7 @@ function renderDoughnutChart(surfaces) {
             }]
         },
         options: {
-            responsive: true, maintainAspectRatio: true, cutout: '76%',
+            responsive: true, maintainAspectRatio: true, cutout: '82%',
             plugins: {
                 legend: {
                     position: 'bottom',
