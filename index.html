@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sinner Tracker - The Fox</title>
-    
+    <title>Sinner Tracker — The Fox Dashboard</title>
+
+    <meta name="description" content="The unofficial real-time Jannik Sinner tracker. ATP ranking, stats, trophies and more.">
+    <meta property="og:title" content="Sinner Tracker — The Fox Dashboard">
     <meta property="og:image" content="https://dimuzzo.github.io/sinner-tracker/assets/social-cover.png">
     <meta name="twitter:image" content="https://dimuzzo.github.io/sinner-tracker/assets/social-cover.png">
 
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -21,304 +24,327 @@
                 extend: {
                     fontFamily: { sans: ['Montserrat', 'sans-serif'] },
                     colors: {
-                        'sinner-orange': '#f97316',
-                        'sinner-black': '#171717',
-                        'sinner-green': '#22c55e',
-                        'sinner-white': '#f8fafc',
-                        'dark-bg': '#0f172a',
-                        'dark-card': '#1e293b',
-                        'turin-blue': '#2563eb'
+                        'fox-orange': '#f97316',
+                        'fox-green':  '#22c55e',
+                        'fox-blue':   '#2563eb',
+                        'fox-black':  '#0d0d0d',
+                        'dark-bg':    '#0a101e',
+                        'dark-card':  '#111827',
                     }
                 }
             }
         }
     </script>
 </head>
-<body class="bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-slate-100 via-gray-100 to-slate-200 dark:from-slate-800 dark:via-dark-bg dark:to-slate-900 text-sinner-black dark:text-gray-100 antialiased transition-colors duration-500 min-h-screen">
 
-    <header class="bg-sinner-black/90 glass-effect text-sinner-white py-3 px-4 shadow-lg sticky top-0 z-50 border-b border-white/10">
+<body class="bg-slate-100 dark:bg-dark-bg text-slate-900 dark:text-slate-100 min-h-screen">
+
+    <!-- HEADER -->
+    <header class="glass sticky top-0 z-50 bg-fox-black/95 border-b border-white/[0.06] py-3 px-4 shadow-xl">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <img src="assets/icon-192.png" alt="Logo" class="w-8 h-8 rounded-lg shadow-sm">
-                <h1 class="text-xl font-black tracking-widest uppercase text-sinner-orange hidden sm:block">Sinner Tracker</h1>
-                <h1 class="text-xl font-black tracking-widest uppercase text-sinner-orange sm:hidden">Sinner</h1>
+            <div class="flex items-center gap-2.5">
+                <img src="assets/icon-192.png" alt="Sinner Tracker" class="w-8 h-8 rounded-lg">
+                <span class="font-black text-fox-orange tracking-widest uppercase text-base hidden sm:block" style="font-family:'Barlow Condensed',sans-serif; letter-spacing:0.15em;">Sinner Tracker</span>
+                <span class="font-black text-fox-orange tracking-widest uppercase text-base sm:hidden" style="font-family:'Barlow Condensed',sans-serif; letter-spacing:0.15em;">🦊 Tracker</span>
             </div>
-            <div class="flex items-center space-x-2">
-                <button id="install-btn" class="hidden bg-sinner-green hover:bg-green-600 text-white font-bold py-1 px-2 rounded text-xs transition shadow-md flex items-center gap-1">
-                    <span class="text-sm">📱</span> <span data-i18n="installApp" class="hidden sm:inline">Install App</span>
+            <div class="flex items-center gap-2">
+                <button id="install-btn" class="hidden items-center gap-1.5 bg-fox-green hover:bg-green-500 text-white font-bold py-1.5 px-3 rounded-lg text-xs transition-colors">
+                    📱 <span data-i18n="installApp" class="hidden sm:inline">Install App</span>
                 </button>
-                
-                <button onclick="toggleDarkMode()" class="p-1 rounded-md hover:bg-gray-800 transition text-lg" id="dark-mode-btn">🌙</button>
-                
-                <button id="lang-btn" onclick="toggleLanguage()" class="bg-sinner-orange hover:bg-orange-600 text-white font-bold py-1 px-3 rounded text-xs transition">IT</button>
+                <button onclick="toggleDarkMode()" id="dark-mode-btn" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors text-base">🌙</button>
+                <button id="lang-btn" onclick="toggleLanguage()" class="bg-fox-orange hover:bg-orange-500 text-white font-black py-1.5 px-3 rounded-lg text-xs transition-colors tracking-wide">IT</button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto p-6 mt-6">
-        <!-- CURRENT TOURNAMENT BANNER -->
-        <div id="tournament-banner" class="animate-fade-in mb-6 bg-gradient-to-br from-sinner-black/95 to-gray-800/95 glass-effect text-white rounded-2xl shadow-xl border-t-4 border-turin-blue p-6 md:p-8 relative overflow-hidden custom-hover">
-            <div class="absolute right-4 top-4 z-20" data-html2canvas-ignore>
-                <button id="share-btn" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white p-2 rounded-full shadow-lg transition-all" title="Share to IG Stories">
-                    📸
-                </button>
-            </div>
-            
-            <div class="absolute -right-10 -bottom-10 opacity-5 text-9xl">🎾</div>
-            
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 relative z-10">
-                <div class="flex-1">
-                    <div class="flex flex-wrap items-center gap-3 mb-2">
-                        <span class="bg-turin-blue text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full" id="next-round-display">Loading...</span>
-                        
-                        <div id="live-indicator" class="hidden flex items-center gap-1.5 bg-red-500/20 text-red-400 border border-red-500/30 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest animate-pulse">
-                            <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span> <span data-i18n="liveNow">Live</span>
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-14">
+
+        <!-- TOURNAMENT BANNER -->
+        <section class="anim anim-1">
+            <div id="tournament-banner" class="tournament-banner shadow-2xl">
+                <div class="absolute top-4 right-4 z-20" data-html2canvas-ignore>
+                    <button id="share-btn" title="Download banner for IG Stories"
+                        class="w-9 h-9 flex items-center justify-center bg-white/10 hover:bg-white/20 border border-white/10 rounded-full text-base transition-colors backdrop-blur-sm">
+                        📸
+                    </button>
+                </div>
+                <div class="absolute -right-12 -top-12 w-64 h-64 rounded-full bg-fox-orange/5 blur-3xl pointer-events-none"></div>
+                <div class="absolute -left-8 -bottom-8 w-48 h-48 rounded-full bg-fox-blue/8 blur-3xl pointer-events-none"></div>
+
+                <div class="relative z-10 p-6 md:p-8 flex flex-col md:flex-row justify-between gap-6 md:items-center">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex flex-wrap items-center gap-2 mb-4">
+                            <span id="next-round-display" class="court-badge round">Loading…</span>
+                            <span id="live-indicator" class="court-badge live hidden">
+                                <span class="w-1.5 h-1.5 bg-red-400 rounded-full inline-block"></span>
+                                <span data-i18n="liveNow">Live Now</span>
+                            </span>
+                            <span id="streak-badge" class="court-badge streak hidden">
+                                🔥 <span id="streak-count">0</span>&nbsp;<span data-i18n="winStreak">Win Streak</span>
+                            </span>
                         </div>
 
-                        <div id="streak-badge" class="hidden flex items-center gap-1.5 bg-orange-500/20 text-orange-400 border border-orange-500/30 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
-                            🔥 <span id="streak-count">0</span> <span data-i18n="winStreak">Win Streak</span>
+                        <h2 id="next-tournament-display"
+                            class="text-white font-black uppercase leading-none mb-2"
+                            style="font-family:'Barlow Condensed',sans-serif; font-size:clamp(2rem,5vw,3.5rem); letter-spacing:0.02em;">
+                            Current Event
+                        </h2>
+                        <p id="next-opponent-display" class="text-fox-orange font-extrabold text-xl md:text-2xl">vs TBD</p>
+
+                        <div class="flex items-center gap-2 mt-5">
+                            <span class="label-xs text-slate-500" data-i18n="recentForm">Form</span>
+                            <div id="recent-form-display" class="flex items-center gap-1.5"></div>
                         </div>
                     </div>
-                    <h2 id="next-tournament-display" class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 uppercase tracking-tight" data-i18n="currentEvent">Current Event</h2>
-                    <p id="next-opponent-display" class="text-xl md:text-2xl text-sinner-orange font-extrabold mt-2">vs TBD</p>
-                </div>
-                
-                <div class="bg-gray-900/50 backdrop-blur-sm rounded-xl p-4 border border-gray-700 min-w-[200px]">
-                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-3 border-b border-gray-700 pb-2" data-i18n="matchSchedule">Match Schedule</p>
-                    
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-xs font-bold text-gray-300" data-i18n="localTime">Local Time (<span id="local-country-code">...</span>)</span>
-                        <span id="next-date-local" class="text-sm font-black text-white">--:--</span>
+
+                    <div class="time-box glass flex-shrink-0">
+                        <p class="label-xs text-slate-400 border-b border-white/[0.08] pb-2 mb-3" data-i18n="matchSchedule">Match Schedule</p>
+                        <div class="flex justify-between items-center gap-6 mb-2">
+                            <span class="text-xs text-slate-400 font-semibold">
+                                <span data-i18n="localTime">Local</span>
+                                (<span id="local-country-code" class="text-white font-black">—</span>)
+                            </span>
+                            <span id="next-date-local" class="font-black text-white text-sm">--:--</span>
+                        </div>
+                        <div class="flex justify-between items-center gap-6">
+                            <span class="text-xs text-slate-400 font-semibold" data-i18n="yourTime">Your Time</span>
+                            <span id="next-date-user" class="font-black text-fox-orange text-sm">--:--</span>
+                        </div>
+                        <p id="next-date-day" class="text-right label-xs text-slate-500 mt-3"></p>
                     </div>
-                    
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs font-bold text-gray-300" data-i18n="yourTime">Your Time</span>
-                        <span id="next-date-user" class="text-sm font-black text-sinner-orange">--:--</span>
-                    </div>
-                    <p id="next-date-day" class="text-right text-[10px] text-gray-500 mt-2 uppercase font-bold"></p>
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- HERO STATS GRID -->
-        <div class="animate-fade-in delay-100 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-6 rounded-xl shadow-md border-t-4 border-sinner-orange custom-hover">
-                <h3 class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider" data-i18n="rankingTitle">ATP Ranking</h3>
-                <p id="ranking-display" class="text-4xl font-black mt-2">#1 👑</p>
-            </div>
-
-            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-6 rounded-xl shadow-md border-t-4 border-yellow-400 custom-hover">
-                <h3 class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider" data-i18n="titlesYTD">Titles YTD</h3>
-                <p id="titles-ytd-display" class="text-4xl font-black mt-2 text-yellow-500">0</p>
-            </div>
-
-            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-6 rounded-xl shadow-md border-t-4 border-sinner-green custom-hover">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <h3 class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider" data-i18n="winLossTitle">Win / Loss (YTD)</h3>
-                        <p id="win-loss-display" class="text-4xl font-black mt-2">0 - 0</p>
-                    </div>
+        <section class="anim anim-2">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="card glass stat-card accent-orange card-hover">
+                    <p class="label-xs text-muted" data-i18n="rankingTitle">ATP Ranking</p>
+                    <p id="ranking-display" class="stat-value mt-2">#1 👑</p>
+                    <span class="bg-icon">🏆</span>
                 </div>
-                <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex items-center gap-2">
-                    <span class="text-[10px] uppercase font-bold text-gray-400 mr-2">Form</span>
-                    <div id="recent-form-display" class="flex gap-1.5"></div>
+                <div class="card glass stat-card accent-yellow card-hover">
+                    <p class="label-xs text-muted" data-i18n="titlesYTD">Titles YTD</p>
+                    <p id="titles-ytd-display" class="stat-value mt-2 text-yellow-500 dark:text-yellow-400">0</p>
+                    <span class="bg-icon">🥇</span>
+                </div>
+                <div class="card glass stat-card accent-green card-hover">
+                    <p class="label-xs text-muted" data-i18n="winLossTitle">Win / Loss</p>
+                    <p id="win-loss-display" class="stat-value mt-2">0-0</p>
+                    <span class="bg-icon">✅</span>
+                </div>
+                <div class="card glass stat-card accent-slate card-hover">
+                    <p class="label-xs text-muted" data-i18n="pointsTitle">ATP Points</p>
+                    <p id="total-points-display" class="stat-value mt-2">0</p>
+                    <span class="bg-icon">📊</span>
                 </div>
             </div>
-
-            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-6 rounded-xl shadow-md border-t-4 border-sinner-black dark:border-gray-500 custom-hover">
-                <h3 class="text-gray-500 dark:text-gray-400 text-xs font-bold uppercase tracking-wider" data-i18n="pointsTitle">Total ATP Points</h3>
-                <p id="total-points-display" class="text-4xl font-black mt-2">0</p>
-            </div>
-        </div>
+        </section>
 
         <!-- GOLDEN MASTERS BANNER -->
-        <div class="animate-fade-in delay-200 mb-12 bg-gradient-to-r from-yellow-300/90 via-yellow-500/90 to-yellow-600/90 glass-effect rounded-xl p-1 shadow-[0_0_30px_rgba(234,179,8,0.4)] hover:shadow-[0_0_40px_rgba(234,179,8,0.6)] transition-shadow duration-500">
-            <div class="bg-sinner-black/95 rounded-lg p-6 text-center flex flex-col md:flex-row items-center justify-center gap-4 relative overflow-hidden">
-                <div class="absolute inset-0 bg-yellow-500/10 animate-pulse"></div>
-                
-                <span class="text-5xl relative z-10">👑</span>
-                <div class="relative z-10">
-                    <h2 class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-500 uppercase tracking-[0.2em]" data-i18n="goldenMastersTitle">
-                        Career Golden Masters
-                    </h2>
-                    <p class="text-yellow-100/70 text-xs md:text-sm font-bold tracking-widest uppercase mt-2" data-i18n="goldenMastersSub">
-                        All 9 ATP Masters 1000 Titles Conquered
-                    </p>
+        <section class="anim anim-2">
+            <div class="golden-banner glass p-6 md:p-8">
+                <div class="absolute -left-8 top-0 bottom-0 w-48 bg-yellow-400/5 blur-3xl pointer-events-none"></div>
+                <div class="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-4 text-center sm:text-left">
+                    <span class="text-5xl drop-shadow-lg">👑</span>
+                    <div>
+                        <h2 class="font-black uppercase text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-500"
+                            style="font-family:'Barlow Condensed',sans-serif; font-size:clamp(1.5rem,4vw,2.5rem); letter-spacing:0.1em;"
+                            data-i18n="goldenMastersTitle">Career Golden Masters</h2>
+                        <p class="label-xs text-yellow-400/80 mt-2" data-i18n="goldenMastersSub">All 9 ATP Masters 1000 Titles Conquered</p>
+                    </div>
+                    <span class="text-5xl drop-shadow-lg hidden sm:block">🏆</span>
                 </div>
-                <span class="text-5xl relative z-10">🏆</span>
             </div>
-        </div>
+        </section>
 
-        <!-- SLAM COUNTDOWN -->
-        <div id="slam-countdown-container" class="animate-fade-in delay-300 mb-12 hidden">
-            <div class="bg-gradient-to-r from-sinner-orange/90 to-orange-600/90 glass-effect rounded-xl p-6 text-white flex justify-between items-center shadow-lg relative overflow-hidden">
-                <div class="relative z-10">
-                    <h4 class="text-[11px] font-black uppercase tracking-widest opacity-90 mb-1" id="countdown-label">Days until Next Slam</h4>
-                    <p class="text-3xl font-black tracking-tighter" id="countdown-timer">00d 00h 00m</p>
+        <!-- COUNTDOWN -->
+        <section id="slam-countdown-container" class="anim anim-3 hidden">
+            <div class="countdown-banner text-white flex justify-between items-center">
+                <div>
+                    <p id="countdown-label" class="label-xs opacity-80 mb-1">Days until Wimbledon</p>
+                    <p id="countdown-timer" class="font-black text-3xl tracking-tight" style="font-family:'Barlow Condensed',sans-serif;">0d 0h 0m</p>
                 </div>
-                <div class="text-6xl absolute -right-4 -bottom-4 opacity-20 rotate-12">⏳</div>
             </div>
-        </div>
+        </section>
 
         <!-- RACE TO TURIN -->
-        <section class="animate-fade-in mb-12">
-            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-6 rounded-xl shadow-md border-l-4 border-turin-blue custom-hover">
-                <div class="flex justify-between items-end mb-3">
+        <section class="anim anim-3">
+            <div class="card glass p-5 md:p-6" style="border-left: 3px solid var(--blue);">
+                <div class="flex justify-between items-end mb-3 gap-4 flex-wrap">
                     <div>
-                        <h3 class="text-turin-blue dark:text-blue-400 text-sm font-bold uppercase tracking-wider" data-i18n="raceToTurin">Race to Turin</h3>
-                        <p class="text-3xl font-black mt-1"><span id="race-points-display">0</span> <span class="text-sm text-gray-400 dark:text-gray-500 font-semibold">/ 7730 pts</span></p>
+                        <p class="label-xs text-fox-blue dark:text-blue-400" data-i18n="raceToTurin">Race to Turin</p>
+                        <p class="mt-1 flex items-end gap-2">
+                            <span id="race-points-display" class="stat-value">0</span>
+                            <span class="text-sm text-muted font-semibold mb-1">/ 7730 pts</span>
+                        </p>
                     </div>
-                    <div class="text-right">
-                        <span id="race-pct-display" class="text-2xl font-black text-turin-blue dark:text-blue-400">0%</span>
-                    </div>
+                    <span id="race-pct-display" class="font-black text-2xl text-fox-blue dark:text-blue-400" style="font-family:'Barlow Condensed',sans-serif;">0%</span>
                 </div>
-                <div class="w-full bg-gray-200/50 dark:bg-gray-800/50 rounded-full h-4 overflow-hidden relative shadow-inner">
-                    <div id="bar-race" class="bg-gradient-to-r from-blue-400 to-turin-blue h-4 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                <div class="race-bar-track">
+                    <div id="bar-race" class="race-bar-fill" style="width:0%"></div>
                 </div>
-                <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 text-right font-semibold uppercase tracking-wide" id="race-status">Qualifying...</p>
+                <p id="race-status" class="text-right label-xs text-muted mt-2" data-i18n="qualifying">Qualifying…</p>
             </div>
         </section>
 
         <!-- PLAYER IDENTITY CARD -->
-        <section class="animate-fade-in mb-16">
-            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-6" data-i18n="bioTitle">Player Identity Card</h2>
-            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
-                <div class="grid grid-cols-2 md:grid-cols-6 divide-x divide-y md:divide-y-0 divide-gray-200/50 dark:divide-gray-700/50">
-                    <div class="p-5 text-center">
-                        <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold mb-1" data-i18n="bioHeight">Height</p>
-                        <p id="bio-height" class="text-lg font-black italic">--</p>
+        <section class="anim anim-3">
+            <div class="section-header">
+                <h2 data-i18n="bioTitle">Identity Card</h2>
+                <span class="section-sub">Player Profile</span>
+            </div>
+            <div class="card glass overflow-hidden">
+                <div class="bio-grid">
+                    <div class="bio-cell">
+                        <p class="label-xs text-muted" data-i18n="bioHeight">Height</p>
+                        <p id="bio-height" class="bio-value">—</p>
                     </div>
-                    <div class="p-5 text-center">
-                        <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold mb-1" data-i18n="bioWeight">Weight</p>
-                        <p id="bio-weight" class="text-lg font-black italic">--</p>
+                    <div class="bio-cell">
+                        <p class="label-xs text-muted" data-i18n="bioWeight">Weight</p>
+                        <p id="bio-weight" class="bio-value">—</p>
                     </div>
-                    <div class="p-5 text-center">
-                        <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold mb-1" data-i18n="bioPlays">Plays</p>
-                        <p id="bio-plays" class="text-sm font-black uppercase italic">--</p>
+                    <div class="bio-cell">
+                        <p class="label-xs text-muted" data-i18n="bioPlays">Plays</p>
+                        <p id="bio-plays" class="bio-value" style="font-size:1rem;">—</p>
                     </div>
-                    <div class="p-5 text-center">
-                        <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold mb-1" data-i18n="bioPro">Pro Since</p>
-                        <p id="bio-pro" class="text-lg font-black italic">--</p>
+                    <div class="bio-cell">
+                        <p class="label-xs text-muted" data-i18n="bioPro">Pro Since</p>
+                        <p id="bio-pro" class="bio-value">—</p>
                     </div>
-                    <div class="p-5 text-center md:col-span-2 bg-gray-50/30 dark:bg-gray-800/20">
-                        <p class="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold mb-1" data-i18n="bioCoaches">Coaching Team</p>
-                        <p id="bio-coach" class="text-sm font-black italic">--</p>
+                    <div class="bio-cell">
+                        <p class="label-xs text-muted" data-i18n="bioCoaches">Coaching Team</p>
+                        <p id="bio-coach" class="bio-value" style="font-size:0.82rem; line-height:1.35;">—</p>
+                    </div>
+                    <div class="bio-cell">
+                        <p class="label-xs text-muted">Birthplace</p>
+                        <p id="bio-birthplace" class="bio-value" style="font-size:0.82rem; line-height:1.35;">—</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOX STATS + SURFACE MASTERY -->
+        <section class="anim anim-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                <div>
+                    <div class="section-header">
+                        <h2 data-i18n="foxStats">The Fox Stats</h2>
+                    </div>
+                    <div class="card glass p-4 md:p-6 flex items-center justify-center">
+                        <div class="w-full max-w-xs aspect-square">
+                            <canvas id="radarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="section-header">
+                        <h2 data-i18n="surfaceMastery">Surface Mastery</h2>
+                    </div>
+                    <div class="card glass p-4 md:p-6 flex flex-col items-center justify-center">
+                        <div class="relative w-full max-w-[260px] aspect-square">
+                            <canvas id="doughnutChart"></canvas>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                                <span id="total-wins-center" class="font-black text-3xl" style="font-family:'Barlow Condensed',sans-serif;">0</span>
+                                <span class="label-xs text-muted mt-0.5" data-i18n="winsYTD">Wins YTD</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- ROADMAP -->
-        <section class="animate-fade-in mb-16">
-            <div class="flex justify-between items-end mb-4">
-                <h2 class="text-2xl font-extrabold uppercase tracking-wide" data-i18n="roadmapTitle">Roadmap</h2>
-                <span class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider" data-i18n="majorEvents">Next Major Events</span>
+        <section class="anim anim-4">
+            <div class="section-header">
+                <h2 data-i18n="roadmapTitle">Roadmap</h2>
+                <span class="section-sub" data-i18n="majorEvents">Next Major Events</span>
             </div>
-            
-            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-6 md:p-8 rounded-xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 relative">
-                <div class="hidden md:block absolute top-1/2 left-10 right-10 h-1 bg-gray-200/50 dark:bg-gray-700/50 -translate-y-1/2 z-0"></div>
-                
-                <div id="roadmap-container" class="grid grid-cols-1 md:grid-cols-5 gap-6 relative z-10">
+            <div class="card glass p-6 md:p-8">
+                <div class="roadmap-wrapper">
+                    <div class="roadmap-line"></div>
+                    <div id="roadmap-container" class="grid grid-cols-1 md:grid-cols-5 gap-3 md:gap-4 relative z-10"></div>
                 </div>
             </div>
         </section>
 
         <!-- POINTS EVOLUTION -->
-        <section class="animate-fade-in mb-12">
-            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="pointsEvolution">Points Evolution</h2>
-            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-6 rounded-xl shadow-lg border border-gray-200/50 dark:border-gray-700/50">
-                <canvas id="pointsChart" style="max-height: 350px;"></canvas>
+        <section class="anim anim-4">
+            <div class="section-header">
+                <h2 data-i18n="pointsEvolution">Points Evolution</h2>
             </div>
-        </section>
-
-        <!-- FOX STATS & SURFACE MASTERY -->
-        <section class="animate-fade-in mb-12 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-            <div class="flex flex-col">
-                <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="foxStats">The Fox Stats</h2>
-                <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-4 md:p-6 rounded-xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 flex justify-center items-center flex-grow">
-                    <div class="relative w-full max-w-[320px] md:max-w-[420px] aspect-square">
-                        <canvas id="radarChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-col mt-4 md:mt-0">
-                <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="surfaceMastery">Surface Mastery</h2>
-                <div class="bg-white/70 dark:bg-dark-card/70 glass-effect p-4 md:p-6 rounded-xl shadow-lg border border-gray-200/50 dark:border-gray-700/50 flex flex-col justify-center items-center flex-grow relative">
-                    <div class="relative w-full max-w-[280px] md:max-w-[350px] aspect-square">
-                        <canvas id="doughnutChart"></canvas>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none mt-2">
-                            <span class="text-3xl md:text-4xl font-black text-gray-800 dark:text-white" id="total-wins-center">0</span>
-                            <span class="text-[10px] md:text-xs uppercase font-bold text-gray-500 tracking-widest mt-1" data-i18n="winsYTD">Wins YTD</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="card glass p-5 md:p-6">
+                <canvas id="pointsChart" style="max-height:320px;"></canvas>
             </div>
         </section>
 
         <!-- TROPHY CABINET -->
-        <section class="animate-fade-in mt-20 mb-12">
-            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="trophyCabinet">Trophy Cabinet</h2>
-            <div id="trophy-cabinet" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6"></div>
+        <section class="anim anim-5">
+            <div class="section-header">
+                <h2 data-i18n="trophyCabinet">Trophy Cabinet</h2>
+                <span id="trophy-count" class="section-sub"></span>
+            </div>
+            <div id="trophy-cabinet" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
         </section>
 
         <!-- EPIC RIVALRIES -->
-        <section class="animate-fade-in mb-12">
-            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="rivalries">Epic Rivalries</h2>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                <div id="h2h-container" class="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6"></div>
-                
+        <section class="anim anim-5">
+            <div class="section-header">
+                <h2 data-i18n="rivalries">Epic Rivalries</h2>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                <div id="h2h-container" class="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4"></div>
                 <div class="flex flex-col gap-4">
-                    <div class="bg-gradient-to-br from-green-50/80 to-emerald-100/80 dark:from-green-900/40 dark:to-emerald-900/40 glass-effect p-4 rounded-xl shadow-md border border-green-200/50 dark:border-green-800/50 flex items-center justify-between custom-hover">
+                    <div class="special-h2h-card pigeon">
                         <div>
-                            <span class="text-[10px] uppercase font-bold text-green-600 dark:text-green-400 tracking-wider" data-i18n="pigeon">The Pigeon 🟢</span>
-                            <h4 id="pigeon-name" class="font-bold text-sm text-sinner-black dark:text-white mt-0.5">Loading...</h4>
+                            <p class="label-xs text-green-500 dark:text-green-400" data-i18n="pigeon">The Pigeon 🟢</p>
+                            <p id="pigeon-name" class="font-bold text-sm mt-1">Loading…</p>
                         </div>
-                        <span id="pigeon-score" class="font-black text-lg text-green-700 dark:text-green-300">0-0</span>
+                        <span id="pigeon-score" class="font-black text-xl text-green-600 dark:text-green-300 whitespace-nowrap" style="font-family:'Barlow Condensed',sans-serif;">0-0</span>
                     </div>
-
-                    <div class="bg-gradient-to-br from-red-50/80 to-rose-100/80 dark:from-red-900/40 dark:to-rose-900/40 glass-effect p-4 rounded-xl shadow-md border border-red-200/50 dark:border-red-800/50 flex items-center justify-between custom-hover">
+                    <div class="special-h2h-card nemesis">
                         <div>
-                            <span class="text-[10px] uppercase font-bold text-red-600 dark:text-red-400 tracking-wider" data-i18n="nemesis">The Nemesis 🔴</span>
-                            <h4 id="nemesis-name" class="font-bold text-sm text-sinner-black dark:text-white mt-0.5">Loading...</h4>
+                            <p class="label-xs text-red-500 dark:text-red-400" data-i18n="nemesis">The Nemesis 🔴</p>
+                            <p id="nemesis-name" class="font-bold text-sm mt-1">Loading…</p>
                         </div>
-                        <span id="nemesis-score" class="font-black text-lg text-red-700 dark:text-red-300">0-0</span>
+                        <span id="nemesis-score" class="font-black text-xl text-red-600 dark:text-red-400 whitespace-nowrap" style="font-family:'Barlow Condensed',sans-serif;">0-0</span>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- TOURNAMENTS BREAKDOWN -->
-        <section class="animate-fade-in mb-12">
-            <h2 class="text-2xl font-extrabold uppercase tracking-wide mb-4" data-i18n="tournaments">Tournaments Breakdown</h2>
-            <div class="bg-white/70 dark:bg-dark-card/70 glass-effect shadow-md rounded-xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+        <section class="anim anim-5">
+            <div class="section-header">
+                <h2 data-i18n="tournaments">Tournaments</h2>
+            </div>
+            <div class="card glass overflow-hidden">
                 <div class="overflow-x-auto w-full">
-                    <table class="w-full text-left border-collapse min-w-[500px]">
-                        <thead class="bg-sinner-black/90 text-sinner-white text-xs md:text-sm uppercase tracking-wider">
+                    <table class="data-table">
+                        <thead>
                             <tr>
-                                <th class="py-3 px-4" data-i18n="tournHeader">Tournament</th>
-                                <th class="py-3 px-4 text-center" data-i18n="defendingHeader">Defending</th>
-                                <th class="py-3 px-4 text-center" data-i18n="earnedHeader">Earned</th>
-                                <th class="py-3 px-4 text-center" data-i18n="netDiffHeader">Net Diff</th>
+                                <th data-i18n="tournHeader">Tournament</th>
+                                <th class="text-center" data-i18n="defendingHeader">Defending</th>
+                                <th class="text-center" data-i18n="earnedHeader">Earned</th>
+                                <th class="text-center" data-i18n="netDiffHeader">Net Diff</th>
                             </tr>
                         </thead>
-                        <tbody id="tournament-data" class="text-sm font-semibold text-gray-800 dark:text-gray-200"></tbody>
+                        <tbody id="tournament-data"></tbody>
                     </table>
                 </div>
             </div>
         </section>
+
     </main>
 
-    <footer class="bg-sinner-black/90 glass-effect text-gray-400 py-6 text-center text-sm mt-12 shadow-inner border-t border-white/10">
-        <p data-i18n="footerText">Sinner Tracker 2026 - Unofficial Fan Dashboard</p>
+    <footer class="bg-fox-black/95 border-t border-white/[0.06] text-slate-500 py-6 text-center mt-8">
+        <p class="label-xs tracking-widest" data-i18n="footerText">Sinner Tracker 2026 — Unofficial Fan Dashboard</p>
     </footer>
 
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js');
-            });
+            window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
         }
     </script>
     <script src="script.js"></script>

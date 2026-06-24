@@ -1,51 +1,647 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@600;700;800;900&display=swap');
 
-html {
-    scroll-behavior: smooth;
+/* =========================================
+   TOKENS & RESET
+   ========================================= */
+:root {
+  --orange:     #f97316;
+  --orange-dim: #c2540a;
+  --green:      #22c55e;
+  --blue:       #2563eb;
+  --black:      #0d0d0d;
+  --white:      #f8fafc;
+  --card-light: rgba(255,255,255,0.72);
+  --card-dark:  rgba(22,33,48,0.80);
+  --text-muted-light: #64748b;
+  --text-muted-dark:  #94a3b8;
+  --border-light: rgba(0,0,0,0.07);
+  --border-dark:  rgba(255,255,255,0.08);
+  --radius-card: 1.25rem;
+  --radius-sm:   0.5rem;
+  --shadow-card: 0 4px 24px -4px rgba(0,0,0,0.10);
+  --shadow-hover: 0 12px 36px -6px rgba(0,0,0,0.18);
+  --font-display: 'Barlow Condensed', 'Montserrat', sans-serif;
+  --font-body:    'Montserrat', sans-serif;
 }
 
-/* Smooth transition for theme switching */
+html { scroll-behavior: smooth; }
+
+*, *::before, *::after { box-sizing: border-box; }
+
 body {
-    transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: var(--font-body);
+  transition: background-color 0.4s ease, color 0.4s ease;
+  -webkit-font-smoothing: antialiased;
 }
 
-.custom-hover {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* =========================================
+   TYPOGRAPHY SCALE
+   ========================================= */
+.display-xl {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+.display-lg {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.label-xs {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.label-sm {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.stat-value {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
-.custom-hover:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+/* =========================================
+   SECTION DIVIDERS
+   ========================================= */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.section-header h2 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.section-header::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, var(--border-light), transparent);
+}
+.dark .section-header::after {
+  background: linear-gradient(to right, var(--border-dark), transparent);
+}
+.section-sub {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+  margin-left: auto;
+  white-space: nowrap;
+}
+.dark .section-sub { color: var(--text-muted-dark); }
+
+/* =========================================
+   GLASS / CARD
+   ========================================= */
+.glass {
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+}
+.card {
+  background: var(--card-light);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.3s cubic-bezier(.22,1,.36,1), box-shadow 0.3s ease;
+}
+.dark .card {
+  background: var(--card-dark);
+  border-color: var(--border-dark);
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
 }
 
-/* Ensure chart canvas doesn't look weird during resize */
-canvas {
-    width: 100% !important;
+/* =========================================
+   STAT CARDS (hero grid)
+   ========================================= */
+.stat-card {
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+}
+.stat-card.accent-orange::before { background: var(--orange); }
+.stat-card.accent-yellow::before { background: linear-gradient(90deg, #facc15, #f59e0b); }
+.stat-card.accent-green::before  { background: var(--green); }
+.stat-card.accent-slate::before  { background: #475569; }
+.dark .stat-card.accent-slate::before { background: #64748b; }
+
+.stat-card .bg-icon {
+  position: absolute;
+  right: -0.5rem;
+  bottom: -0.75rem;
+  font-size: 4.5rem;
+  opacity: 0.06;
+  pointer-events: none;
+  user-select: none;
 }
 
-/* Better fade-in animation */
+/* =========================================
+   TOURNAMENT BANNER
+   ========================================= */
+.tournament-banner {
+  background: linear-gradient(135deg, #0d0d0d 0%, #1a1a2e 50%, #0d0d0d 100%);
+  border-radius: var(--radius-card);
+  position: relative;
+  overflow: hidden;
+}
+.tournament-banner::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--orange), var(--blue));
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+.tournament-banner.live::after {
+  background: linear-gradient(90deg, #ef4444, #f97316, #ef4444);
+  background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.court-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.court-badge.round  { background: rgba(37,99,235,0.25); color: #93c5fd; border-color: rgba(37,99,235,0.35); }
+.court-badge.live   { background: rgba(239,68,68,0.25); color: #fca5a5; border-color: rgba(239,68,68,0.35); animation: pulse-badge 1.5s ease infinite; }
+.court-badge.streak { background: rgba(249,115,22,0.25); color: #fdba74; border-color: rgba(249,115,22,0.35); }
+
+@keyframes pulse-badge {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.65; }
+}
+
+.time-box {
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
+  min-width: 200px;
+}
+
+/* =========================================
+   FORM DOTS
+   ========================================= */
+.form-dot {
+  position: relative;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 900;
+  color: #fff;
+  cursor: default;
+  flex-shrink: 0;
+}
+.form-dot .tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111;
+  color: #f8fafc;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.65rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  z-index: 50;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.form-dot .tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #111;
+}
+.form-dot:hover .tooltip { opacity: 1; }
+
+/* =========================================
+   RACE BAR
+   ========================================= */
+.race-bar-track {
+  background: rgba(0,0,0,0.08);
+  border-radius: 9999px;
+  height: 10px;
+  overflow: hidden;
+  position: relative;
+}
+.dark .race-bar-track { background: rgba(255,255,255,0.08); }
+.race-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #60a5fa, var(--blue));
+  transition: width 1.2s cubic-bezier(.22,1,.36,1);
+  position: relative;
+}
+.race-bar-fill::after {
+  content: '';
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 6px;
+  background: white;
+  border-radius: 9999px;
+  opacity: 0.5;
+}
+
+/* =========================================
+   PLAYER CARD
+   ========================================= */
+.bio-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+}
+@media (min-width: 640px) {
+  .bio-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 768px) {
+  .bio-grid { grid-template-columns: repeat(6, 1fr); }
+}
+.bio-cell {
+  padding: 1.25rem 1rem;
+  text-align: center;
+  border-right: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+.dark .bio-cell {
+  border-color: var(--border-dark);
+}
+.bio-cell:last-child { border-right: none; }
+@media (max-width: 639px) {
+  .bio-cell:nth-child(even) { border-right: none; }
+  .bio-cell:nth-last-child(-n+2) { border-bottom: none; }
+}
+@media (min-width: 640px) and (max-width: 767px) {
+  .bio-cell:nth-child(3n) { border-right: none; }
+  .bio-cell:nth-last-child(-n+3) { border-bottom: none; }
+}
+@media (min-width: 768px) {
+  .bio-cell { border-bottom: none; }
+  .bio-cell:last-child { border-right: none; }
+}
+.bio-value {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  margin-top: 0.3rem;
+  line-height: 1.1;
+}
+
+/* =========================================
+   H2H BARS
+   ========================================= */
+.h2h-card {
+  padding: 1.25rem 1.5rem;
+}
+.h2h-bar {
+  display: flex;
+  height: 8px;
+  border-radius: 9999px;
+  overflow: hidden;
+  gap: 2px;
+}
+.h2h-bar-win  { background: var(--orange); transition: width 1s cubic-bezier(.22,1,.36,1); }
+.h2h-bar-loss { background: #475569; transition: width 1s cubic-bezier(.22,1,.36,1); }
+.dark .h2h-bar-loss { background: #334155; }
+
+/* =========================================
+   TROPHY CABINET
+   ========================================= */
+.trophy-card {
+  padding: 1.25rem 1rem;
+  border-radius: var(--radius-card);
+  text-align: center;
+  border: 1px solid var(--border-light);
+  transition: all 0.35s cubic-bezier(.22,1,.36,1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.dark .trophy-card { border-color: var(--border-dark); }
+.trophy-card:hover {
+  transform: translateY(-5px) scale(1.02);
+}
+.trophy-card.slam {
+  background: linear-gradient(145deg, rgba(250,204,21,0.08), rgba(245,158,11,0.04));
+  border-color: rgba(250,204,21,0.25);
+}
+.trophy-card.slam:hover {
+  box-shadow: 0 0 28px rgba(250,204,21,0.2);
+  border-color: rgba(250,204,21,0.5);
+}
+.trophy-card.finals {
+  background: linear-gradient(145deg, rgba(37,99,235,0.08), rgba(14,165,233,0.04));
+  border-color: rgba(37,99,235,0.2);
+}
+.trophy-card.finals:hover {
+  box-shadow: 0 0 28px rgba(37,99,235,0.2);
+  border-color: rgba(37,99,235,0.45);
+}
+.trophy-card.masters {
+  background: rgba(255,255,255,0.5);
+}
+.dark .trophy-card.masters { background: rgba(30,41,59,0.6); }
+.trophy-card.golden {
+  background: linear-gradient(145deg, #fbbf24, #f59e0b);
+  border: none;
+  color: #fff;
+  box-shadow: 0 0 30px rgba(245,158,11,0.35);
+}
+.trophy-card.golden:hover {
+  box-shadow: 0 0 50px rgba(245,158,11,0.55);
+  transform: translateY(-5px) scale(1.04);
+}
+.trophy-icon {
+  font-size: 2.4rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+}
+.trophy-name {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+}
+.year-badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  background: rgba(249,115,22,0.15);
+  color: var(--orange);
+  border: 1px solid rgba(249,115,22,0.3);
+  border-radius: 0.35rem;
+  font-size: 0.62rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+}
+.trophy-card.golden .year-badge {
+  background: rgba(0,0,0,0.2);
+  color: #fff;
+  border-color: rgba(255,255,255,0.25);
+}
+
+/* =========================================
+   ROADMAP TIMELINE
+   ========================================= */
+.roadmap-wrapper {
+  position: relative;
+  padding: 0 0.5rem;
+}
+.roadmap-line {
+  position: absolute;
+  top: 28px;
+  left: 2rem;
+  right: 2rem;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--border-light), transparent);
+  display: none;
+}
+.dark .roadmap-line { background: linear-gradient(90deg, transparent, var(--border-dark), transparent); }
+@media (min-width: 768px) { .roadmap-line { display: block; } }
+
+.roadmap-stop {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+@media (min-width: 768px) {
+  .roadmap-stop {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    padding: 0;
+  }
+}
+.roadmap-dot {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.12);
+  position: relative;
+  z-index: 2;
+  transition: transform 0.2s ease;
+}
+.dark .roadmap-dot { border-color: #1e293b; }
+.roadmap-stop:hover .roadmap-dot { transform: scale(1.25); }
+.roadmap-info {
+  background: rgba(248,250,252,0.7);
+  border: 1px solid var(--border-light);
+  border-radius: 0.75rem;
+  padding: 0.75rem 0.875rem;
+  flex: 1;
+  min-width: 0;
+}
+.dark .roadmap-info {
+  background: rgba(30,41,59,0.5);
+  border-color: var(--border-dark);
+}
+.roadmap-date {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted-light);
+  margin-bottom: 0.25rem;
+}
+.dark .roadmap-date { color: var(--text-muted-dark); }
+.roadmap-name {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+}
+
+/* =========================================
+   TABLE
+   ========================================= */
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th {
+  background: #0d0d0d;
+  color: #f8fafc;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.875rem 1rem;
+  text-align: left;
+}
+.data-table td {
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.dark .data-table td { border-color: var(--border-dark); }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: rgba(249,115,22,0.04); }
+
+/* =========================================
+   SKELETON LOADING
+   ========================================= */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.8; }
+}
+.skeleton {
+  background: rgba(100,116,139,0.2);
+  border-radius: 0.5rem;
+  animation: skeleton-pulse 1.6s ease-in-out infinite;
+}
+.dark .skeleton { background: rgba(148,163,184,0.1); }
+
+/* =========================================
+   ANIMATIONS
+   ========================================= */
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.anim {
+  animation: fadeInUp 0.65s cubic-bezier(.22,1,.36,1) both;
+  opacity: 0;
+}
+.anim-1 { animation-delay: 0ms; }
+.anim-2 { animation-delay: 80ms; }
+.anim-3 { animation-delay: 160ms; }
+.anim-4 { animation-delay: 240ms; }
+.anim-5 { animation-delay: 320ms; }
+
+/* =========================================
+   GOLDEN MASTERS BANNER
+   ========================================= */
+.golden-banner {
+  background: linear-gradient(135deg, #0d0d0d, #1a1400, #0d0d0d);
+  border: 1px solid rgba(250,204,21,0.3);
+  border-radius: var(--radius-card);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(250,204,21,0.1);
+}
+.golden-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(250,204,21,0.12) 0%, transparent 65%);
+  pointer-events: none;
 }
 
-.animate-fade-in {
-    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    opacity: 0;
+/* =========================================
+   COUNTDOWN
+   ========================================= */
+.countdown-banner {
+  background: linear-gradient(135deg, var(--orange), var(--orange-dim));
+  border-radius: var(--radius-card);
+  padding: 1.25rem 1.75rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(249,115,22,0.3);
+}
+.countdown-banner::after {
+  content: '🎾';
+  position: absolute;
+  right: -1rem;
+  bottom: -1rem;
+  font-size: 5rem;
+  opacity: 0.12;
+  transform: rotate(20deg);
 }
 
-.delay-100 { animation-delay: 100ms; }
-.delay-200 { animation-delay: 200ms; }
-.delay-300 { animation-delay: 300ms; }
-
-/* Glass Effect */
-.glass-effect {
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+/* =========================================
+   SPECIAL H2H CARDS (pigeon / nemesis)
+   ========================================= */
+.special-h2h-card {
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
+.special-h2h-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+.special-h2h-card.pigeon {
+  background: linear-gradient(135deg, rgba(34,197,94,0.10), rgba(5,150,105,0.06));
+  border: 1px solid rgba(34,197,94,0.2);
+}
+.special-h2h-card.nemesis {
+  background: linear-gradient(135deg, rgba(239,68,68,0.10), rgba(220,38,38,0.06));
+  border: 1px solid rgba(239,68,68,0.2);
+}
+
+/* =========================================
+   SCROLLBAR
+   ========================================= */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(100,116,139,0.3); border-radius: 9999px; }
+
+/* =========================================
+   UTILITIES
+   ========================================= */
+.text-orange { color: var(--orange); }
+.text-green  { color: var(--green);  }
+.text-blue   { color: var(--blue);   }
+.text-muted  { color: var(--text-muted-light); }
+.dark .text-muted { color: var(--text-muted-dark); }
+
+.flag-emoji { font-size: 1.2em; }
