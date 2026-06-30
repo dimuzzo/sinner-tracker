@@ -1,16 +1,16 @@
 {
-  "last_updated": "2026-06-29T06:53:57.744781+00:00",
+  "last_updated": "2026-06-30T06:16:37.789919+00:00",
   "ranking": 1,
   "total_points": 13450,
   "win_loss": "36 - 2",
   "stats": {
     "first_serve_in": 59.8,
-    "break_points_saved": 65.5,
-    "first_return_won": 66.9,
+    "break_points_saved": 65.6,
+    "first_return_won": 67.0,
     "break_points_converted": 43.0
   },
   "next_match": {
-    "opponent": "TBD",
+    "opponent": "Unknown Player",
     "tournament": "TBD",
     "round": "1st Round",
     "countryAcr": "ITA",
@@ -167,6 +167,11 @@
   ],
   "recent_form": [
     {
+      "win": true,
+      "opponent": "Miomir Kecmanovic",
+      "result": "4-6 6-3 6-7(6) 6-2 6-3"
+    },
+    {
       "win": false,
       "opponent": "Juan Manuel Cerundolo",
       "result": "3-6 2-6 7-5 6-1 6-1"
@@ -185,26 +190,15 @@
       "win": true,
       "opponent": "Daniil Medvedev",
       "result": "6-2 5-7 6-4"
-    },
-    {
-      "win": true,
-      "opponent": "Andrey Rublev",
-      "result": "6-2 6-4"
     }
   ],
   "race_points": 5950,
   "surface_mastery": {
     "Hard": 19,
     "Clay": 18,
-    "Grass": 0
+    "Grass": 1
   },
   "roadmap": [
-    {
-      "name": "Wimbledon",
-      "date": "2026-07-01T00:00:00Z",
-      "court": "Grass",
-      "country": "GBR"
-    },
     {
       "name": "Canadian Open",
       "date": "2026-08-06T00:00:00Z",
@@ -226,6 +220,12 @@
     {
       "name": "China Open",
       "date": "2026-09-26T00:00:00Z",
+      "court": "Hard",
+      "country": "CHN"
+    },
+    {
+      "name": "Shanghai Masters",
+      "date": "2026-10-02T00:00:00Z",
       "court": "Hard",
       "country": "CHN"
     }
@@ -252,5 +252,5 @@
     "plays": "Right-Handed, Two-Handed Backhand",
     "coach": "Simone Vagnozzi, Darren Cahill"
   },
-  "current_streak": 0
+  "current_streak": 1
 }
