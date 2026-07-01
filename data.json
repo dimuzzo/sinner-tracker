@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-30T06:16:37.789919+00:00",
+  "last_updated": "2026-07-01T06:37:28.240133+00:00",
   "ranking": 1,
   "total_points": 13450,
   "win_loss": "36 - 2",
@@ -11,9 +11,9 @@
   },
   "next_match": {
     "opponent": "Unknown Player",
-    "tournament": "TBD",
+    "tournament": "Canadian Open",
     "round": "1st Round",
-    "countryAcr": "ITA",
+    "countryAcr": "CAN",
     "date": null
   },
   "tournaments": [
