@@ -1,20 +1,20 @@
 {
-  "last_updated": "2026-07-01T06:37:28.240133+00:00",
+  "last_updated": "2026-07-02T06:03:45.690880+00:00",
   "ranking": 1,
   "total_points": 13450,
   "win_loss": "36 - 2",
   "stats": {
     "first_serve_in": 59.8,
-    "break_points_saved": 65.6,
+    "break_points_saved": 65.5,
     "first_return_won": 67.0,
     "break_points_converted": 43.0
   },
   "next_match": {
-    "opponent": "Unknown Player",
-    "tournament": "Canadian Open",
-    "round": "1st Round",
-    "countryAcr": "CAN",
-    "date": null
+    "opponent": "Jenson Brooksby",
+    "tournament": "Wimbledon",
+    "round": "3rd Round",
+    "countryAcr": "GBR",
+    "date": "2026-07-03T13:00:00.000Z"
   },
   "tournaments": [
     {
@@ -168,6 +168,11 @@
   "recent_form": [
     {
       "win": true,
+      "opponent": "Nuno Borges",
+      "result": "7-6(4) 7-6(2) 6-4"
+    },
+    {
+      "win": true,
       "opponent": "Miomir Kecmanovic",
       "result": "4-6 6-3 6-7(6) 6-2 6-3"
     },
@@ -185,18 +190,13 @@
       "win": true,
       "opponent": "Casper Ruud",
       "result": "6-4 6-4"
-    },
-    {
-      "win": true,
-      "opponent": "Daniil Medvedev",
-      "result": "6-2 5-7 6-4"
     }
   ],
   "race_points": 5950,
   "surface_mastery": {
     "Hard": 19,
     "Clay": 18,
-    "Grass": 1
+    "Grass": 2
   },
   "roadmap": [
     {
@@ -252,5 +252,5 @@
     "plays": "Right-Handed, Two-Handed Backhand",
     "coach": "Simone Vagnozzi, Darren Cahill"
   },
-  "current_streak": 1
+  "current_streak": 2
 }
