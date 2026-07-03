@@ -9,9 +9,9 @@ import os
 API_KEY = os.getenv("API_KEY", "").strip()
 HOST    = "tennis-api-atp-wta-itf.p.rapidapi.com"
 HEADERS = {
-    'X-RapidAPI-Key':  API_KEY,
+    'X-RapidAPI-Key': API_KEY,
     'X-RapidAPI-Host': HOST,
-    'User-Agent':      'SinnerTrackerBot/12.0'
+    'User-Agent': 'SinnerTrackerBot/11.0'
 }
 
 SINNER_ID = 47275
@@ -51,6 +51,7 @@ TOURNAMENT_NAME_MAP = {
     "miami":                   "Miami Open",
 }
 
+# countryAcr overrides for known tournaments
 TOURNAMENT_COUNTRY_MAP = {
     "Wimbledon":               "GBR",
     "Roland Garros":           "FRA",
@@ -66,9 +67,6 @@ TOURNAMENT_COUNTRY_MAP = {
     "Indian Wells Open":       "USA",
     "Miami Open":              "USA",
 }
-
-# Cache tournament info lookups within a single run to avoid redundant API calls
-_tournament_cache = {}
 
 # ─────────────────────────────────────────
 # HELPERS
@@ -90,118 +88,81 @@ def calculate_pct(part, total):
     return round((part / total) * 100, 1)
 
 def normalize_tournament_name(raw_name):
+    """Apply name overrides so display names are always clean."""
     if not raw_name:
         return raw_name
     lower = raw_name.lower()
     for key, clean in TOURNAMENT_NAME_MAP.items():
         if key in lower:
             return clean
+    # Generic cleanup: drop " - City" suffix
     return raw_name.split(' - ')[0].strip()
 
-def get_tournament_name(tournament_id):
-    """Fetch and cache tournament name+country from the dedicated endpoint."""
-    if not tournament_id:
-        return None, None
-    if tournament_id in _tournament_cache:
-        return _tournament_cache[tournament_id]
-
-    info = api_call(f"/tennis/v2/atp/tournament/info/{tournament_id}")
-    name, country = None, None
-    if info and isinstance(info, dict):
-        raw_name = info.get('name') or info.get('tournamentName')
-        name     = normalize_tournament_name(raw_name) if raw_name else None
-        country  = (info.get('country') or {}).get('acronym') if isinstance(info.get('country'), dict) else info.get('countryAcr')
-
-    if name and not country:
-        country = TOURNAMENT_COUNTRY_MAP.get(name)
-
-    _tournament_cache[tournament_id] = (name, country)
-    return name, country
-
-def extract_match_info(match):
+def build_datetime(date_str, time_str=None):
     """
-    Extract a clean next_match dict from a fixture object returned by
-    getAllFixtures / getDateFixtures / fixtures-by-player.
-    Returns None if this match doesn't involve Sinner.
+    Combine a date string (YYYY-MM-DD or ISO) with an optional time string (HH:MM or HH:MM:SS).
+    Returns an ISO-8601 string in UTC, or best-effort.
     """
-    p1 = match.get('player1') or {}
-    p2 = match.get('player2') or {}
+    if not date_str:
+        return None
+    # If already a full ISO string with time, return as-is
+    if 'T' in date_str and len(date_str) > 10:
+        return date_str
+    # date_str is just YYYY-MM-DD
+    if time_str and time_str not in ('00:00', '00:00:00', '0:00'):
+        return f"{date_str[:10]}T{time_str[:5]}:00Z"
+    return f"{date_str[:10]}T00:00:00Z"
 
-    p1_id = str(match.get('player1Id', p1.get('id', '')))
-    p2_id = str(match.get('player2Id', p2.get('id', '')))
+def extract_match_info(match, fallback_tournament=None):
+    """
+    Extract a clean next_match dict from a fixture object.
+    Tries multiple field name patterns the API uses inconsistently.
+    """
+    # ── Player ID detection ──
+    p1_id = str(match.get('player1Id') or match.get('player1_id') or
+                (match.get('player1') or {}).get('id') or '')
+    p2_id = str(match.get('player2Id') or match.get('player2_id') or
+                (match.get('player2') or {}).get('id') or '')
     sinner_str = str(SINNER_ID)
 
     if sinner_str not in (p1_id, p2_id):
         return None  # Not Sinner's match
 
-    # ── Opponent name (always present as `.name` per API schema) ──
+    # Opponent name
     if p1_id == sinner_str:
-        opp = p2.get('name') or 'TBD'
+        opp = (match.get('player2') or {}).get('name') or match.get('player2Name') or 'TBD'
     else:
-        opp = p1.get('name') or 'TBD'
+        opp = (match.get('player1') or {}).get('name') or match.get('player1Name') or 'TBD'
 
-    # ── Tournament: resolve via dedicated endpoint (tournamentId is just an int) ──
-    t_id = match.get('tournamentId')
-    t_name, t_country = get_tournament_name(t_id)
-    if not t_name:
-        t_name = f"Event #{t_id}" if t_id else "TBD"
-    if not t_country:
-        t_country = "ITA"
+    # Tournament name
+    raw_t = (match.get('tournament') or
+             match.get('tournamentName') or
+             (match.get('tournamentInfo') or {}).get('name') or
+             fallback_tournament or 'TBD')
+    t_name = normalize_tournament_name(raw_t)
 
-    # ── Round ──
-    r_id   = match.get('roundId')
-    r_name = ROUND_MAP.get(r_id, f"Round {r_id}" if r_id else "TBD")
+    # Country
+    t_country = TOURNAMENT_COUNTRY_MAP.get(t_name) or \
+                (match.get('tournamentInfo') or {}).get('countryAcr') or 'ITA'
 
-    # ── Date: API gives full ISO datetime when known, otherwise null ──
-    match_date = match.get('date')  # e.g. "2026-06-30T22:30:00.000Z" or None
+    # Round
+    r_id   = match.get('roundId') or match.get('round_id')
+    r_name = ROUND_MAP.get(r_id) or match.get('round') or match.get('roundName') or 'TBD'
+
+    # Date + Time
+    raw_date = (match.get('date') or match.get('startDate') or
+                match.get('matchDate') or match.get('scheduled'))
+    raw_time = (match.get('time') or match.get('startTime') or
+                match.get('matchTime') or match.get('scheduledTime'))
+    match_dt = build_datetime(raw_date, raw_time)
 
     return {
         "opponent":   opp,
         "tournament": t_name,
         "round":      r_name,
         "countryAcr": t_country,
-        "date":       match_date,
+        "date":       match_dt,
     }
-
-def find_sinner_match():
-    """
-    Search for Sinner's next match using two strategies:
-      A. /fixtures/player/{id} — fast, pre-filtered, but `date` is often null
-      B. /fixtures/{date} day-by-day — slower, but has real match times
-    Strategy B always runs to try to fill in / upgrade the date with a real time.
-    """
-    next_match = None
-
-    # STRATEGY A
-    print("  [A] Trying /fixtures/player/...")
-    player_fixtures = api_call(f"/tennis/v2/atp/fixtures/player/{SINNER_ID}")
-    if player_fixtures and isinstance(player_fixtures, list):
-        for fix in player_fixtures:
-            result = extract_match_info(fix)
-            if result:
-                next_match = result
-                print(f"  [A] Found: {result['tournament']} vs {result['opponent']} (date={result['date']})")
-                break
-
-    # STRATEGY B — always scan to find/upgrade real match time
-    if not next_match or not next_match.get('date'):
-        print("  [B] Scanning daily fixtures for next 14 days...")
-        scan_date = datetime.datetime.now(datetime.timezone.utc)
-        for _ in range(14):
-            date_str = scan_date.strftime("%Y-%m-%d")
-            daily = api_call(f"/tennis/v2/atp/fixtures/{date_str}")
-            if daily and isinstance(daily, list):
-                for match in daily:
-                    result = extract_match_info(match)
-                    if result:
-                        next_match = result
-                        print(f"  [B] Found: {result['tournament']} vs {result['opponent']} (date={result['date']})")
-                        break
-            if next_match and next_match.get('date'):
-                break
-            scan_date += datetime.timedelta(days=1)
-
-    return next_match
 
 # ─────────────────────────────────────────
 # MAIN
@@ -218,7 +179,7 @@ def update_database():
         db = {"tournaments": [], "trophies": []}
 
     try:
-        # 1/9 Ranking & Points
+        # 1/9 Ranking & Points 
         print("1/9 Syncing Ranking & ATP Points...")
         rankings = api_call("/tennis/v2/atp/ranking/singles/")
         if rankings:
@@ -244,18 +205,120 @@ def update_database():
             }
 
         # 3/9 Next Match
+        # Strategy priority:
+        #   A. MS /upcoming/{id}          — dedicated "next match" endpoint, best data
+        #   B. MS /potential-fixtures/{id} — when draw not yet complete, gives possible opponents
+        #   C. /fixtures/player/{id}       — v2 player fixtures, date often null but has IDs
+        #   D. /fixtures/{date} day scan   — daily fixtures, has real match times
+        # If API returns null opponent, existing data.json value is preserved.
         print("3/9 Syncing Next Match...")
-        next_match = find_sinner_match()
+        now = datetime.datetime.now(datetime.timezone.utc)
+        existing_match = db.get('next_match', {})
+        next_match = None
 
+        # STRATEGY A: MS Upcoming Match
+        print("  [A] Trying MS /upcoming/...")
+        ms_upcoming = api_call(f"/tennis/ms/player/upcoming/{SINNER_ID}")
+        if ms_upcoming:
+            # May be a single object or a list — handle both
+            candidates = ms_upcoming if isinstance(ms_upcoming, list) else [ms_upcoming]
+            for item in candidates:
+                result = extract_match_info(item)
+                if result and result.get('opponent') not in (None, '', 'TBD'):
+                    next_match = result
+                    print(f"  [A] Found: {result['tournament']} vs {result['opponent']} on {result['date']}")
+                    break
+
+        # STRATEGY B: MS Potential Fixtures
+        # Only run if A gave us nothing or no opponent
+        if not next_match or next_match.get('opponent') in (None, '', 'TBD'):
+            print("  [B] Trying MS /potential-fixtures/...")
+            ms_potential = api_call(f"/tennis/ms/player/potential-fixtures/{SINNER_ID}")
+            if ms_potential:
+                candidates = ms_potential if isinstance(ms_potential, list) else [ms_potential]
+                for item in candidates:
+                    result = extract_match_info(item)
+                    if result:
+                        if not next_match:
+                            next_match = result
+                        elif result.get('opponent') not in (None, '', 'TBD'):
+                            next_match = result  # upgrade opponent
+                        if next_match.get('opponent') not in (None, '', 'TBD'):
+                            print(f"  [B] Found: {result['tournament']} vs {result['opponent']}")
+                            break
+
+        # STRATEGY C: v2 Player Fixtures
+        if not next_match:
+            print("  [C] Trying v2 /fixtures/player/...")
+            player_fixtures = api_call(f"/tennis/v2/atp/fixtures/player/{SINNER_ID}")
+            if player_fixtures and isinstance(player_fixtures, list):
+                for fix in player_fixtures:
+                    result = extract_match_info(fix)
+                    if result:
+                        next_match = result
+                        print(f"  [C] Found: {result['tournament']} vs {result['opponent']} on {result['date']}")
+                        break
+
+        # STRATEGY D: Daily scan for real match time
+        # Always run if we still lack a real time (not midnight placeholder)
+        needs_time = not next_match or not next_match.get('date') or next_match['date'].endswith('T00:00:00Z')
+        if needs_time:
+            print("  [D] Scanning daily fixtures for real match time (next 14 days)...")
+            scan_date = now
+            for _ in range(14):
+                date_str = scan_date.strftime("%Y-%m-%d")
+                daily = api_call(f"/tennis/v2/atp/fixtures/{date_str}")
+                if daily and isinstance(daily, list):
+                    for match in daily:
+                        result = extract_match_info(match)
+                        if result:
+                            has_real_time = result.get('date') and not result['date'].endswith('T00:00:00Z')
+                            if not next_match:
+                                next_match = result
+                                print(f"  [D] Found: {result['tournament']} vs {result['opponent']} on {result['date']}")
+                                break
+                            elif has_real_time:
+                                # Only upgrade time, keep better opponent name if already found
+                                next_match['date'] = result['date']
+                                if next_match.get('opponent') in (None, '', 'TBD') and result.get('opponent') not in (None, '', 'TBD'):
+                                    next_match['opponent'] = result['opponent']
+                                print(f"  [D] Upgraded time to {result['date']}")
+                                break
+                    else:
+                        scan_date += datetime.timedelta(days=1)
+                        continue
+                    if not needs_time or (next_match and next_match.get('date') and not next_match['date'].endswith('T00:00:00Z')):
+                        break
+                    scan_date += datetime.timedelta(days=1)
+                    continue
+                scan_date += datetime.timedelta(days=1)
+
+        # Finalize: never overwrite with worse data
         if next_match:
+            # If opponent is still null/TBD, keep whatever was already in data.json
+            if next_match.get('opponent') in (None, '', 'TBD'):
+                kept = existing_match.get('opponent')
+                if kept and kept not in ('TBD', 'Unknown Player', 'Off Season'):
+                    next_match['opponent'] = kept
+                    print(f"  → Kept existing opponent: {kept}")
+            # Same for tournament
+            if next_match.get('tournament') in (None, '', 'TBD'):
+                kept_t = existing_match.get('tournament')
+                if kept_t and kept_t not in ('TBD', 'Off Season'):
+                    next_match['tournament'] = kept_t
+                    next_match['countryAcr'] = existing_match.get('countryAcr', 'ITA')
             db['next_match'] = next_match
             print(f"  → Saved: {next_match}")
         else:
-            db['next_match'] = {
-                "opponent": "TBD", "tournament": "Off Season",
-                "round": "TBD",    "countryAcr": "ITA", "date": None
-            }
-            print("  → No upcoming match found, set to Off Season.")
+            # Nothing found at all — keep existing unless it's clearly stale
+            if existing_match.get('tournament') not in (None, '', 'TBD', 'Off Season'):
+                print(f"  → No API result; preserving existing: {existing_match}")
+            else:
+                db['next_match'] = {
+                    "opponent": "TBD", "tournament": "Off Season",
+                    "round": "TBD", "countryAcr": "ITA", "date": None
+                }
+                print("  → No upcoming match found, set to Off Season.")
 
         # 4/9 H2H Rivalries
         print("4/9 Syncing H2H...")
@@ -324,19 +387,19 @@ def update_database():
         now          = datetime.datetime.now(datetime.timezone.utc)
         current_year = now.year
         elite_schedule = [
-            {"name": "Monte-Carlo Masters",     "date": f"{current_year}-04-12T00:00:00Z", "court": "Clay",   "country": "MON"},
-            {"name": "Madrid Open",             "date": f"{current_year}-04-24T00:00:00Z", "court": "Clay",   "country": "ESP"},
+            {"name": "Monte-Carlo Masters", "date": f"{current_year}-04-12T00:00:00Z", "court": "Clay",   "country": "MON"},
+            {"name": "Madrid Open", "date": f"{current_year}-04-24T00:00:00Z", "court": "Clay",   "country": "ESP"},
             {"name": "Internazionali d'Italia", "date": f"{current_year}-05-08T00:00:00Z", "court": "Clay",   "country": "ITA"},
-            {"name": "Roland Garros",           "date": f"{current_year}-05-26T00:00:00Z", "court": "Clay",   "country": "FRA"},
-            {"name": "Halle Open",              "date": f"{current_year}-06-17T00:00:00Z", "court": "Grass",  "country": "GER"},
-            {"name": "Wimbledon",               "date": f"{current_year}-07-01T00:00:00Z", "court": "Grass",  "country": "GBR"},
-            {"name": "Canadian Open",           "date": f"{current_year}-08-06T00:00:00Z", "court": "Hard",   "country": "CAN"},
-            {"name": "Cincinnati Open",         "date": f"{current_year}-08-12T00:00:00Z", "court": "Hard",   "country": "USA"},
-            {"name": "US Open",                 "date": f"{current_year}-08-26T00:00:00Z", "court": "Hard",   "country": "USA"},
-            {"name": "China Open",              "date": f"{current_year}-09-26T00:00:00Z", "court": "Hard",   "country": "CHN"},
-            {"name": "Shanghai Masters",        "date": f"{current_year}-10-02T00:00:00Z", "court": "Hard",   "country": "CHN"},
-            {"name": "Paris Masters",           "date": f"{current_year}-10-28T00:00:00Z", "court": "I.hard", "country": "FRA"},
-            {"name": "ATP Finals Turin",        "date": f"{current_year}-11-10T00:00:00Z", "court": "I.hard", "country": "ITA"},
+            {"name": "Roland Garros", "date": f"{current_year}-05-26T00:00:00Z", "court": "Clay",   "country": "FRA"},
+            {"name": "Halle Open", "date": f"{current_year}-06-17T00:00:00Z", "court": "Grass",  "country": "GER"},
+            {"name": "Wimbledon", "date": f"{current_year}-06-29T00:00:00Z", "court": "Grass",  "country": "GBR"},
+            {"name": "Canadian Open", "date": f"{current_year}-08-06T00:00:00Z", "court": "Hard",   "country": "CAN"},
+            {"name": "Cincinnati Open", "date": f"{current_year}-08-12T00:00:00Z", "court": "Hard",   "country": "USA"},
+            {"name": "US Open", "date": f"{current_year}-08-26T00:00:00Z", "court": "Hard",   "country": "USA"},
+            {"name": "China Open", "date": f"{current_year}-09-26T00:00:00Z", "court": "Hard",   "country": "CHN"},
+            {"name": "Shanghai Masters", "date": f"{current_year}-10-02T00:00:00Z", "court": "Hard",   "country": "CHN"},
+            {"name": "Paris Masters", "date": f"{current_year}-10-28T00:00:00Z", "court": "I.hard", "country": "FRA"},
+            {"name": "ATP Finals Turin", "date": f"{current_year}-11-10T00:00:00Z", "court": "I.hard", "country": "ITA"},
         ]
         db['roadmap'] = [
             t for t in elite_schedule
@@ -379,10 +442,10 @@ def update_database():
                 "coach":      info.get('coach',      'Simone Vagnozzi, Darren Cahill'),
             }
 
-        # Race to Turin
+        # 10/9 Race to Turin
         db['race_points'] = sum(t.get('earned', 0) for t in db.get('tournaments', []))
 
-        # Save
+        # 11/9 Save
         db['last_updated'] = datetime.datetime.now(datetime.timezone.utc).isoformat()
         with open('data.json', 'w') as f:
             json.dump(db, f, indent=2)
