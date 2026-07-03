@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-02T06:03:45.690880+00:00",
+  "last_updated": "2026-07-03T05:57:55.802715+00:00",
   "ranking": 1,
   "total_points": 13450,
   "win_loss": "36 - 2",
@@ -10,11 +10,11 @@
     "break_points_converted": 43.0
   },
   "next_match": {
-    "opponent": "Jenson Brooksby",
-    "tournament": "Wimbledon",
-    "round": "3rd Round",
-    "countryAcr": "GBR",
-    "date": "2026-07-03T13:00:00.000Z"
+    "opponent": "Unknown Player",
+    "tournament": "Canadian Open",
+    "round": "1st Round",
+    "countryAcr": "CAN",
+    "date": null
   },
   "tournaments": [
     {
