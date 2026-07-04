@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-03T05:57:55.802715+00:00",
+  "last_updated": "2026-07-04T05:50:14.462024+00:00",
   "ranking": 1,
   "total_points": 13450,
   "win_loss": "36 - 2",
@@ -61,20 +61,20 @@
   "rivalries": [
     {
       "name": "Carlos Alcaraz",
-      "wins": 7,
-      "losses": 11,
+      "wins": 0,
+      "losses": 0,
       "country": "ES"
     },
     {
       "name": "Novak Djokovic",
-      "wins": 6,
-      "losses": 5,
+      "wins": 0,
+      "losses": 0,
       "country": "SR"
     },
     {
       "name": "Alexander Zverev",
-      "wins": 10,
-      "losses": 4,
+      "wins": 0,
+      "losses": 0,
       "country": "DE"
     }
   ],
@@ -165,38 +165,12 @@
       "category": "Masters 1000"
     }
   ],
-  "recent_form": [
-    {
-      "win": true,
-      "opponent": "Nuno Borges",
-      "result": "7-6(4) 7-6(2) 6-4"
-    },
-    {
-      "win": true,
-      "opponent": "Miomir Kecmanovic",
-      "result": "4-6 6-3 6-7(6) 6-2 6-3"
-    },
-    {
-      "win": false,
-      "opponent": "Juan Manuel Cerundolo",
-      "result": "3-6 2-6 7-5 6-1 6-1"
-    },
-    {
-      "win": true,
-      "opponent": "Clement Tabur",
-      "result": "6-1 6-3 6-4"
-    },
-    {
-      "win": true,
-      "opponent": "Casper Ruud",
-      "result": "6-4 6-4"
-    }
-  ],
+  "recent_form": [],
   "race_points": 5950,
   "surface_mastery": {
-    "Hard": 19,
-    "Clay": 18,
-    "Grass": 2
+    "Hard": 0,
+    "Clay": 0,
+    "Grass": 0
   },
   "roadmap": [
     {
@@ -232,16 +206,16 @@
   ],
   "special_h2h": {
     "pigeon": {
-      "name": "Alex De Minaur",
-      "diff": 13,
-      "wins": 13,
+      "name": "TBD",
+      "diff": -999,
+      "wins": 0,
       "losses": 0
     },
     "nemesis": {
-      "name": "Carlos Alcaraz",
-      "diff": -4,
-      "wins": 7,
-      "losses": 11
+      "name": "TBD",
+      "diff": 999,
+      "wins": 0,
+      "losses": 0
     }
   },
   "bio": {
@@ -252,5 +226,5 @@
     "plays": "Right-Handed, Two-Handed Backhand",
     "coach": "Simone Vagnozzi, Darren Cahill"
   },
-  "current_streak": 2
+  "current_streak": 0
 }
