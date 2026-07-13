@@ -206,10 +206,10 @@ def update_database():
 
         # 3/9 Next Match
         # Strategy priority:
-        #   A. MS /upcoming/{id}          — dedicated "next match" endpoint, best data
-        #   B. MS /potential-fixtures/{id} — when draw not yet complete, gives possible opponents
-        #   C. /fixtures/player/{id}       — v2 player fixtures, date often null but has IDs
-        #   D. /fixtures/{date} day scan   — daily fixtures, has real match times
+        #   A. MS /upcoming/{id} - dedicated "next match" endpoint, best data
+        #   B. MS /potential-fixtures/{id} - when draw not yet complete, gives possible opponents
+        #   C. /fixtures/player/{id} - v2 player fixtures, date often null but has IDs
+        #   D. /fixtures/{date} day scan - daily fixtures, has real match times
         # If API returns null opponent, existing data.json value is preserved.
         print("3/9 Syncing Next Match...")
         now = datetime.datetime.now(datetime.timezone.utc)
@@ -220,7 +220,7 @@ def update_database():
         print("  [A] Trying MS /upcoming/...")
         ms_upcoming = api_call(f"/tennis/ms/player/upcoming/{SINNER_ID}")
         if ms_upcoming:
-            # May be a single object or a list — handle both
+            # May be a single object or a list - handle both
             candidates = ms_upcoming if isinstance(ms_upcoming, list) else [ms_upcoming]
             for item in candidates:
                 result = extract_match_info(item)
@@ -310,7 +310,7 @@ def update_database():
             db['next_match'] = next_match
             print(f"  → Saved: {next_match}")
         else:
-            # Nothing found at all — keep existing unless it's clearly stale
+            # Nothing found at all - keep existing unless it's clearly stale
             if existing_match.get('tournament') not in (None, '', 'TBD', 'Off Season'):
                 print(f"  → No API result; preserving existing: {existing_match}")
             else:
@@ -347,6 +347,10 @@ def update_database():
         streak       = 0
         streak_done  = False
 
+        wins_ytd   = 0
+        losses_ytd = 0
+        current_year = datetime.datetime.now(datetime.timezone.utc).year
+
         if past_matches and isinstance(past_matches, list):
             for m in past_matches:
                 p1      = m.get("player1", {})
@@ -355,6 +359,15 @@ def update_database():
                 opp     = p2.get("name") if is_p1 else p1.get("name")
                 is_win  = str(m.get("match_winner")) == str(SINNER_ID)
 
+                # Count only current-year matches for win_loss
+                match_date = m.get("date") or m.get("startDate") or ""
+                match_year = int(match_date[:4]) if len(match_date) >= 4 and match_date[:4].isdigit() else current_year
+                if match_year == current_year:
+                    if is_win:
+                        wins_ytd += 1
+                    else:
+                        losses_ytd += 1
+
                 if len(recent_form) < 5:
                     recent_form.append({"win": is_win, "opponent": opp, "result": m.get("result", "")})
                 if not streak_done:
@@ -362,6 +375,13 @@ def update_database():
                         streak += 1
                     else:
                         streak_done = True
+
+        # Only update win_loss if API returned meaningful data (>5 matches)
+        if wins_ytd + losses_ytd > 5:
+            db['win_loss'] = f"{wins_ytd} - {losses_ytd}"
+            print(f"  Win/Loss YTD: {wins_ytd} - {losses_ytd}")
+        else:
+            print(f"  Win/Loss: not enough data from API ({wins_ytd}W {losses_ytd}L), keeping existing")
 
         db['recent_form']    = recent_form
         db['current_streak'] = streak
@@ -442,8 +462,9 @@ def update_database():
                 "coach":      info.get('coach',      'Simone Vagnozzi, Darren Cahill'),
             }
 
-        # 10/9 Race to Turin
+        # Race to Turin - recalculate from tournaments AFTER all updates
         db['race_points'] = sum(t.get('earned', 0) for t in db.get('tournaments', []))
+        print(f"  Race points recalculated: {db['race_points']}")
 
         # 11/9 Save
         db['last_updated'] = datetime.datetime.now(datetime.timezone.utc).isoformat()
