@@ -1,8 +1,8 @@
 {
-  "last_updated": "2026-07-13T08:15:20.056461+00:00",
+  "last_updated": "2026-07-14T04:54:51.422144+00:00",
   "ranking": 1,
   "total_points": 13450,
-  "win_loss": "44 - 3",
+  "win_loss": "9 - 1",
   "stats": {
     "first_serve_in": 59.9,
     "break_points_saved": 65.6,
@@ -10,11 +10,11 @@
     "break_points_converted": 42.9
   },
   "next_match": {
-    "opponent": "TBD",
+    "opponent": "Unknown Player",
     "tournament": "Canadian Open",
     "round": "1st Round",
     "countryAcr": "CAN",
-    "date": "2026-08-06T00:00:00Z"
+    "date": null
   },
   "tournaments": [
     {
