@@ -12,10 +12,10 @@ const COUNTRY_FLAGS = {
 
 const TZ_MAP = {
     AUS: 'Australia/Melbourne', ESP: 'Europe/Madrid',
-    FRA: 'Europe/Paris',        GBR: 'Europe/London',
-    USA: 'America/New_York',    ITA: 'Europe/Rome',
-    MON: 'Europe/Monaco',       CHN: 'Asia/Shanghai',
-    GER: 'Europe/Berlin',       CAN: 'America/Toronto',
+    FRA: 'Europe/Paris', GBR: 'Europe/London',
+    USA: 'America/New_York', ITA: 'Europe/Rome',
+    MON: 'Europe/Monaco', CHN: 'Asia/Shanghai',
+    GER: 'Europe/Berlin', CAN: 'America/Toronto',
 };
 
 // =========================================
@@ -25,43 +25,43 @@ let currentLang = 'en';
 
 const T = {
     en: {
-        rankingTitle: 'ATP Ranking',     winLossTitle: 'Win / Loss',    pointsTitle: 'ATP Points',
+        rankingTitle: 'ATP Ranking', winLossTitle: 'Win / Loss', pointsTitle: 'ATP Points',
         pointsEvolution: 'Points Evolution', foxStats: 'The Fox Stats', trophyCabinet: 'Trophy Cabinet',
-        rivalries: 'Epic Rivalries',     tournaments: 'Tournaments',    tournHeader: 'Tournament',
-        defendingHeader: 'Defending',    earnedHeader: 'Earned',        netDiffHeader: 'Net Diff',
+        rivalries: 'Epic Rivalries', tournaments: 'Tournaments', tournHeader: 'Tournament',
+        defendingHeader: 'Defending', earnedHeader: 'Earned', netDiffHeader: 'Net Diff',
         footerText: 'Sinner Tracker 2026 — Unofficial Fan Dashboard',
-        serveIn: '1st Serve In',         bpSaved: 'BP Saved',           retWon: 'Return Won',
-        bpConv: 'BP Converted',          raceToTurin: 'Race to Turin',
-        qualifying: 'Qualifying…',       qualified: 'QUALIFIED! 🎉',    installApp: 'Install App',
-        liveNow: 'Live Now',             recentForm: 'Form',            surfaceMastery: 'Surface Mastery',
-        winsYTD: 'Wins YTD',             roadmapTitle: 'Roadmap',       majorEvents: 'Next Major Events',
-        pigeon: 'The Pigeon 🟢',         nemesis: 'The Nemesis 🔴',
-        bioTitle: 'Identity Card',       bioHeight: 'Height',           bioWeight: 'Weight',
-        bioPlays: 'Plays',               bioPro: 'Pro Since',           bioCoaches: 'Coaching Team',
+        serveIn: '1st Serve In', bpSaved: 'BP Saved', retWon: 'Return Won',
+        bpConv: 'BP Converted', raceToTurin: 'Race to Turin',
+        qualifying: 'Qualifying…', qualified: 'QUALIFIED! 🎉', installApp: 'Install App',
+        liveNow: 'Live Now', recentForm: 'Form', surfaceMastery: 'Surface Mastery',
+        winsYTD: 'Wins YTD', roadmapTitle: 'Roadmap', majorEvents: 'Next Major Events',
+        pigeon: 'The Pigeon 🟢', nemesis: 'The Nemesis 🔴',
+        bioTitle: 'Identity Card', bioHeight: 'Height', bioWeight: 'Weight',
+        bioPlays: 'Plays', bioPro: 'Pro Since', bioCoaches: 'Coaching Team',
         goldenMastersTitle: 'Career Golden Masters',
         goldenMastersSub: 'All 9 ATP Masters 1000 Titles Conquered',
-        titlesYTD: 'Titles YTD',         matchSchedule: 'Match Schedule',
-        localTime: 'Local',              yourTime: 'Your Time',         winStreak: 'Win Streak',
+        titlesYTD: 'Titles YTD', matchSchedule: 'Match Schedule',
+        localTime: 'Local', yourTime: 'Your Time', winStreak: 'Win Streak',
         daysUntil: 'Days until',
     },
     it: {
         rankingTitle: 'Classifica ATP',  winLossTitle: 'Vittorie / Sconfitte', pointsTitle: 'Punti Totali ATP',
-        pointsEvolution: 'Evoluzione Punti', foxStats: 'Le Statistiche',       trophyCabinet: 'Bacheca Trofei',
-        rivalries: 'Rivalità Epiche',    tournaments: 'Dettaglio Tornei',      tournHeader: 'Torneo',
-        defendingHeader: 'Da Difendere', earnedHeader: 'Guadagnati',           netDiffHeader: 'Differenza',
+        pointsEvolution: 'Evoluzione Punti', foxStats: 'Le Statistiche', trophyCabinet: 'Bacheca Trofei',
+        rivalries: 'Rivalità Epiche',    tournaments: 'Dettaglio Tornei', tournHeader: 'Torneo',
+        defendingHeader: 'Da Difendere', earnedHeader: 'Guadagnati', netDiffHeader: 'Differenza',
         footerText: 'Sinner Tracker 2026 — Dashboard Non Ufficiale',
-        serveIn: '1ª di Servizio',       bpSaved: 'PB Salvate',               retWon: 'Risposta Vinta',
-        bpConv: 'Break Conv.',           raceToTurin: 'Corsa per Torino',
+        serveIn: '1ª di Servizio', bpSaved: 'PB Salvate', retWon: 'Risposta Vinta',
+        bpConv: 'Break Conv.', raceToTurin: 'Corsa per Torino',
         qualifying: 'Qualificazione in corso…', qualified: 'QUALIFICATO! 🎉', installApp: 'Installa App',
-        liveNow: 'In Diretta',           recentForm: 'Forma',                 surfaceMastery: 'Vittorie per Superficie',
-        winsYTD: 'Vittorie YTD',         roadmapTitle: 'Calendario',          majorEvents: 'Prossimi Grandi Eventi',
-        pigeon: 'Il Figlioccio 🟢',      nemesis: 'La Bestia Nera 🔴',
-        bioTitle: "Carta d'Identità",    bioHeight: 'Altezza',                bioWeight: 'Peso',
-        bioPlays: 'Mano',                bioPro: 'Pro dal',                   bioCoaches: 'Team Tecnico',
+        liveNow: 'In Diretta', recentForm: 'Forma', surfaceMastery: 'Vittorie per Superficie',
+        winsYTD: 'Vittorie YTD', roadmapTitle: 'Calendario', majorEvents: 'Prossimi Grandi Eventi',
+        pigeon: 'Il Figlioccio 🟢', nemesis: 'La Bestia Nera 🔴',
+        bioTitle: "Carta d'Identità", bioHeight: 'Altezza', bioWeight: 'Peso',
+        bioPlays: 'Mano', bioPro: 'Pro dal', bioCoaches: 'Team Tecnico',
         goldenMastersTitle: 'Career Golden Masters',
         goldenMastersSub: 'Tutti e 9 i titoli Masters 1000 conquistati',
-        titlesYTD: 'Titoli YTD',         matchSchedule: 'Orari Programmati',
-        localTime: 'Locale',             yourTime: 'Tuo Orario',              winStreak: 'Vittorie di Fila',
+        titlesYTD: 'Titoli YTD', matchSchedule: 'Orari Programmati',
+        localTime: 'Locale', yourTime: 'Tuo Orario', winStreak: 'Vittorie di Fila',
         daysUntil: 'Giorni a',
     }
 };
@@ -158,11 +158,11 @@ async function initDashboard() {
             renderTableAndPoints(data.tournaments);
             renderChart(data.tournaments, data.total_points);
         }
-        if (data.stats)           renderRadarChart(data.stats);
+        if (data.stats) renderRadarChart(data.stats);
         if (data.surface_mastery) renderDoughnutChart(data.surface_mastery);
-        if (data.trophies)        renderTrophies(data.trophies);
-        if (data.rivalries)       renderH2H(data.rivalries);
-        if (data.roadmap)         renderRoadmap(data.roadmap);
+        if (data.trophies) renderTrophies(data.trophies);
+        if (data.rivalries) renderH2H(data.rivalries);
+        if (data.roadmap) renderRoadmap(data.roadmap);
 
         initCountdown();
         initShareButton();
@@ -194,30 +194,30 @@ function populateBanner(nextMatch, streak, recentForm) {
     if (!nextMatch) return;
 
     document.getElementById('next-tournament-display').innerText = nextMatch.tournament;
-    document.getElementById('next-opponent-display').innerText   = `vs ${nextMatch.opponent}`;
-    document.getElementById('next-round-display').innerText      = nextMatch.round;
-    document.getElementById('local-country-code').innerText      = nextMatch.countryAcr ?? '—';
+    document.getElementById('next-opponent-display').innerText = `vs ${nextMatch.opponent}`;
+    document.getElementById('next-round-display').innerText = nextMatch.round;
+    document.getElementById('local-country-code').innerText = nextMatch.countryAcr ?? '—';
 
     // Live detection
     if (nextMatch.date) {
         const matchDate = new Date(nextMatch.date);
-        const now       = Date.now();
-        const isLive    = now >= matchDate.getTime() && now <= matchDate.getTime() + 10800000;
+        const now = Date.now();
+        const isLive = now >= matchDate.getTime() && now <= matchDate.getTime() + 10800000;
 
-        const banner    = document.getElementById('tournament-banner');
-        const liveEl    = document.getElementById('live-indicator');
+        const banner = document.getElementById('tournament-banner');
+        const liveEl = document.getElementById('live-indicator');
 
         banner.classList.toggle('live', isLive);
         liveEl.classList.toggle('hidden', !isLive);
 
         // Dual timezone
-        const tz        = TZ_MAP[nextMatch.countryAcr] ?? 'UTC';
-        const locale    = currentLang === 'it' ? 'it-IT' : 'en-US';
-        const timeOpts  = { hour: '2-digit', minute: '2-digit', hour12: false };
+        const tz = TZ_MAP[nextMatch.countryAcr] ?? 'UTC';
+        const locale = currentLang === 'it' ? 'it-IT' : 'en-US';
+        const timeOpts = { hour: '2-digit', minute: '2-digit', hour12: false };
 
-        document.getElementById('next-date-user').innerText  = matchDate.toLocaleTimeString(locale, timeOpts);
+        document.getElementById('next-date-user').innerText = matchDate.toLocaleTimeString(locale, timeOpts);
         document.getElementById('next-date-local').innerText = matchDate.toLocaleTimeString(locale, { ...timeOpts, timeZone: tz });
-        document.getElementById('next-date-day').innerText   = matchDate.toLocaleDateString(locale, { weekday: 'long', month: 'short', day: 'numeric' });
+        document.getElementById('next-date-day').innerText = matchDate.toLocaleDateString(locale, { weekday: 'long', month: 'short', day: 'numeric' });
     }
 
     // Streak badge
@@ -249,10 +249,10 @@ function populateBanner(nextMatch, streak, recentForm) {
 // =========================================
 function populateBio(bio) {
     if (!bio) return;
-    document.getElementById('bio-height').innerText     = `${bio.height} cm`;
-    document.getElementById('bio-weight').innerText     = `${bio.weight} kg`;
-    document.getElementById('bio-pro').innerText        = bio.turned_pro;
-    document.getElementById('bio-coach').innerText      = bio.coach;
+    document.getElementById('bio-height').innerText = `${bio.height} cm`;
+    document.getElementById('bio-weight').innerText = `${bio.weight} kg`;
+    document.getElementById('bio-pro').innerText = bio.turned_pro;
+    document.getElementById('bio-coach').innerText = bio.coach;
     document.getElementById('bio-birthplace').innerText = bio.birthplace ?? '—';
 
     const hand = bio.plays?.split(',')[0] ?? '';
@@ -293,9 +293,9 @@ function populateRace(data) {
 // =========================================
 function populateSpecialH2H(h2h) {
     if (!h2h) return;
-    document.getElementById('pigeon-name').innerText  = h2h.pigeon.name;
+    document.getElementById('pigeon-name').innerText = h2h.pigeon.name;
     document.getElementById('pigeon-score').innerText = `${h2h.pigeon.wins} - ${h2h.pigeon.losses}`;
-    document.getElementById('nemesis-name').innerText  = h2h.nemesis.name;
+    document.getElementById('nemesis-name').innerText = h2h.nemesis.name;
     document.getElementById('nemesis-score').innerText = `${h2h.nemesis.wins} - ${h2h.nemesis.losses}`;
 }
 
@@ -336,10 +336,10 @@ function renderRadarChart(s) {
             layout: { padding: 16 },
             scales: {
                 r: {
-                    angleLines:  { color: gridColor },
-                    grid:        { color: gridColor },
+                    angleLines: { color: gridColor },
+                    grid: { color: gridColor },
                     pointLabels: { color: textColor, font: { size: 12, weight: 'bold', family: 'Montserrat' } },
-                    ticks:       { display: false, stepSize: 25 },
+                    ticks: { display: false, stepSize: 25 },
                     suggestedMin: 0, suggestedMax: 100,
                 }
             },
@@ -361,7 +361,7 @@ function renderDoughnutChart(surfaces) {
     const el = document.getElementById('doughnutChart');
     if (!el) return;
     const isDark = document.documentElement.classList.contains('dark');
-    const total  = (surfaces.Hard ?? 0) + (surfaces.Clay ?? 0) + (surfaces.Grass ?? 0);
+    const total = (surfaces.Hard ?? 0) + (surfaces.Clay ?? 0) + (surfaces.Grass ?? 0);
 
     const center = document.getElementById('total-wins-center');
     if (center) center.innerText = total;
@@ -496,8 +496,8 @@ function renderTrophies(trophiesData) {
         let cls = 'trophy-card masters';
         let icon = '🏆';
         if (t.title === 'Career Golden Masters') { cls = 'trophy-card golden'; icon = '✨'; }
-        else if (t.category === 'Grand Slam')    { cls = 'trophy-card slam';    icon = '👑'; }
-        else if (t.category === 'ATP Finals')    { cls = 'trophy-card finals';   icon = '💎'; }
+        else if (t.category === 'Grand Slam') { cls = 'trophy-card slam'; icon = '👑'; }
+        else if (t.category === 'ATP Finals') { cls = 'trophy-card finals'; icon = '💎'; }
 
         const nameColor = t.title === 'Career Golden Masters' ? 'color:#fff' : '';
         const badges = t.years.map(y => `<span class="year-badge">${y}</span>`).join('');
@@ -545,18 +545,18 @@ function renderRoadmap(roadmap) {
     if (!container || !roadmap?.length) return;
 
     const COURT_COLORS = {
-        clay:   { dot: 'bg-orange-600', badge: '🟠' },
-        grass:  { dot: 'bg-green-500',  badge: '🟢' },
-        hard:   { dot: 'bg-blue-500',   badge: '🔵' },
+        clay: { dot: 'bg-orange-600', badge: '🟠' },
+        grass: { dot: 'bg-green-500', badge: '🟢' },
+        hard: { dot: 'bg-blue-500', badge: '🔵' },
         'i.hard': { dot: 'bg-indigo-500', badge: '🟣' },
     };
     const locale = currentLang === 'it' ? 'it-IT' : 'en-US';
 
     container.innerHTML = roadmap.map(t => {
-        const d    = new Date(t.date);
-        const ds   = d.toLocaleDateString(locale, { month: 'short', day: 'numeric' });
-        const key  = (t.court ?? '').toLowerCase();
-        const cfg  = COURT_COLORS[key] ?? COURT_COLORS.hard;
+        const d = new Date(t.date);
+        const ds = d.toLocaleDateString(locale, { month: 'short', day: 'numeric' });
+        const key = (t.court ?? '').toLowerCase();
+        const cfg = COURT_COLORS[key] ?? COURT_COLORS.hard;
 
         return `<div class="roadmap-stop">
             <div class="roadmap-dot ${cfg.dot} flex-shrink-0"></div>

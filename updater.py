@@ -16,61 +16,59 @@ HEADERS = {
 
 SINNER_ID = 47275
 RIVALS = {
-    "Carlos Alcaraz":   68074,
-    "Novak Djokovic":   5992,
+    "Carlos Alcaraz": 68074,
+    "Novak Djokovic": 5992,
     "Alexander Zverev": 24008
 }
 
 # Round IDs → human-readable labels
 ROUND_MAP = {
     1: "Q1", 2: "Q2", 3: "Q3",
-    4: "1st Round",   5: "2nd Round",  6: "3rd Round",
-    7: "4th Round",   8: "Round Robin", 9: "Quarterfinals",
+    4: "1st Round", 5: "2nd Round", 6: "3rd Round",
+    7: "4th Round", 8: "Round Robin", 9: "Quarterfinals",
     10: "Semifinals", 11: "Bronze Medal", 12: "Final",
     24: "Quarterfinals"
 }
 
 # Tournament-name overrides: cleans up API names
 TOURNAMENT_NAME_MAP = {
-    "wimbledon":               "Wimbledon",
-    "roland garros":           "Roland Garros",
-    "australian open":         "Australian Open",
-    "us open":                 "US Open",
-    "monte-carlo":             "Monte-Carlo Masters",
-    "monte carlo":             "Monte-Carlo Masters",
-    "madrid":                  "Madrid Open",
-    "internazionali":          "Internazionali d'Italia",
-    "rome":                    "Internazionali d'Italia",
-    "canadian":                "Canadian Open",
-    "toronto":                 "Canadian Open",
-    "montreal":                "Canadian Open",
-    "cincinnati":              "Cincinnati Open",
-    "shanghai":                "Shanghai Masters",
-    "paris":                   "Paris Masters",
-    "indian wells":            "Indian Wells Open",
-    "miami":                   "Miami Open",
+    "wimbledon": "Wimbledon",
+    "roland garros": "Roland Garros",
+    "australian open": "Australian Open",
+    "us open": "US Open",
+    "monte-carlo": "Monte-Carlo Masters",
+    "monte carlo": "Monte-Carlo Masters",
+    "madrid": "Madrid Open",
+    "internazionali": "Internazionali d'Italia",
+    "rome": "Internazionali d'Italia",
+    "canadian": "Canadian Open",
+    "toronto": "Canadian Open",
+    "montreal": "Canadian Open",
+    "cincinnati": "Cincinnati Open",
+    "shanghai": "Shanghai Masters",
+    "paris": "Paris Masters",
+    "indian wells": "Indian Wells Open",
+    "miami": "Miami Open",
 }
 
 # countryAcr overrides for known tournaments
 TOURNAMENT_COUNTRY_MAP = {
-    "Wimbledon":               "GBR",
-    "Roland Garros":           "FRA",
-    "Australian Open":         "AUS",
-    "US Open":                 "USA",
-    "Monte-Carlo Masters":     "MON",
-    "Madrid Open":             "ESP",
+    "Wimbledon": "GBR",
+    "Roland Garros": "FRA",
+    "Australian Open": "AUS",
+    "US Open": "USA",
+    "Monte-Carlo Masters": "MON",
+    "Madrid Open": "ESP",
     "Internazionali d'Italia": "ITA",
-    "Canadian Open":           "CAN",
-    "Cincinnati Open":         "USA",
-    "Shanghai Masters":        "CHN",
-    "Paris Masters":           "FRA",
-    "Indian Wells Open":       "USA",
-    "Miami Open":              "USA",
+    "Canadian Open": "CAN",
+    "Cincinnati Open": "USA",
+    "Shanghai Masters": "CHN",
+    "Paris Masters": "FRA",
+    "Indian Wells Open": "USA",
+    "Miami Open": "USA",
 }
 
-# ─────────────────────────────────────────
-# HELPERS
-# ─────────────────────────────────────────
+# HELPERS   
 def api_call(endpoint_path):
     url = f"https://{HOST}{endpoint_path}"
     req = urllib.request.Request(url, headers=HEADERS)
@@ -79,7 +77,7 @@ def api_call(endpoint_path):
             res = json.loads(resp.read().decode('utf-8'))
             return res.get('data', res)
     except Exception as e:
-        print(f"  [API ERROR] {endpoint_path}: {e}")
+        print(f"[API ERROR] {endpoint_path}: {e}")
         return None
 
 def calculate_pct(part, total):
@@ -118,7 +116,7 @@ def extract_match_info(match, fallback_tournament=None):
     Extract a clean next_match dict from a fixture object.
     Tries multiple field name patterns the API uses inconsistently.
     """
-    # ── Player ID detection ──
+    # Player ID detection
     p1_id = str(match.get('player1Id') or match.get('player1_id') or
                 (match.get('player1') or {}).get('id') or '')
     p2_id = str(match.get('player2Id') or match.get('player2_id') or
@@ -157,16 +155,14 @@ def extract_match_info(match, fallback_tournament=None):
     match_dt = build_datetime(raw_date, raw_time)
 
     return {
-        "opponent":   opp,
+        "opponent": opp,
         "tournament": t_name,
-        "round":      r_name,
+        "round": r_name,
         "countryAcr": t_country,
-        "date":       match_dt,
+        "date": match_dt,
     }
 
-# ─────────────────────────────────────────
 # MAIN
-# ─────────────────────────────────────────
 def update_database():
     if not API_KEY or API_KEY == "YOUR_API_KEY":
         print("CRITICAL: API_KEY not configured in GitHub Secrets!")
@@ -185,8 +181,8 @@ def update_database():
         if rankings:
             for r in rankings:
                 if str(r.get('player', {}).get('id')) == str(SINNER_ID):
-                    db['ranking']      = r.get('position', db.get('ranking'))
-                    db['total_points'] = r.get('point',    db.get('total_points'))
+                    db['ranking'] = r.get('position', db.get('ranking'))
+                    db['total_points'] = r.get('point', db.get('total_points'))
                     break
 
         # 2/9 Win/Loss & Fox Stats
@@ -194,13 +190,13 @@ def update_database():
         stats_data = api_call(f"/tennis/v2/atp/player/match-stats/{SINNER_ID}")
         if stats_data:
             serv = stats_data.get('serviceStats', {})
-            rtn  = stats_data.get('rtnStats', {})
-            bps  = stats_data.get('breakPointsServeStats', {})
-            bpr  = stats_data.get('breakPointsRtnStats', {})
+            rtn = stats_data.get('rtnStats', {})
+            bps = stats_data.get('breakPointsServeStats', {})
+            bpr = stats_data.get('breakPointsRtnStats', {})
             db['stats'] = {
-                "first_serve_in":       calculate_pct(serv.get('firstServeGm'),    serv.get('firstServeOfGm')),
-                "break_points_saved":   calculate_pct(bps.get('breakPointSavedGm'), bps.get('breakPointFacedGm')),
-                "first_return_won":     calculate_pct(rtn.get('winningOnFirstServeGm'), rtn.get('winningOnFirstServeOfGm')),
+                "first_serve_in": calculate_pct(serv.get('firstServeGm'),    serv.get('firstServeOfGm')),
+                "break_points_saved": calculate_pct(bps.get('breakPointSavedGm'), bps.get('breakPointFacedGm')),
+                "first_return_won": calculate_pct(rtn.get('winningOnFirstServeGm'), rtn.get('winningOnFirstServeOfGm')),
                 "break_points_converted": calculate_pct(bpr.get('breakPointWonGm'), bpr.get('breakPointChanceGm'))
             }
 
@@ -226,7 +222,7 @@ def update_database():
                 result = extract_match_info(item)
                 if result and result.get('opponent') not in (None, '', 'TBD'):
                     next_match = result
-                    print(f"  [A] Found: {result['tournament']} vs {result['opponent']} on {result['date']}")
+                    print(f"[A] Found: {result['tournament']} vs {result['opponent']} on {result['date']}")
                     break
 
         # STRATEGY B: MS Potential Fixtures
@@ -244,7 +240,7 @@ def update_database():
                         elif result.get('opponent') not in (None, '', 'TBD'):
                             next_match = result  # upgrade opponent
                         if next_match.get('opponent') not in (None, '', 'TBD'):
-                            print(f"  [B] Found: {result['tournament']} vs {result['opponent']}")
+                            print(f"[B] Found: {result['tournament']} vs {result['opponent']}")
                             break
 
         # STRATEGY C: v2 Player Fixtures
@@ -256,14 +252,14 @@ def update_database():
                     result = extract_match_info(fix)
                     if result:
                         next_match = result
-                        print(f"  [C] Found: {result['tournament']} vs {result['opponent']} on {result['date']}")
+                        print(f"[C] Found: {result['tournament']} vs {result['opponent']} on {result['date']}")
                         break
 
         # STRATEGY D: Daily scan for real match time
         # Always run if we still lack a real time (not midnight placeholder)
         needs_time = not next_match or not next_match.get('date') or next_match['date'].endswith('T00:00:00Z')
         if needs_time:
-            print("  [D] Scanning daily fixtures for real match time (next 14 days)...")
+            print("[D] Scanning daily fixtures for real match time (next 14 days)...")
             scan_date = now
             for _ in range(14):
                 date_str = scan_date.strftime("%Y-%m-%d")
@@ -275,14 +271,14 @@ def update_database():
                             has_real_time = result.get('date') and not result['date'].endswith('T00:00:00Z')
                             if not next_match:
                                 next_match = result
-                                print(f"  [D] Found: {result['tournament']} vs {result['opponent']} on {result['date']}")
+                                print(f"[D] Found: {result['tournament']} vs {result['opponent']} on {result['date']}")
                                 break
                             elif has_real_time:
                                 # Only upgrade time, keep better opponent name if already found
                                 next_match['date'] = result['date']
                                 if next_match.get('opponent') in (None, '', 'TBD') and result.get('opponent') not in (None, '', 'TBD'):
                                     next_match['opponent'] = result['opponent']
-                                print(f"  [D] Upgraded time to {result['date']}")
+                                print(f"[D] Upgraded time to {result['date']}")
                                 break
                     else:
                         scan_date += datetime.timedelta(days=1)
@@ -332,9 +328,9 @@ def update_database():
                     p1_wins += int(surface.get('player1wins', 0))
                     p2_wins += int(surface.get('player2wins', 0))
             new_rivalries.append({
-                "name":    name,
-                "wins":    p1_wins,
-                "losses":  p2_wins,
+                "name": name,
+                "wins": p1_wins,
+                "losses": p2_wins,
                 "country": COUNTRY_FOR.get(name, ''),
             })
         if new_rivalries:
@@ -343,30 +339,17 @@ def update_database():
         # 5/9 Recent Form & Streak
         print("5/9 Syncing Recent Form & Fox Streak...")
         past_matches = api_call(f"/tennis/v2/atp/player/past-matches/{SINNER_ID}")
-        recent_form  = []
-        streak       = 0
-        streak_done  = False
-
-        wins_ytd   = 0
-        losses_ytd = 0
-        current_year = datetime.datetime.now(datetime.timezone.utc).year
+        recent_form = []
+        streak = 0
+        streak_done = False
 
         if past_matches and isinstance(past_matches, list):
             for m in past_matches:
-                p1      = m.get("player1", {})
-                p2      = m.get("player2", {})
-                is_p1   = str(p1.get("id")) == str(SINNER_ID)
-                opp     = p2.get("name") if is_p1 else p1.get("name")
+                p1 = m.get("player1", {})
+                p2 = m.get("player2", {})
+                is_p1 = str(p1.get("id")) == str(SINNER_ID)
+                opp = p2.get("name") if is_p1 else p1.get("name")
                 is_win  = str(m.get("match_winner")) == str(SINNER_ID)
-
-                # Count only current-year matches for win_loss
-                match_date = m.get("date") or m.get("startDate") or ""
-                match_year = int(match_date[:4]) if len(match_date) >= 4 and match_date[:4].isdigit() else current_year
-                if match_year == current_year:
-                    if is_win:
-                        wins_ytd += 1
-                    else:
-                        losses_ytd += 1
 
                 if len(recent_form) < 5:
                     recent_form.append({"win": is_win, "opponent": opp, "result": m.get("result", "")})
@@ -376,14 +359,7 @@ def update_database():
                     else:
                         streak_done = True
 
-        # Only update win_loss if API returned meaningful data (>5 matches)
-        if wins_ytd + losses_ytd > 5:
-            db['win_loss'] = f"{wins_ytd} - {losses_ytd}"
-            print(f"  Win/Loss YTD: {wins_ytd} - {losses_ytd}")
-        else:
-            print(f"  Win/Loss: not enough data from API ({wins_ytd}W {losses_ytd}L), keeping existing")
-
-        db['recent_form']    = recent_form
+        db['recent_form'] = recent_form
         db['current_streak'] = streak
 
         # 6/9 Surface Mastery
@@ -430,7 +406,7 @@ def update_database():
         # 8/9 Pigeon & Nemesis
         print("8/9 Syncing Pigeon & Nemesis...")
         h2h_data = api_call(f"/tennis/v2/atp/player/intersting-h2h/{SINNER_ID}")
-        pigeon  = {"name": "TBD", "diff": -999, "wins": 0, "losses": 0}
+        pigeon = {"name": "TBD", "diff": -999, "wins": 0, "losses": 0}
         nemesis = {"name": "TBD", "diff":  999, "wins": 0, "losses": 0}
 
         if h2h_data and isinstance(h2h_data, list):
@@ -455,16 +431,16 @@ def update_database():
             info = bio_data.get('information', {})
             db['bio'] = {
                 "turned_pro": info.get('turnedPro',  '2018'),
-                "weight":     info.get('weight',     '77'),
-                "height":     info.get('height',     '191'),
+                "weight": info.get('weight', '77'),
+                "height": info.get('height', '191'),
                 "birthplace": info.get('birthplace', 'San Candido, Italy'),
-                "plays":      info.get('plays',      'Right-Handed, Two-Handed Backhand'),
-                "coach":      info.get('coach',      'Simone Vagnozzi, Darren Cahill'),
+                "plays": info.get('plays', 'Right-Handed, Two-Handed Backhand'),
+                "coach": info.get('coach', 'Simone Vagnozzi, Darren Cahill'),
             }
 
         # Race to Turin - recalculate from tournaments AFTER all updates
         db['race_points'] = sum(t.get('earned', 0) for t in db.get('tournaments', []))
-        print(f"  Race points recalculated: {db['race_points']}")
+        print(f"Race points recalculated: {db['race_points']}")
 
         # 11/9 Save
         db['last_updated'] = datetime.datetime.now(datetime.timezone.utc).isoformat()

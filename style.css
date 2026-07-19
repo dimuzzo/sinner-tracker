@@ -4,24 +4,24 @@
    TOKENS & RESET
    ========================================= */
 :root {
-  --orange:     #f97316;
+  --orange: #f97316;
   --orange-dim: #c2540a;
-  --green:      #22c55e;
-  --blue:       #2563eb;
-  --black:      #0d0d0d;
-  --white:      #f8fafc;
+  --green: #22c55e;
+  --blue: #2563eb;
+  --black: #0d0d0d;
+  --white: #f8fafc;
   --card-light: rgba(255,255,255,0.72);
-  --card-dark:  rgba(22,33,48,0.80);
+  --card-dark: rgba(22,33,48,0.80);
   --text-muted-light: #64748b;
-  --text-muted-dark:  #94a3b8;
+  --text-muted-dark: #94a3b8;
   --border-light: rgba(0,0,0,0.07);
-  --border-dark:  rgba(255,255,255,0.08);
+  --border-dark: rgba(255,255,255,0.08);
   --radius-card: 1.25rem;
-  --radius-sm:   0.5rem;
+  --radius-sm: 0.5rem;
   --shadow-card: 0 4px 24px -4px rgba(0,0,0,0.10);
   --shadow-hover: 0 12px 36px -6px rgba(0,0,0,0.18);
   --font-display: 'Barlow Condensed', 'Montserrat', sans-serif;
-  --font-body:    'Montserrat', sans-serif;
+  --font-body: 'Montserrat', sans-serif;
 }
 
 html { scroll-behavior: smooth; }
@@ -149,8 +149,8 @@ body {
 }
 .stat-card.accent-orange::before { background: var(--orange); }
 .stat-card.accent-yellow::before { background: linear-gradient(90deg, #facc15, #f59e0b); }
-.stat-card.accent-green::before  { background: var(--green); }
-.stat-card.accent-slate::before  { background: #475569; }
+.stat-card.accent-green::before { background: var(--green); }
+.stat-card.accent-slate::before { background: #475569; }
 .dark .stat-card.accent-slate::before { background: #64748b; }
 
 .stat-card .bg-icon {
@@ -187,7 +187,7 @@ body {
 }
 
 @keyframes shimmer {
-  0%   { background-position: 0% 50%; }
+  0% { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }
 }
 
@@ -209,7 +209,7 @@ body {
 
 @keyframes pulse-badge {
   0%, 100% { opacity: 1; }
-  50%       { opacity: 0.65; }
+  50% { opacity: 0.65; }
 }
 
 .time-box {
@@ -351,7 +351,7 @@ body {
   overflow: hidden;
   gap: 2px;
 }
-.h2h-bar-win  { background: var(--orange); transition: width 1s cubic-bezier(.22,1,.36,1); }
+.h2h-bar-win { background: var(--orange); transition: width 1s cubic-bezier(.22,1,.36,1); }
 .h2h-bar-loss { background: #475569; transition: width 1s cubic-bezier(.22,1,.36,1); }
 .dark .h2h-bar-loss { background: #334155; }
 
@@ -539,7 +539,7 @@ body {
    ========================================= */
 @keyframes skeleton-pulse {
   0%, 100% { opacity: 0.4; }
-  50%       { opacity: 0.8; }
+  50% { opacity: 0.8; }
 }
 .skeleton {
   background: rgba(100,116,139,0.2);
@@ -553,7 +553,7 @@ body {
    ========================================= */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
+  to { opacity: 1; transform: translateY(0); }
 }
 .anim {
   animation: fadeInUp 0.65s cubic-bezier(.22,1,.36,1) both;
@@ -664,9 +664,9 @@ body {
    UTILITIES
    ========================================= */
 .text-orange { color: var(--orange); }
-.text-green  { color: var(--green);  }
-.text-blue   { color: var(--blue);   }
-.text-muted  { color: var(--text-muted-light); }
+.text-green { color: var(--green);  }
+.text-blue { color: var(--blue);   }
+.text-muted { color: var(--text-muted-light); }
 .dark .text-muted { color: var(--text-muted-dark); }
 
 .flag-emoji { font-size: 1.2em; }
