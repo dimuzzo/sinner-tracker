@@ -42,7 +42,7 @@ const T = {
         goldenMastersSub: 'All 9 ATP Masters 1000 Titles Conquered',
         titlesYTD: 'Titles YTD', matchSchedule: 'Match Schedule',
         localTime: 'Local', yourTime: 'Your Time', winStreak: 'Win Streak',
-        daysUntil: 'Days until',
+        daysUntil: 'Days until', apiError: "Statistic unavailable due to an external error. We apologize for the inconvenience.",
     },
     it: {
         rankingTitle: 'Classifica ATP',  winLossTitle: 'Vittorie / Sconfitte', pointsTitle: 'Punti Totali ATP',
@@ -62,7 +62,7 @@ const T = {
         goldenMastersSub: 'Tutti e 9 i titoli Masters 1000 conquistati',
         titlesYTD: 'Titoli YTD', matchSchedule: 'Orari Programmati',
         localTime: 'Locale', yourTime: 'Tuo Orario', winStreak: 'Vittorie di Fila',
-        daysUntil: 'Giorni a',
+        daysUntil: 'Giorni a', apiError: "Statistica non disponibile per un problema esterno. Ci scusiamo per il disagio.",
     }
 };
 
@@ -141,6 +141,20 @@ function initCountdown() {
 // =========================================
 // DATA FETCH & POPULATE
 // =========================================
+
+function renderErrorState(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = `
+        <div class="flex flex-col items-center justify-center h-full w-full p-4 text-center">
+            <span class="text-3xl mb-3 opacity-60">⚠️</span>
+            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-relaxed">
+                ${T[currentLang].apiError}
+            </p>
+        </div>
+    `;
+}
+
 async function initDashboard() {
     try {
         const res = await fetch('data.json?v=' + Date.now(), { cache: 'no-store' });
@@ -154,14 +168,29 @@ async function initDashboard() {
         populateRace(data);
         populateSpecialH2H(data.special_h2h);
 
+        const errors = data.api_errors || [];
+
+        if (errors.includes('recent_form')) {
+            document.getElementById('recent-form-wrapper').innerHTML = `<span class="text-[10px] font-bold text-red-400 uppercase tracking-widest">⚠️ ${T[currentLang].apiError}</span>`;
+        }
+
+        if (errors.includes('stats')) renderErrorState('radar-container');
+        else if (data.stats) renderRadarChart(data.stats);
+
+        if (errors.includes('surface_mastery')) renderErrorState('doughnut-container');
+        else if (data.surface_mastery) renderDoughnutChart(data.surface_mastery);
+
+        if (errors.includes('rivalries')) renderErrorState('h2h-container');
+        else if (data.rivalries) renderH2H(data.rivalries);
+        
+        if (errors.includes('special_h2h')) renderErrorState('special-h2h-container');
+        else if (data.special_h2h) populateSpecialH2H(data.special_h2h);
+        
         if (data.tournaments) {
             renderTableAndPoints(data.tournaments);
             renderChart(data.tournaments, data.total_points);
         }
-        if (data.stats) renderRadarChart(data.stats);
-        if (data.surface_mastery) renderDoughnutChart(data.surface_mastery);
         if (data.trophies) renderTrophies(data.trophies);
-        if (data.rivalries) renderH2H(data.rivalries);
         if (data.roadmap) renderRoadmap(data.roadmap);
 
         initCountdown();

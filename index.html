@@ -91,7 +91,7 @@
                         </h2>
                         <p id="next-opponent-display" class="text-fox-orange font-extrabold text-xl md:text-2xl">vs TBD</p>
 
-                        <div class="flex items-center gap-2 mt-5">
+                        <div id="recent-form-wrapper" class="flex items-center gap-2 mt-5">
                             <span class="label-xs text-slate-500" data-i18n="recentForm">Form</span>
                             <div id="recent-form-display" class="flex items-center gap-1.5"></div>
                         </div>
@@ -233,7 +233,7 @@
                         <h2 data-i18n="foxStats">The Fox Stats</h2>
                     </div>
                     <div class="card glass p-4 md:p-6 flex items-center justify-center flex-grow">
-                        <div class="w-full max-w-sm aspect-square">
+                        <div id="radar-container" class="w-full max-w-sm aspect-square">
                             <canvas id="radarChart"></canvas>
                         </div>
                     </div>
@@ -243,9 +243,9 @@
                         <h2 data-i18n="surfaceMastery">Surface Mastery</h2>
                     </div>
                     <div class="card glass p-4 md:p-6 flex flex-col items-center justify-center flex-grow">
-                        <div class="relative aspect-square" style="width: min(75%, 280px);">
+                        <div id="doughnut-container" class="relative aspect-square" style="width: min(75%, 280px);">
                             <canvas id="doughnutChart"></canvas>
-                            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                            <div id="doughnut-center-text" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                                 <span id="total-wins-center" class="font-black text-4xl" style="font-family:'Barlow Condensed',sans-serif;">0</span>
                                 <span class="label-xs text-muted mt-1" data-i18n="winsYTD">Wins YTD</span>
                             </div>
@@ -295,7 +295,7 @@
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
                 <div id="h2h-container" class="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4"></div>
-                <div class="flex flex-col gap-4">
+                <div id="special-h2h-container" class="flex flex-col gap-4">
                     <div class="special-h2h-card pigeon">
                         <div>
                             <p class="label-xs text-green-500 dark:text-green-400" data-i18n="pigeon">The Pigeon 🟢</p>
