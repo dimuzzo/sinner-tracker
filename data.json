@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-03T05:46:53.271711+00:00",
+  "last_updated": "2026-08-04T05:18:29.429236+00:00",
   "ranking": 1,
   "total_points": 13450,
   "win_loss": "44 - 3",
@@ -66,20 +66,20 @@
   "rivalries": [
     {
       "name": "Carlos Alcaraz",
-      "wins": 7,
-      "losses": 11,
+      "wins": 0,
+      "losses": 0,
       "country": "ES"
     },
     {
       "name": "Novak Djokovic",
-      "wins": 7,
-      "losses": 5,
+      "wins": 0,
+      "losses": 0,
       "country": "SR"
     },
     {
       "name": "Alexander Zverev",
-      "wins": 11,
-      "losses": 4,
+      "wins": 0,
+      "losses": 0,
       "country": "DE"
     }
   ],
