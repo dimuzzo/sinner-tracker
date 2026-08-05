@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-04T05:18:29.429236+00:00",
+  "last_updated": "2026-08-05T05:18:37.222473+00:00",
   "ranking": 1,
   "total_points": 13450,
   "win_loss": "44 - 3",
@@ -236,5 +236,13 @@
     "plays": "Right-Handed, Two-Handed Backhand",
     "coach": "Simone Vagnozzi, Darren Cahill"
   },
-  "current_streak": 0
+  "current_streak": 0,
+  "api_errors": [
+    "ranking",
+    "stats",
+    "rivalries",
+    "recent_form",
+    "surface_mastery",
+    "special_h2h"
+  ]
 }
