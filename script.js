@@ -461,7 +461,11 @@ function renderChart(tournaments, currentTotalPoints) {
             }]
         },
         options: {
-            responsive: true, maintainAspectRatio: false,
+            responsive: true, 
+            maintainAspectRatio: false,
+            layout: {
+                padding: { left: 10, right: 35, top: 15, bottom: 10 }
+            },
             plugins: { legend: { display: false } },
             scales: {
                 y: {
