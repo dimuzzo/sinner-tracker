@@ -252,6 +252,31 @@ def update_database():
         else:
             db['api_errors'].append('surface_mastery')
 
+        # 7/9 Roadmap
+        print("7/9 Syncing Tournament Roadmap...")
+        now          = datetime.datetime.now(datetime.timezone.utc)
+        current_year = now.year
+        elite_schedule = [
+            {"name": "Monte-Carlo Masters", "date": f"{current_year}-04-12T00:00:00Z", "court": "Clay",   "country": "MON"},
+            {"name": "Madrid Open", "date": f"{current_year}-04-24T00:00:00Z", "court": "Clay",   "country": "ESP"},
+            {"name": "Internazionali d'Italia", "date": f"{current_year}-05-08T00:00:00Z", "court": "Clay",   "country": "ITA"},
+            {"name": "Roland Garros", "date": f"{current_year}-05-26T00:00:00Z", "court": "Clay",   "country": "FRA"},
+            {"name": "Halle Open", "date": f"{current_year}-06-17T00:00:00Z", "court": "Grass",  "country": "GER", "withdrawn": True},
+            {"name": "Wimbledon", "date": f"{current_year}-06-29T00:00:00Z", "court": "Grass",  "country": "GBR"},
+            {"name": "Canadian Open", "date": f"{current_year}-08-06T00:00:00Z", "court": "Hard",   "country": "CAN", "withdrawn": True},
+            {"name": "Cincinnati Open", "date": f"{current_year}-08-12T00:00:00Z", "court": "Hard",   "country": "USA", "withdrawn": True},
+            {"name": "US Open", "date": f"{current_year}-08-26T00:00:00Z", "court": "Hard",   "country": "USA"},
+            {"name": "China Open", "date": f"{current_year}-09-26T00:00:00Z", "court": "Hard",   "country": "CHN"},
+            {"name": "Shanghai Masters", "date": f"{current_year}-10-02T00:00:00Z", "court": "Hard",   "country": "CHN"},
+            {"name": "Paris Masters", "date": f"{current_year}-10-28T00:00:00Z", "court": "I.hard", "country": "FRA"},
+            {"name": "ATP Finals Turin", "date": f"{current_year}-11-10T00:00:00Z", "court": "I.hard", "country": "ITA"},
+        ]
+        db['roadmap'] = [
+            t for t in elite_schedule
+            if datetime.datetime.strptime(t["date"][:10], "%Y-%m-%d")
+               .replace(tzinfo=datetime.timezone.utc) >= now
+        ][:5]
+
         # 8/9 Special H2H
         print("8/9 Syncing Pigeon & Nemesis...")
         h2h_data = api_call(f"/tennis/v2/atp/player/intersting-h2h/{SINNER_ID}")
@@ -271,6 +296,7 @@ def update_database():
             db['api_errors'].append('special_h2h')
 
         # 9/9 Player Bio
+        print("9/9 Syncing Player Bio...")
         bio_data = api_call(f"/tennis/v2/atp/player/profile/{SINNER_ID}")
         if bio_data is not None:
             info = bio_data.get('information', {})

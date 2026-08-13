@@ -43,6 +43,7 @@ const T = {
         titlesYTD: 'Titles YTD', matchSchedule: 'Match Schedule',
         localTime: 'Local', yourTime: 'Your Time', winStreak: 'Win Streak',
         daysUntil: 'Days until', apiError: "Statistic unavailable due to an external error. We apologize for the inconvenience.",
+        withdrawn: 'Withdrawn',
     },
     it: {
         rankingTitle: 'Classifica ATP',  winLossTitle: 'Vittorie / Sconfitte', pointsTitle: 'Punti Totali ATP',
@@ -63,6 +64,7 @@ const T = {
         titlesYTD: 'Titoli YTD', matchSchedule: 'Orari Programmati',
         localTime: 'Locale', yourTime: 'Tuo Orario', winStreak: 'Vittorie di Fila',
         daysUntil: 'Giorni a', apiError: "Statistica non disponibile per un problema esterno. Ci scusiamo per il disagio.",
+        withdrawn: 'Ritirato',
     }
 };
 
@@ -587,11 +589,18 @@ function renderRoadmap(roadmap) {
         const key = (t.court ?? '').toLowerCase();
         const cfg = COURT_COLORS[key] ?? COURT_COLORS.hard;
 
-        return `<div class="roadmap-stop">
-            <div class="roadmap-dot ${cfg.dot} flex-shrink-0"></div>
-            <div class="roadmap-info">
-                <p class="roadmap-date">${cfg.badge} ${ds} · ${t.country}</p>
-                <h4 class="roadmap-name">${t.name}</h4>
+        const isWithdrawn = t.withdrawn === true;
+        const opacityClass = isWithdrawn ? 'opacity-50 grayscale' : '';
+        const lineThroughClass = isWithdrawn ? 'line-through text-slate-400 dark:text-slate-500' : '';
+        const dotColor = isWithdrawn ? 'bg-slate-400 border-slate-300' : cfg.dot;
+        const badgeHTML = isWithdrawn ? `<span class="absolute -top-2 -right-2 bg-red-500 text-white text-[8px] font-black px-1.5 py-0.5 rounded uppercase shadow">${T[currentLang].withdrawn}</span>` : '';
+
+        return `<div class="roadmap-stop ${opacityClass}">
+            <div class="roadmap-dot ${dotColor} flex-shrink-0"></div>
+            <div class="roadmap-info relative">
+                ${badgeHTML}
+                <p class="roadmap-date">${isWithdrawn ? '❌' : cfg.badge} ${ds} · ${t.country}</p>
+                <h4 class="roadmap-name ${lineThroughClass}">${t.name}</h4>
             </div>
         </div>`;
     }).join('');
