@@ -172,21 +172,23 @@ async function initDashboard() {
 
         const errors = data.api_errors || [];
 
-        if (errors.includes('recent_form')) {
-            document.getElementById('recent-form-wrapper').innerHTML = `<span class="text-[10px] font-bold text-red-400 uppercase tracking-widest">⚠️ ${T[currentLang].apiError}</span>`;
+        if (!data.recent_form || data.recent_form.length === 0) {
+            if (errors.includes('recent_form')) {
+                document.getElementById('recent-form-wrapper').innerHTML = `<span class="text-[10px] font-bold text-red-400 uppercase tracking-widest">⚠️ ${T[currentLang].apiError}</span>`;
+            }
         }
 
-        if (errors.includes('stats')) renderErrorState('radar-container');
-        else if (data.stats) renderRadarChart(data.stats);
+        if (data.stats) renderRadarChart(data.stats);
+        else if (errors.includes('stats')) renderErrorState('radar-container');
 
-        if (errors.includes('surface_mastery')) renderErrorState('doughnut-container');
-        else if (data.surface_mastery) renderDoughnutChart(data.surface_mastery);
+        if (data.surface_mastery) renderDoughnutChart(data.surface_mastery);
+        else if (errors.includes('surface_mastery')) renderErrorState('doughnut-container');
 
-        if (errors.includes('rivalries')) renderErrorState('h2h-container');
-        else if (data.rivalries) renderH2H(data.rivalries);
+        if (data.rivalries) renderH2H(data.rivalries);
+        else if (errors.includes('rivalries')) renderErrorState('h2h-container');
         
-        if (errors.includes('special_h2h')) renderErrorState('special-h2h-container');
-        else if (data.special_h2h) populateSpecialH2H(data.special_h2h);
+        if (data.special_h2h) populateSpecialH2H(data.special_h2h);
+        else if (errors.includes('special_h2h')) renderErrorState('special-h2h-container');
         
         if (data.tournaments) {
             renderTableAndPoints(data.tournaments);
