@@ -11,7 +11,7 @@ HOST    = "tennis-api-atp-wta-itf.p.rapidapi.com"
 HEADERS = {
     'X-RapidAPI-Key': API_KEY,
     'X-RapidAPI-Host': HOST,
-    'User-Agent': 'SinnerTrackerBot/12.0'
+    'User-Agent': 'SinnerTrackerBot/13.0'
 }
 
 SINNER_ID = 47275
@@ -49,6 +49,12 @@ def api_call(endpoint_path):
     try:
         with urllib.request.urlopen(req, timeout=10) as resp:
             res = json.loads(resp.read().decode('utf-8'))
+            
+            # Anti soft error: if the response is a dict with a "message" key but no "data" key, treat it as an error
+            if isinstance(res, dict) and "message" in res and "data" not in res:
+                print(f"[API SOFT ERROR] {endpoint_path}: {res['message']}")
+                return None
+                
             return res.get('data', res)
     except Exception as e:
         print(f"[API ERROR] {endpoint_path}: {e}")
@@ -105,7 +111,8 @@ def update_database():
         # 1/9 Ranking
         print("1/9 Syncing Ranking...")
         rankings = api_call("/tennis/v2/atp/ranking/singles/")
-        if rankings is not None:
+        # rankings must be a non-empty list
+        if rankings and isinstance(rankings, list) and len(rankings) > 0:
             for r in rankings:
                 if str(r.get('player', {}).get('id')) == str(SINNER_ID):
                     db['ranking'] = r.get('position', db.get('ranking'))
@@ -117,7 +124,8 @@ def update_database():
         # 2/9 Stats
         print("2/9 Syncing Stats...")
         stats_data = api_call(f"/tennis/v2/atp/player/match-stats/{SINNER_ID}")
-        if stats_data is not None:
+        # stats_data must be a non-empty list
+        if stats_data and isinstance(stats_data, dict) and 'serviceStats' in stats_data:
             serv, rtn = stats_data.get('serviceStats', {}), stats_data.get('rtnStats', {})
             bps, bpr = stats_data.get('breakPointsServeStats', {}), stats_data.get('breakPointsRtnStats', {})
             db['stats'] = {
@@ -204,34 +212,36 @@ def update_database():
         h2h_failed = False
         for name, r_id in RIVALS.items():
             h2h = api_call(f"/tennis/v2/atp/h2h/info/{SINNER_ID}/{r_id}")
-            if h2h is None:
+            # h2h_data must be a non-empty list
+            if not h2h or not isinstance(h2h, list) or len(h2h) == 0:
                 h2h_failed = True
                 break
             p1_wins = p2_wins = 0
-            if isinstance(h2h, list):
-                for surface in h2h:
-                    p1_wins += int(surface.get('player1wins', 0))
-                    p2_wins += int(surface.get('player2wins', 0))
+            for surface in h2h:
+                p1_wins += int(surface.get('player1wins', 0))
+                p2_wins += int(surface.get('player2wins', 0))
             new_rivalries.append({"name": name, "wins": p1_wins, "losses": p2_wins, "country": COUNTRY_FOR.get(name, '')})
         
-        if not h2h_failed: db['rivalries'] = new_rivalries
-        else: db['api_errors'].append('rivalries')
+        if not h2h_failed and len(new_rivalries) == len(RIVALS): 
+            db['rivalries'] = new_rivalries
+        else: 
+            db['api_errors'].append('rivalries')
 
         # 5/9 Form & Streak
         print("5/9 Syncing Recent Form & Fox Streak...")
         past_matches = api_call(f"/tennis/v2/atp/player/past-matches/{SINNER_ID}")
-        if past_matches is not None:
+        # past_matches must be a non-empty list
+        if past_matches and isinstance(past_matches, list) and len(past_matches) > 0:
             recent_form, streak, streak_done = [], 0, False
-            if isinstance(past_matches, list):
-                for m in past_matches:
-                    p1, p2 = m.get("player1", {}), m.get("player2", {})
-                    is_p1 = str(p1.get("id")) == str(SINNER_ID)
-                    opp = p2.get("name") if is_p1 else p1.get("name")
-                    is_win = str(m.get("match_winner")) == str(SINNER_ID)
-                    if len(recent_form) < 5: recent_form.append({"win": is_win, "opponent": opp, "result": m.get("result", "")})
-                    if not streak_done:
-                        if is_win: streak += 1
-                        else: streak_done = True
+            for m in past_matches:
+                p1, p2 = m.get("player1", {}), m.get("player2", {})
+                is_p1 = str(p1.get("id")) == str(SINNER_ID)
+                opp = p2.get("name") if is_p1 else p1.get("name")
+                is_win = str(m.get("match_winner")) == str(SINNER_ID)
+                if len(recent_form) < 5: recent_form.append({"win": is_win, "opponent": opp, "result": m.get("result", "")})
+                if not streak_done:
+                    if is_win: streak += 1
+                    else: streak_done = True
             db['recent_form'] = recent_form
             db['current_streak'] = streak
         else:
@@ -240,14 +250,14 @@ def update_database():
         # 6/9 Surface Mastery
         print("6/9 Syncing Surface...")
         surface_data = api_call(f"/tennis/v2/atp/player/surface-summary/{SINNER_ID}")
-        if surface_data is not None:
+        # surface_data must be a non-empty list
+        if surface_data and isinstance(surface_data, list) and len(surface_data) > 0:
             surfaces_db = {"Hard": 0, "Clay": 0, "Grass": 0}
-            if isinstance(surface_data, list) and len(surface_data) > 0:
-                for s in surface_data[0].get('surfaces', []):
-                    court, wins = s.get("court", "").lower(), int(s.get("courtWins", 0))
-                    if "hard" in court: surfaces_db["Hard"] += wins
-                    elif "clay" in court: surfaces_db["Clay"] += wins
-                    elif "grass" in court: surfaces_db["Grass"] += wins
+            for s in surface_data[0].get('surfaces', []):
+                court, wins = s.get("court", "").lower(), int(s.get("courtWins", 0))
+                if "hard" in court: surfaces_db["Hard"] += wins
+                elif "clay" in court: surfaces_db["Clay"] += wins
+                elif "grass" in court: surfaces_db["Grass"] += wins
             db['surface_mastery'] = surfaces_db
         else:
             db['api_errors'].append('surface_mastery')
@@ -273,24 +283,23 @@ def update_database():
         ]
         db['roadmap'] = [
             t for t in elite_schedule
-            if datetime.datetime.strptime(t["date"][:10], "%Y-%m-%d")
-               .replace(tzinfo=datetime.timezone.utc) >= now
+            if datetime.datetime.strptime(t["date"][:10], "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc) >= now - datetime.timedelta(days=7)
         ][:5]
 
         # 8/9 Special H2H
         print("8/9 Syncing Pigeon & Nemesis...")
         h2h_data = api_call(f"/tennis/v2/atp/player/intersting-h2h/{SINNER_ID}")
-        if h2h_data is not None:
+        # h2h_data must be a non-empty list
+        if h2h_data and isinstance(h2h_data, list) and len(h2h_data) > 0:
             pigeon = {"name": "TBD", "diff": -999, "wins": 0, "losses": 0}
             nemesis = {"name": "TBD", "diff": 999, "wins": 0, "losses": 0}
-            if isinstance(h2h_data, list):
-                for entry in h2h_data:
-                    p1, p2 = entry.get("player1", {}), entry.get("player2", {})
-                    if str(p1.get("id")) == str(SINNER_ID): s_wins, o_wins, o_name = p1.get("wins", 0), p2.get("wins", 0), p2.get("name", "Unknown")
-                    else: s_wins, o_wins, o_name = p2.get("wins", 0), p1.get("wins", 0), p1.get("name", "Unknown")
-                    diff = s_wins - o_wins
-                    if diff > pigeon["diff"]: pigeon = {"name": o_name, "diff": diff, "wins": s_wins, "losses": o_wins}
-                    if diff < nemesis["diff"]: nemesis = {"name": o_name, "diff": diff, "wins": s_wins, "losses": o_wins}
+            for entry in h2h_data:
+                p1, p2 = entry.get("player1", {}), entry.get("player2", {})
+                if str(p1.get("id")) == str(SINNER_ID): s_wins, o_wins, o_name = p1.get("wins", 0), p2.get("wins", 0), p2.get("name", "Unknown")
+                else: s_wins, o_wins, o_name = p2.get("wins", 0), p1.get("wins", 0), p1.get("name", "Unknown")
+                diff = s_wins - o_wins
+                if diff > pigeon["diff"]: pigeon = {"name": o_name, "diff": diff, "wins": s_wins, "losses": o_wins}
+                if diff < nemesis["diff"]: nemesis = {"name": o_name, "diff": diff, "wins": s_wins, "losses": o_wins}
             db['special_h2h'] = {"pigeon": pigeon, "nemesis": nemesis}
         else:
             db['api_errors'].append('special_h2h')
@@ -298,7 +307,7 @@ def update_database():
         # 9/9 Player Bio
         print("9/9 Syncing Player Bio...")
         bio_data = api_call(f"/tennis/v2/atp/player/profile/{SINNER_ID}")
-        if bio_data is not None:
+        if bio_data and isinstance(bio_data, dict) and 'information' in bio_data:
             info = bio_data.get('information', {})
             db['bio'] = {
                 "turned_pro": info.get('turnedPro', '2018'), "weight": info.get('weight', '77'),
@@ -309,6 +318,7 @@ def update_database():
         db['race_points'] = sum(t.get('earned', 0) for t in db.get('tournaments', []))
         db['last_updated'] = datetime.datetime.now(datetime.timezone.utc).isoformat()
         
+        # Saving the updated database to data.json
         with open('data.json', 'w') as f:
             json.dump(db, f, indent=2)
         print("\nSUCCESS: data.json updated safely!")

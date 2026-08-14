@@ -4,10 +4,10 @@
   "total_points": 13450,
   "win_loss": "44 - 3",
   "stats": {
-    "first_serve_in": 0,
-    "break_points_saved": 0,
-    "first_return_won": 0,
-    "break_points_converted": 0
+    "first_serve_in": 59.9,
+    "break_points_saved": 65.6,
+    "first_return_won": 67.1,
+    "break_points_converted": 42.9
   },
   "next_match": {
     "opponent": "Unknown Player",
@@ -66,20 +66,20 @@
   "rivalries": [
     {
       "name": "Carlos Alcaraz",
-      "wins": 0,
-      "losses": 0,
+      "wins": 7,
+      "losses": 11,
       "country": "ES"
     },
     {
       "name": "Novak Djokovic",
-      "wins": 0,
-      "losses": 0,
+      "wins": 7,
+      "losses": 5,
       "country": "SR"
     },
     {
       "name": "Alexander Zverev",
-      "wins": 0,
-      "losses": 0,
+      "wins": 11,
+      "losses": 4,
       "country": "DE"
     }
   ],
@@ -175,12 +175,38 @@
       "category": "Masters 1000"
     }
   ],
-  "recent_form": [],
+  "recent_form": [
+    {
+      "win": true,
+      "opponent": "Alexander Zverev",
+      "result": "6-7(7) 7-6(2) 6-3 6-4"
+    },
+    {
+      "win": true,
+      "opponent": "Novak Djokovic",
+      "result": "6-4 6-4 6-4"
+    },
+    {
+      "win": true,
+      "opponent": "Jan-Lennard Struff",
+      "result": "7-5 7-6(4) 6-3"
+    },
+    {
+      "win": true,
+      "opponent": "Shintaro Mochizuki",
+      "result": "6-3 7-6(0) 6-3"
+    },
+    {
+      "win": true,
+      "opponent": "Jenson Brooksby",
+      "result": "6-4 6-3 6-4"
+    }
+  ],
   "race_points": 7950,
   "surface_mastery": {
-    "Hard": 0,
-    "Clay": 0,
-    "Grass": 0
+    "Hard": 19,
+    "Clay": 18,
+    "Grass": 7
   },
   "roadmap": [
     {
@@ -216,16 +242,16 @@
   ],
   "special_h2h": {
     "pigeon": {
-      "name": "TBD",
-      "diff": -999,
-      "wins": 0,
+      "name": "Alex De Minaur",
+      "diff": 13,
+      "wins": 13,
       "losses": 0
     },
     "nemesis": {
-      "name": "TBD",
-      "diff": 999,
-      "wins": 0,
-      "losses": 0
+      "name": "Carlos Alcaraz",
+      "diff": -4,
+      "wins": 7,
+      "losses": 11
     }
   },
   "bio": {
@@ -236,6 +262,13 @@
     "plays": "Right-Handed, Two-Handed Backhand",
     "coach": "Simone Vagnozzi, Darren Cahill"
   },
-  "current_streak": 0,
-  "api_errors": []
+  "current_streak": 7,
+  "api_errors": [
+    "ranking",
+    "stats",
+    "rivalries",
+    "recent_form",
+    "surface_mastery",
+    "special_h2h"
+  ]
 }
