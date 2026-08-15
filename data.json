@@ -61,6 +61,11 @@
       "name": "Wimbledon",
       "defending": 2000,
       "earned": 2000
+    },
+    {
+      "name": "Cincinnati Open",
+      "defending": 650,
+      "earned": 0
     }
   ],
   "rivalries": [
