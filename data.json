@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-14T04:12:03.345867+00:00",
+  "last_updated": "2026-08-15T02:54:58.159594+00:00",
   "ranking": 1,
   "total_points": 13450,
   "win_loss": "44 - 3",
@@ -210,6 +210,13 @@
   },
   "roadmap": [
     {
+      "name": "Cincinnati Open",
+      "date": "2026-08-12T00:00:00Z",
+      "court": "Hard",
+      "country": "USA",
+      "withdrawn": true
+    },
+    {
       "name": "US Open",
       "date": "2026-08-26T00:00:00Z",
       "court": "Hard",
@@ -232,12 +239,6 @@
       "date": "2026-10-28T00:00:00Z",
       "court": "I.hard",
       "country": "FRA"
-    },
-    {
-      "name": "ATP Finals Turin",
-      "date": "2026-11-10T00:00:00Z",
-      "court": "I.hard",
-      "country": "ITA"
     }
   ],
   "special_h2h": {
@@ -263,12 +264,5 @@
     "coach": "Simone Vagnozzi, Darren Cahill"
   },
   "current_streak": 7,
-  "api_errors": [
-    "ranking",
-    "stats",
-    "rivalries",
-    "recent_form",
-    "surface_mastery",
-    "special_h2h"
-  ]
+  "api_errors": []
 }
