@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-18T02:58:48.634388+00:00",
+  "last_updated": "2026-08-19T03:00:55.017128+00:00",
   "ranking": 1,
   "total_points": 13450,
   "win_loss": "44 - 3",
@@ -215,13 +215,6 @@
   },
   "roadmap": [
     {
-      "name": "Cincinnati Open",
-      "date": "2026-08-12T00:00:00Z",
-      "court": "Hard",
-      "country": "USA",
-      "withdrawn": true
-    },
-    {
       "name": "US Open",
       "date": "2026-08-26T00:00:00Z",
       "court": "Hard",
@@ -244,6 +237,12 @@
       "date": "2026-10-28T00:00:00Z",
       "court": "I.hard",
       "country": "FRA"
+    },
+    {
+      "name": "ATP Finals Turin",
+      "date": "2026-11-10T00:00:00Z",
+      "court": "I.hard",
+      "country": "ITA"
     }
   ],
   "special_h2h": {
