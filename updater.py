@@ -275,7 +275,7 @@ def update_database():
             {"name": "Wimbledon", "date": f"{current_year}-06-29T00:00:00Z", "court": "Grass",  "country": "GBR"},
             {"name": "Canadian Open", "date": f"{current_year}-08-06T00:00:00Z", "court": "Hard",   "country": "CAN", "withdrawn": True},
             {"name": "Cincinnati Open", "date": f"{current_year}-08-12T00:00:00Z", "court": "Hard",   "country": "USA", "withdrawn": True},
-            {"name": "US Open", "date": f"{current_year}-08-26T00:00:00Z", "court": "Hard",   "country": "USA"},
+            {"name": "US Open", "date": f"{current_year}-08-26T00:00:00Z", "court": "Hard",   "country": "USA", "withdrawn": True},
             {"name": "China Open", "date": f"{current_year}-09-26T00:00:00Z", "court": "Hard",   "country": "CHN"},
             {"name": "Shanghai Masters", "date": f"{current_year}-10-02T00:00:00Z", "court": "Hard",   "country": "CHN"},
             {"name": "Paris Masters", "date": f"{current_year}-10-28T00:00:00Z", "court": "I.hard", "country": "FRA"},
