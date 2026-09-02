@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-01T07:31:48.649039+00:00",
+  "last_updated": "2026-09-02T06:57:24.103346+00:00",
   "ranking": 1,
   "total_points": 12800,
   "win_loss": "44 - 3",
@@ -215,13 +215,6 @@
   },
   "roadmap": [
     {
-      "name": "US Open",
-      "date": "2026-08-26T00:00:00Z",
-      "court": "Hard",
-      "country": "USA",
-      "withdrawn": true
-    },
-    {
       "name": "China Open",
       "date": "2026-09-26T00:00:00Z",
       "court": "Hard",
@@ -269,11 +262,5 @@
     "coach": "Simone Vagnozzi, Darren Cahill"
   },
   "current_streak": 7,
-  "api_errors": [
-    "stats",
-    "rivalries",
-    "recent_form",
-    "surface_mastery",
-    "special_h2h"
-  ]
+  "api_errors": []
 }
