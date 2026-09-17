@@ -2,6 +2,8 @@ import json
 import datetime
 import urllib.request
 import os
+import sys
+import argparse
 
 # ─────────────────────────────────────────
 # CONFIG
@@ -84,7 +86,10 @@ def extract_match_info(match, fallback_tournament=None):
     sinner_str = str(SINNER_ID)
 
     if sinner_str not in (p1_id, p2_id): return None
-    opp = (match.get('player2') or {}).get('name') or match.get('player2Name') or 'TBD' if p1_id == sinner_str else (match.get('player1') or {}).get('name') or match.get('player1Name') or 'TBD'
+    if p1_id == sinner_str:
+        opp = (match.get('player2') or {}).get('name') or match.get('player2Name') or 'TBD'
+    else:
+        opp = (match.get('player1') or {}).get('name') or match.get('player1Name') or 'TBD'
     raw_t = match.get('tournament') or match.get('tournamentName') or (match.get('tournamentInfo') or {}).get('name') or fallback_tournament or 'TBD'
     t_name = normalize_tournament_name(raw_t)
     t_country = TOURNAMENT_COUNTRY_MAP.get(t_name) or (match.get('tournamentInfo') or {}).get('countryAcr') or 'ITA'
@@ -94,15 +99,81 @@ def extract_match_info(match, fallback_tournament=None):
     raw_time = match.get('time') or match.get('startTime') or match.get('matchTime') or match.get('scheduledTime')
     return {"opponent": opp, "tournament": t_name, "round": r_name, "countryAcr": t_country, "date": build_datetime(raw_date, raw_time)}
 
+
+def validate_database(db):
+    """Validate the persisted dashboard schema before it is deployed."""
+    errors = []
+
+    if not isinstance(db, dict):
+        return ["root must be a JSON object"]
+
+    if not isinstance(db.get("ranking"), int) or db["ranking"] < 1:
+        errors.append("ranking must be a positive integer")
+    if not isinstance(db.get("total_points"), (int, float)) or db["total_points"] < 0:
+        errors.append("total_points must be a non-negative number")
+
+    win_loss = db.get("win_loss")
+    if not isinstance(win_loss, str) or "-" not in win_loss:
+        errors.append("win_loss must be a string such as '44 - 3'")
+
+    stats = db.get("stats")
+    required_stats = ("first_serve_in", "break_points_saved", "first_return_won", "break_points_converted")
+    if not isinstance(stats, dict):
+        errors.append("stats must be an object")
+    else:
+        for key in required_stats:
+            value = stats.get(key)
+            if not isinstance(value, (int, float)) or not 0 <= value <= 100:
+                errors.append(f"stats.{key} must be between 0 and 100")
+
+    if not isinstance(db.get("tournaments"), list):
+        errors.append("tournaments must be a list")
+    if not isinstance(db.get("trophies"), list):
+        errors.append("trophies must be a list")
+    if not isinstance(db.get("roadmap"), list):
+        errors.append("roadmap must be a list")
+    if not isinstance(db.get("recent_form"), list):
+        errors.append("recent_form must be a list")
+    if not isinstance(db.get("rivalries"), list):
+        errors.append("rivalries must be a list")
+
+    history = db.get("history", {})
+    if not isinstance(history, dict) or not isinstance(history.get("points", []), list):
+        errors.append("history.points must be a list")
+
+    if not isinstance(db.get("last_updated"), str):
+        errors.append("last_updated must be an ISO datetime string")
+
+    return errors
+
+
+def load_database():
+    try:
+        with open("data.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as exc:
+        print(f"CRITICAL: cannot read data.json: {exc}")
+        return None
+
+
+def update_history(db, now):
+    """Persist a small daily history used by the dashboard charts."""
+    history = db.setdefault("history", {})
+    points_history = history.setdefault("points", [])
+    day = now.strftime("%Y-%m-%d")
+
+    points_snapshot = {"date": day, "points": int(db.get("total_points", 0))}
+    points_history[:] = [x for x in points_history if x.get("date") != day]
+    points_history.append(points_snapshot)
+    points_history[:] = points_history[-180:]
+
 def update_database():
     if not API_KEY or API_KEY == "YOUR_API_KEY":
         print("CRITICAL: API_KEY not configured!")
-        return
+        return False
 
-    try:
-        with open('data.json', 'r') as f:
-            db = json.load(f)
-    except Exception:
+    db = load_database()
+    if db is None:
         db = {"tournaments": [], "trophies": []}
 
     db['api_errors'] = []
@@ -264,7 +335,7 @@ def update_database():
 
         # 7/9 Roadmap
         print("7/9 Syncing Tournament Roadmap...")
-        now          = datetime.datetime.now(datetime.timezone.utc)
+        now = datetime.datetime.now(datetime.timezone.utc)
         current_year = now.year
         elite_schedule = [
             {"name": "Monte-Carlo Masters", "date": f"{current_year}-04-12T00:00:00Z", "court": "Clay",   "country": "MON"},
@@ -278,8 +349,8 @@ def update_database():
             {"name": "US Open", "date": f"{current_year}-08-26T00:00:00Z", "court": "Hard",   "country": "USA", "withdrawn": True},
             {"name": "China Open", "date": f"{current_year}-09-26T00:00:00Z", "court": "Hard",   "country": "CHN"},
             {"name": "Shanghai Masters", "date": f"{current_year}-10-02T00:00:00Z", "court": "Hard",   "country": "CHN"},
-            {"name": "Paris Masters", "date": f"{current_year}-10-28T00:00:00Z", "court": "I.hard", "country": "FRA"},
-            {"name": "ATP Finals Turin", "date": f"{current_year}-11-10T00:00:00Z", "court": "I.hard", "country": "ITA"},
+            {"name": "Paris Masters", "date": f"{current_year}-10-28T00:00:00Z", "court": "Indoor Hard", "country": "FRA"},
+            {"name": "ATP Finals Turin", "date": f"{current_year}-11-10T00:00:00Z", "court": "Indoor Hard", "country": "ITA"},
         ]
         db['roadmap'] = [
             t for t in elite_schedule
@@ -315,16 +386,43 @@ def update_database():
                 "plays": info.get('plays', 'Right-Handed, Two-Handed Backhand'), "coach": info.get('coach', 'Simone Vagnozzi, Darren Cahill')
             }
 
+        now = datetime.datetime.now(datetime.timezone.utc)
         db['race_points'] = sum(t.get('earned', 0) for t in db.get('tournaments', []))
-        db['last_updated'] = datetime.datetime.now(datetime.timezone.utc).isoformat()
-        
-        # Saving the updated database to data.json
-        with open('data.json', 'w') as f:
-            json.dump(db, f, indent=2)
-        print("\nSUCCESS: data.json updated safely!")
+        update_history(db, now)
+        db['last_updated'] = now.isoformat()
+
+        validation_errors = validate_database(db)
+        if validation_errors:
+            print("\nVALIDATION FAILED:")
+            for error in validation_errors:
+                print(f" - {error}")
+            return False
+
+        with open('data.json', 'w', encoding='utf-8') as f:
+            json.dump(db, f, indent=2, ensure_ascii=False)
+        print("\nSUCCESS: data.json updated and validated safely!")
+        return True
 
     except Exception as e:
         print(f"\nCritical error: {e}")
+        return False
 
 if __name__ == "__main__":
-    update_database()
+    parser = argparse.ArgumentParser(description="Sinner Tracker data updater")
+    parser.add_argument('--validate-only', action='store_true', help='Validate the existing data.json and exit')
+    args = parser.parse_args()
+
+    if args.validate_only:
+        db = load_database()
+        if db is None:
+            sys.exit(1)
+        errors = validate_database(db)
+        if errors:
+            print('VALIDATION FAILED:')
+            for error in errors:
+                print(f' - {error}')
+            sys.exit(1)
+        print('VALIDATION OK: data.json matches the expected dashboard schema.')
+        sys.exit(0)
+
+    sys.exit(0 if update_database() else 1)

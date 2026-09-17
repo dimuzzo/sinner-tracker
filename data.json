@@ -66,6 +66,11 @@
       "name": "Cincinnati Open",
       "defending": 650,
       "earned": 0
+    },
+    {
+      "name": "US Open",
+      "defending": 1300,
+      "earned": 0
     }
   ],
   "rivalries": [

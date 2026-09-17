@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sinner Tracker — The Fox Dashboard</title>
-
-    <meta name="description" content="The unofficial real-time Jannik Sinner tracker. ATP ranking, stats, trophies and more.">
+    <meta name="theme-color" content="#f97316">
+    <meta name="description" content="The unofficial Jannik Sinner tracker: ranking, form, points, trophies, rivalries and tournament roadmap.">
     <meta property="og:title" content="Sinner Tracker — The Fox Dashboard">
-    <meta property="og:image" content="https://dimuzzo.github.io/sinner-tracker/assets/social-cover.png">
-    <meta name="twitter:image" content="https://dimuzzo.github.io/sinner-tracker/assets/social-cover.png">
+    <meta property="og:description" content="ATP ranking, points, form, trophies and tournament roadmap for Jannik Sinner.">
+    <meta property="og:image" content="assets/social-cover.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="assets/social-cover.png">
+    <title>Sinner Tracker - The Fox Dashboard</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="assets/icon-192.png">
@@ -28,306 +33,337 @@
                         'fox-green': '#22c55e',
                         'fox-blue': '#2563eb',
                         'fox-black': '#0d0d0d',
-                        'dark-bg': '#0a101e',
-                        'dark-card': '#111827',
+                        'dark-bg': '#080d17',
+                        'dark-card': '#111827'
                     }
                 }
             }
-        }
+        };
     </script>
 </head>
-
 <body class="bg-slate-100 dark:bg-dark-bg text-slate-900 dark:text-slate-100 min-h-screen">
+    <a class="skip-link" href="#main-content">Skip to content</a>
 
-    <!-- HEADER -->
-    <header class="glass sticky top-0 z-50 bg-fox-black/95 border-b border-white/[0.06] py-3 px-4 shadow-xl">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-2.5">
-                <img src="assets/icon-192.png" alt="Sinner Tracker" class="w-8 h-8 rounded-lg">
-                <span class="font-black text-fox-orange tracking-widest uppercase text-base hidden sm:block" style="font-family:'Barlow Condensed',sans-serif; letter-spacing:0.15em;">Sinner Tracker</span>
-                <span class="font-black text-fox-orange tracking-widest uppercase text-base sm:hidden" style="font-family:'Barlow Condensed',sans-serif; letter-spacing:0.15em;">🦊 Tracker</span>
+    <header class="site-header glass sticky top-0 z-50 bg-fox-black/95 border-b border-white/[0.06]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+            <div class="flex items-center justify-between gap-4">
+                <a href="#top" class="brand flex items-center gap-2.5" aria-label="Sinner Tracker home">
+                    <img src="assets/icon-192.png" alt="" class="w-8 h-8 rounded-lg" width="32" height="32">
+                    <span class="brand-name hidden sm:inline">Sinner Tracker</span>
+                    <span class="brand-name sm:hidden">Sinner Tracker</span>
+                </a>
+
+                <div class="header-tools">
+                    <div class="header-actions flex items-center gap-2">
+                        <button id="install-btn" class="install-btn hidden" type="button">📱 <span data-i18n="installApp">Install App</span></button>
+                        <button id="dark-mode-btn" class="icon-btn" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+                        <button id="lang-btn" class="lang-btn" type="button" aria-label="Switch language">IT</button>
+                    </div>
+                    <div class="header-meta-row">
+                        <span id="network-status" class="header-meta-chip online" role="status">
+                            <span class="status-dot" aria-hidden="true"></span>
+                            <span id="network-status-text">Online</span>
+                        </span>
+                        <span id="last-updated-header" class="header-meta-chip last-updated">Last updated —</span>
+                    </div>
+                </div>
             </div>
-            <div class="flex items-center gap-2">
-                <button id="install-btn" class="hidden items-center gap-1.5 bg-fox-green hover:bg-green-500 text-white font-bold py-1.5 px-3 rounded-lg text-xs transition-colors">
-                    📱 <span data-i18n="installApp" class="hidden sm:inline">Install App</span>
-                </button>
-                <button onclick="toggleDarkMode()" id="dark-mode-btn" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors text-base">🌙</button>
-                <button id="lang-btn" onclick="toggleLanguage()" class="bg-fox-orange hover:bg-orange-500 text-white font-black py-1.5 px-3 rounded-lg text-xs transition-colors tracking-wide">IT</button>
-            </div>
+            <nav id="section-nav" class="section-nav" aria-label="Dashboard sections">
+                <a href="#overview" data-i18n="navOverview">Overview</a>
+                <a href="#performance" data-i18n="navPerformance">Performance</a>
+                <a href="#roadmap" data-i18n="navRoadmap">Roadmap</a>
+                <a href="#history" data-i18n="navHistory">History</a>
+                <a href="#trophies" data-i18n="navTrophies">Trophies</a>
+                <a href="#rivalries" data-i18n="navRivalries">H2H</a>
+                <a href="#tournaments" data-i18n="navTournaments">Tournaments</a>
+            </nav>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-8 space-y-14">
-
-        <!-- TOURNAMENT BANNER -->
-        <section class="anim anim-1">
-            <div id="tournament-banner" class="tournament-banner shadow-2xl">
-                <div class="absolute top-4 right-4 z-20" data-html2canvas-ignore>
-                    <button id="share-btn" title="Download banner for IG Stories"
-                        class="w-9 h-9 flex items-center justify-center bg-white/10 hover:bg-white/20 border border-white/10 rounded-full text-base transition-colors backdrop-blur-sm">
-                        📸
-                    </button>
-                </div>
-                <div class="absolute -right-12 -top-12 w-64 h-64 rounded-full bg-fox-orange/5 blur-3xl pointer-events-none"></div>
-                <div class="absolute -left-8 -bottom-8 w-48 h-48 rounded-full bg-fox-blue/8 blur-3xl pointer-events-none"></div>
-
-                <div class="relative z-10 p-6 md:p-8 flex flex-col md:flex-row justify-between gap-6 md:items-center">
-                    <div class="flex-1 min-w-0">
-                        <div class="flex flex-wrap items-center gap-2 mb-4">
-                            <span id="next-round-display" class="court-badge round">Loading…</span>
-                            <span id="live-indicator" class="court-badge live hidden">
-                                <span class="w-1.5 h-1.5 bg-red-400 rounded-full inline-block"></span>
-                                <span data-i18n="liveNow">Live Now</span>
-                            </span>
-                            <span id="streak-badge" class="court-badge streak hidden">
-                                🔥 <span id="streak-count">0</span>&nbsp;<span data-i18n="winStreak">Win Streak</span>
-                            </span>
+    <main id="main-content" class="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-10 space-y-10 md:space-y-14">
+        <section id="top" class="hero-wrap" aria-labelledby="hero-title">
+            <div id="hero-banner" class="hero-banner shadow-2xl">
+                <div class="hero-overlay" aria-hidden="true"></div>
+                <div class="hero-glow hero-glow-orange" aria-hidden="true"></div>
+                <div class="hero-glow hero-glow-blue" aria-hidden="true"></div>
+                <div class="hero-content relative z-10">
+                    <div class="hero-copy">
+                        <div class="hero-kicker-row">
+                            <span id="hero-rank-badge" class="hero-badge">#1 ATP</span>
+                            <span id="hero-live-badge" class="hero-badge live hidden"><span class="live-dot"></span><span data-i18n="liveNow">Live Now</span></span>
+                            <span id="hero-streak-badge" class="hero-badge streak hidden">🔥 <span id="hero-streak-count">0</span> <span data-i18n="winStreak">Win Streak</span></span>
                         </div>
-
-                        <h2 id="next-tournament-display"
-                            class="text-white font-black uppercase leading-none mb-2"
-                            style="font-family:'Barlow Condensed',sans-serif; font-size:clamp(2rem,5vw,3.5rem); letter-spacing:0.02em;">
-                            Current Event
-                        </h2>
-                        <p id="next-opponent-display" class="text-fox-orange font-extrabold text-xl md:text-2xl">vs TBD</p>
-
-                        <div id="recent-form-wrapper" class="flex items-center gap-2 mt-5">
-                            <span class="label-xs text-slate-500" data-i18n="recentForm">Form</span>
-                            <div id="recent-form-display" class="flex items-center gap-1.5"></div>
+                        <p class="hero-eyebrow" data-i18n="heroEyebrow">The Fox Dashboard</p>
+                        <h1 id="hero-title" class="hero-title">Jannik Sinner</h1>
+                        <p id="hero-subtitle" class="hero-subtitle">World No. 1 · Italian tennis player</p>
+                        <div class="hero-form-row">
+                            <span class="label-xs" data-i18n="recentForm">Recent Form</span>
+                            <div id="recent-form-display" class="form-dots" aria-label="Recent form"></div>
+                        </div>
+                        <div class="hero-actions mt-5">
+                            <a href="#history" class="hero-action primary" data-i18n="viewMatches">View Matches</a>
+                            <button id="share-btn" class="hero-action ghost" type="button">📸 <span data-i18n="shareBanner">Share</span></button>
                         </div>
                     </div>
 
-                    <div class="time-box glass flex-shrink-0">
-                        <p class="label-xs text-slate-400 border-b border-white/[0.08] pb-2 mb-3" data-i18n="matchSchedule">Match Schedule</p>
-                        <div class="flex justify-between items-center gap-6 mb-2">
-                            <span class="text-xs text-slate-400 font-semibold">
-                                <span data-i18n="localTime">Local</span>
-                                (<span id="local-country-code" class="text-white font-black">—</span>)
-                            </span>
-                            <span id="next-date-local" class="font-black text-white text-sm">--:--</span>
+                    <aside class="next-match-card" aria-label="Next match or event">
+                        <div class="next-match-top">
+                            <span id="next-context-label" class="label-xs">Next Match</span>
+                            <span id="next-round-display" class="mini-badge">—</span>
                         </div>
-                        <div class="flex justify-between items-center gap-6">
-                            <span class="text-xs text-slate-400 font-semibold" data-i18n="yourTime">Your Time</span>
-                            <span id="next-date-user" class="font-black text-fox-orange text-sm">--:--</span>
+                        <p id="next-tournament-display" class="next-event-name">Loading…</p>
+                        <p id="next-opponent-display" class="next-opponent">vs TBD</p>
+                        <div class="next-time-grid">
+                            <div>
+                                <span class="label-xs" data-i18n="localTime">Local</span>
+                                <strong id="next-date-local">—</strong>
+                            </div>
+                            <div>
+                                <span class="label-xs" data-i18n="yourTime">Your Time</span>
+                                <strong id="next-date-user">—</strong>
+                            </div>
                         </div>
-                        <p id="next-date-day" class="text-right label-xs text-slate-500 mt-3"></p>
-                    </div>
+                        <p id="next-date-day" class="next-date-day">—</p>
+                        <p id="next-countdown" class="next-countdown">—</p>
+                        <p id="next-source-note" class="next-source-note">—</p>
+                    </aside>
                 </div>
             </div>
         </section>
 
-        <!-- HERO STATS GRID -->
-        <section class="anim anim-2">
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <section id="overview" class="scroll-anchor" aria-labelledby="overview-title">
+            <div class="section-header">
+                <h2 id="overview-title" data-i18n="overviewTitle">Season Overview</h2>
+                <span id="freshness-label" class="section-sub">—</span>
+            </div>
+            <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
                 <div class="card glass stat-card accent-orange card-hover">
                     <p class="label-xs text-muted" data-i18n="rankingTitle">ATP Ranking</p>
-                    <p id="ranking-display" class="stat-value mt-2">#1 👑</p>
-                    <span class="bg-icon">🏆</span>
+                    <p id="ranking-display" class="stat-value mt-2">#1</p>
+                    <span class="bg-icon" aria-hidden="true">👑</span>
                 </div>
                 <div class="card glass stat-card accent-yellow card-hover">
                     <p class="label-xs text-muted" data-i18n="titlesYTD">Titles YTD</p>
                     <p id="titles-ytd-display" class="stat-value mt-2 text-yellow-500 dark:text-yellow-400">0</p>
-                    <span class="bg-icon">🥇</span>
+                    <span class="bg-icon" aria-hidden="true">🥇</span>
                 </div>
                 <div class="card glass stat-card accent-green card-hover">
                     <p class="label-xs text-muted" data-i18n="winLossTitle">Win / Loss</p>
-                    <p id="win-loss-display" class="stat-value mt-2">0-0</p>
-                    <span class="bg-icon">✅</span>
+                    <p id="win-loss-display" class="stat-value mt-2">0–0</p>
+                    <span class="bg-icon" aria-hidden="true">✅</span>
                 </div>
                 <div class="card glass stat-card accent-slate card-hover">
                     <p class="label-xs text-muted" data-i18n="pointsTitle">ATP Points</p>
                     <p id="total-points-display" class="stat-value mt-2">0</p>
-                    <span class="bg-icon">📊</span>
+                    <span class="bg-icon" aria-hidden="true">📊</span>
+                </div>
+                <div class="card glass stat-card accent-blue card-hover">
+                    <p class="label-xs text-muted" data-i18n="streakTitle">Current Streak</p>
+                    <p id="current-streak-display" class="stat-value mt-2">0</p>
+                    <span class="bg-icon" aria-hidden="true">🔥</span>
                 </div>
             </div>
         </section>
 
-        <!-- GOLDEN MASTERS BANNER -->
-        <section class="anim anim-2">
-            <div class="golden-banner glass p-6 md:p-8">
-                <div class="absolute -left-8 top-0 bottom-0 w-48 bg-yellow-400/5 blur-3xl pointer-events-none"></div>
-                <div class="relative z-10 flex flex-col items-center justify-center text-center gap-3">
-                    <div class="flex items-center justify-center gap-4">
-                        <span class="text-5xl drop-shadow-lg">👑</span>
-                        <h2 class="font-black uppercase text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-500"
-                            style="font-family:'Barlow Condensed',sans-serif; font-size:clamp(1.6rem,4vw,2.6rem); letter-spacing:0.1em;"
-                            data-i18n="goldenMastersTitle">Career Golden Masters</h2>
-                        <span class="text-5xl drop-shadow-lg hidden sm:block">🏆</span>
-                    </div>
-                    <p class="label-xs text-yellow-400/80" data-i18n="goldenMastersSub">All 9 ATP Masters 1000 Titles Conquered</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- COUNTDOWN -->
-        <section id="slam-countdown-container" class="anim anim-3 hidden">
-            <div class="countdown-banner text-white flex justify-between items-center">
+        <section class="golden-banner glass" aria-label="Career Golden Masters">
+            <div class="golden-inner">
+                <div class="golden-mark" aria-hidden="true">👑</div>
                 <div>
-                    <p id="countdown-label" class="label-xs opacity-80 mb-1">Days until Wimbledon</p>
-                    <p id="countdown-timer" class="font-black text-3xl tracking-tight" style="font-family:'Barlow Condensed',sans-serif;">0d 0h 0m</p>
+                    <h2 class="golden-title" data-i18n="goldenMastersTitle">Career Golden Masters</h2>
+                    <p class="golden-sub" data-i18n="goldenMastersSub">All 9 ATP Masters 1000 Titles Conquered</p>
                 </div>
+                <div class="golden-mark hidden sm:block" aria-hidden="true">🏆</div>
             </div>
         </section>
 
-        <!-- RACE TO TURIN -->
-        <section class="anim anim-3">
-            <div class="card glass p-5 md:p-6" style="border-left: 3px solid var(--blue);">
-                <div class="flex justify-between items-end mb-3 gap-4 flex-wrap">
+        <section id="race" aria-labelledby="race-title">
+            <div class="card glass race-card">
+                <div class="race-heading">
                     <div>
-                        <p class="label-xs text-fox-blue dark:text-blue-400" data-i18n="raceToTurin">Race to Turin</p>
-                        <p class="mt-1 flex items-end gap-2">
+                        <p id="race-title" class="label-xs text-fox-blue dark:text-blue-400" data-i18n="raceToTurin">Race to Turin</p>
+                        <div class="flex items-end gap-2 mt-1">
                             <span id="race-points-display" class="stat-value">0</span>
-                            <span class="text-sm text-muted font-semibold mb-1">/ 7730 pts</span>
-                        </p>
-                    </div>
-                    <span id="race-pct-display" class="font-black text-2xl text-fox-blue dark:text-blue-400" style="font-family:'Barlow Condensed',sans-serif;">0%</span>
-                </div>
-                <div class="race-bar-track">
-                    <div id="bar-race" class="race-bar-fill" style="width:0%"></div>
-                </div>
-                <p id="race-status" class="text-right label-xs text-muted mt-2" data-i18n="qualifying">Qualifying…</p>
-            </div>
-        </section>
-
-        <!-- PLAYER IDENTITY CARD -->
-        <section class="anim anim-3">
-            <div class="section-header">
-                <h2 data-i18n="bioTitle">Identity Card</h2>
-                <span class="section-sub">Player Profile</span>
-            </div>
-            <div class="card glass overflow-hidden">
-                <div class="bio-grid">
-                    <div class="bio-cell">
-                        <p class="label-xs text-muted" data-i18n="bioHeight">Height</p>
-                        <p id="bio-height" class="bio-value">—</p>
-                    </div>
-                    <div class="bio-cell">
-                        <p class="label-xs text-muted" data-i18n="bioWeight">Weight</p>
-                        <p id="bio-weight" class="bio-value">—</p>
-                    </div>
-                    <div class="bio-cell">
-                        <p class="label-xs text-muted" data-i18n="bioPlays">Plays</p>
-                        <p id="bio-plays" class="bio-value" style="font-size:1rem;">—</p>
-                    </div>
-                    <div class="bio-cell">
-                        <p class="label-xs text-muted" data-i18n="bioPro">Pro Since</p>
-                        <p id="bio-pro" class="bio-value">—</p>
-                    </div>
-                    <div class="bio-cell">
-                        <p class="label-xs text-muted" data-i18n="bioCoaches">Coaching Team</p>
-                        <p id="bio-coach" class="bio-value" style="font-size:0.82rem; line-height:1.35;">—</p>
-                    </div>
-                    <div class="bio-cell">
-                        <p class="label-xs text-muted">Birthplace</p>
-                        <p id="bio-birthplace" class="bio-value" style="font-size:0.82rem; line-height:1.35;">—</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FOX STATS + SURFACE MASTERY -->
-        <section class="anim anim-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 md:items-stretch">
-                <div class="flex flex-col">
-                    <div class="section-header">
-                        <h2 data-i18n="foxStats">The Fox Stats</h2>
-                    </div>
-                    <div class="card glass p-4 md:p-6 flex items-center justify-center flex-grow">
-                        <div id="radar-container" class="w-full max-w-sm aspect-square">
-                            <canvas id="radarChart"></canvas>
+                            <span class="text-sm text-muted font-semibold mb-1" id="race-qualifier-label">/ 7730 pts</span>
                         </div>
                     </div>
-                </div>
-                <div class="flex flex-col">
-                    <div class="section-header">
-                        <h2 data-i18n="surfaceMastery">Surface Mastery</h2>
+                    <div class="text-right">
+                        <span id="race-pct-display" class="font-black text-xl">0%</span>
+                        <p id="race-status" class="label-xs mt-1 text-muted">Qualifying…</p>
                     </div>
-                    <div class="card glass p-4 md:p-6 flex flex-col items-center justify-center flex-grow">
-                        <div id="doughnut-container" class="relative aspect-square" style="width: min(75%, 280px);">
-                            <canvas id="doughnutChart"></canvas>
+                </div>
+                <div class="race-bar-track" aria-hidden="true"><div id="bar-race" class="race-bar-fill" style="width:0%"></div></div>
+                <div class="race-meta">
+                    <span><span data-i18n="qualificationLine">Qualification line</span>: <strong id="race-line-value">7,730</strong></span>
+                    <span id="race-delta">—</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="performance" class="scroll-anchor" aria-labelledby="performance-title">
+            <div class="section-header">
+                <h2 id="performance-title" data-i18n="performanceTitle">Performance</h2>
+                <span class="section-sub" data-i18n="seasonStats">Season snapshot</span>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-5 flex flex-col">
+                    <div class="card glass p-5 md:p-6 flex-grow accent-border">
+                        <div class="section-card-title">
+                            <div>
+                                <p class="label-xs text-fox-orange" data-i18n="foxStats">The Fox Stats</p>
+                                <p class="card-caption" data-i18n="foxStatsSub">Key serve and return percentages</p>
+                            </div>
+                        </div>
+                        <div id="radar-container" class="w-full max-w-sm aspect-square mx-auto mt-3">
+                            <canvas id="radarChart" aria-label="Fox tennis performance radar chart"></canvas>
+                        </div>
+                        <div id="performance-stat-grid" class="performance-grid"></div>
+                    </div>
+                </div>
+                <div class="lg:col-span-3 flex flex-col">
+                    <div class="card glass p-5 md:p-6 flex-grow accent-border">
+                        <div class="section-card-title">
+                            <div>
+                                <p class="label-xs text-fox-blue" data-i18n="surfaceMastery">Surface Mastery</p>
+                                <p class="card-caption" data-i18n="surfaceSub">Wins by court type</p>
+                            </div>
+                        </div>
+                        <div id="doughnut-container" class="relative aspect-square max-w-[290px] mx-auto mt-3">
+                            <canvas id="doughnutChart" aria-label="Wins by surface doughnut chart"></canvas>
                             <div id="doughnut-center-text" class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                                 <span id="total-wins-center" class="font-black text-4xl" style="font-family:'Barlow Condensed',sans-serif;">0</span>
                                 <span class="label-xs text-muted mt-1" data-i18n="winsYTD">Wins YTD</span>
                             </div>
                         </div>
+                        <div id="surface-stat-list" class="surface-stat-list"></div>
+                    </div>
+                </div>
+                <div class="lg:col-span-4 flex flex-col">
+                    <div class="card glass p-5 md:p-6 flex-grow accent-border">
+                        <div class="section-card-title">
+                            <div>
+                                <p class="label-xs text-slate-500 dark:text-slate-400" data-i18n="bioTitle">Identity Card</p>
+                                <p class="card-caption" data-i18n="bioSub">Player profile</p>
+                            </div>
+                        </div>
+                        <div class="bio-grid mt-5">
+                            <div class="bio-cell"><p class="label-xs text-muted" data-i18n="bioHeight">Height</p><p id="bio-height" class="bio-value">—</p></div>
+                            <div class="bio-cell"><p class="label-xs text-muted" data-i18n="bioWeight">Weight</p><p id="bio-weight" class="bio-value">—</p></div>
+                            <div class="bio-cell"><p class="label-xs text-muted" data-i18n="bioPlays">Plays</p><p id="bio-plays" class="bio-value small">—</p></div>
+                            <div class="bio-cell"><p class="label-xs text-muted" data-i18n="bioPro">Pro Since</p><p id="bio-pro" class="bio-value">—</p></div>
+                            <div class="bio-cell wide"><p class="label-xs text-muted" data-i18n="bioCoaches">Coaching Team</p><p id="bio-coach" class="bio-value small">—</p></div>
+                            <div class="bio-cell wide"><p class="label-xs text-muted" data-i18n="birthplace">Birthplace</p><p id="bio-birthplace" class="bio-value small">—</p></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ROADMAP -->
-        <section class="anim anim-4">
+        <section id="roadmap" class="scroll-anchor" aria-labelledby="roadmap-title">
             <div class="section-header">
-                <h2 data-i18n="roadmapTitle">Roadmap</h2>
+                <h2 id="roadmap-title" data-i18n="roadmapTitle">Roadmap</h2>
                 <span class="section-sub" data-i18n="majorEvents">Next Major Events</span>
             </div>
-            <div class="card glass p-6 md:p-8">
+            <div class="card glass p-5 md:p-8 accent-border">
                 <div class="roadmap-wrapper">
-                    <div class="roadmap-line"></div>
-                    <div id="roadmap-container" class="grid grid-cols-1 md:grid-cols-5 gap-3 md:gap-4 relative z-10"></div>
+                    <div class="roadmap-line" aria-hidden="true"></div>
+                    <div id="roadmap-container" class="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-5 relative z-10"></div>
                 </div>
             </div>
         </section>
 
-        <!-- POINTS EVOLUTION -->
-        <section class="anim anim-4">
+        <section id="history" class="scroll-anchor" aria-labelledby="history-title">
             <div class="section-header">
-                <h2 data-i18n="pointsEvolution">Points Evolution</h2>
+                <h2 id="history-title" data-i18n="historyTitle">Match & Points History</h2>
+                <span class="section-sub" data-i18n="historySub">Recent results and season movement</span>
             </div>
-            <div class="card glass p-5 md:p-6">
-                <canvas id="pointsChart" style="min-height:420px; max-height:480px;"></canvas>
+            <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+                <div class="xl:col-span-5 card glass p-5 md:p-6 accent-border">
+                    <div class="section-card-title">
+                        <div>
+                            <p class="label-xs text-fox-green" data-i18n="recentMatches">Recent Matches</p>
+                            <p class="card-caption" data-i18n="recentMatchesSub">Latest recorded results</p>
+                        </div>
+                        <div class="filter-group" role="group" aria-label="Match filter">
+                            <button class="filter-btn active" data-match-filter="all" type="button" data-i18n="all">All</button>
+                            <button class="filter-btn" data-match-filter="win" type="button" data-i18n="filterWin">W</button>
+                            <button class="filter-btn" data-match-filter="loss" type="button" data-i18n="filterLoss">L</button>
+                        </div>
+                    </div>
+                    <div id="match-history-list" class="match-list mt-5"></div>
+                </div>
+                <div class="xl:col-span-7 card glass p-5 md:p-6 accent-border">
+                    <div class="section-card-title">
+                        <div>
+                            <p class="label-xs text-fox-orange" data-i18n="pointsEvolution">Points Evolution</p>
+                            <p class="card-caption" data-i18n="pointsEvolutionSub">Tournament movement and saved history</p>
+                        </div>
+                        <div class="filter-group" role="group" aria-label="Points chart mode">
+                            <button class="filter-btn active" data-chart-mode="season" type="button" data-i18n="season">Season</button>
+                            <button class="filter-btn" data-chart-mode="net" type="button" data-i18n="net">Net</button>
+                        </div>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="pointsChart" aria-label="ATP points evolution chart"></canvas>
+                    </div>
+                    <div id="points-history-note" class="chart-note"></div>
+                </div>
             </div>
         </section>
 
-        <!-- TROPHY CABINET -->
-        <section class="anim anim-5">
+        <section id="trophies" class="scroll-anchor" aria-labelledby="trophies-title">
             <div class="section-header">
-                <h2 data-i18n="trophyCabinet">Trophy Cabinet</h2>
+                <h2 id="trophies-title" data-i18n="trophyCabinet">Trophy Cabinet</h2>
                 <span id="trophy-count" class="section-sub"></span>
+            </div>
+            <div class="trophy-toolbar">
+                <div id="trophy-filters" class="filter-group" role="group" aria-label="Trophy filter"></div>
             </div>
             <div id="trophy-cabinet" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
         </section>
 
-        <!-- EPIC RIVALRIES -->
-        <section class="anim anim-5">
+        <section id="rivalries" class="scroll-anchor" aria-labelledby="rivalries-title">
             <div class="section-header">
-                <h2 data-i18n="rivalries">Epic Rivalries</h2>
+                <h2 id="rivalries-title" data-i18n="rivalries">Epic Rivalries</h2>
+                <span class="section-sub" data-i18n="h2hSub">Head-to-head snapshot</span>
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
                 <div id="h2h-container" class="lg:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4"></div>
                 <div id="special-h2h-container" class="flex flex-col gap-4">
                     <div class="special-h2h-card pigeon">
                         <div>
-                            <p class="label-xs text-green-500 dark:text-green-400" data-i18n="pigeon">The Pigeon 🟢</p>
+                            <p class="label-xs text-green-500 dark:text-green-400" data-i18n="pigeon">Best H2H</p>
                             <p id="pigeon-name" class="font-bold text-sm mt-1">Loading…</p>
+                            <p id="pigeon-detail" class="special-detail">—</p>
                         </div>
-                        <span id="pigeon-score" class="font-black text-xl text-green-600 dark:text-green-300 whitespace-nowrap" style="font-family:'Barlow Condensed',sans-serif;">0-0</span>
+                        <span id="pigeon-score" class="font-black text-xl text-green-600 dark:text-green-300 whitespace-nowrap" style="font-family:'Barlow Condensed',sans-serif;">0–0</span>
                     </div>
                     <div class="special-h2h-card nemesis">
                         <div>
-                            <p class="label-xs text-red-500 dark:text-red-400" data-i18n="nemesis">The Nemesis 🔴</p>
+                            <p class="label-xs text-red-500 dark:text-red-400" data-i18n="nemesis">Worst H2H</p>
                             <p id="nemesis-name" class="font-bold text-sm mt-1">Loading…</p>
+                            <p id="nemesis-detail" class="special-detail">—</p>
                         </div>
-                        <span id="nemesis-score" class="font-black text-xl text-red-600 dark:text-red-400 whitespace-nowrap" style="font-family:'Barlow Condensed',sans-serif;">0-0</span>
+                        <span id="nemesis-score" class="font-black text-xl text-red-600 dark:text-red-400 whitespace-nowrap" style="font-family:'Barlow Condensed',sans-serif;">0–0</span>
                     </div>
                 </div>
             </div>
+            <p class="section-note" data-i18n="h2hMethod">Best / worst H2H is calculated from the win-loss differential against the tracked rivals.</p>
         </section>
 
-        <!-- TOURNAMENTS BREAKDOWN -->
-        <section class="anim anim-5">
+        <section id="tournaments" class="scroll-anchor" aria-labelledby="tournaments-title">
             <div class="section-header">
-                <h2 data-i18n="tournaments">Tournaments</h2>
+                <h2 id="tournaments-title" data-i18n="tournaments">Tournament Breakdown</h2>
+                <span class="section-sub" data-i18n="tournamentsSub">Defending vs earned points</span>
             </div>
-            <div class="card glass overflow-hidden">
+            <div class="card glass overflow-hidden accent-border">
                 <div class="overflow-x-auto w-full">
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th data-i18n="tournHeader">Tournament</th>
-                                <th class="text-center" data-i18n="defendingHeader">Defending</th>
-                                <th class="text-center" data-i18n="earnedHeader">Earned</th>
-                                <th class="text-center" data-i18n="netDiffHeader">Net Diff</th>
+                                <th class="th-tournament" data-i18n="tournHeader">Tournament</th>
+                                <th class="text-center th-defending" data-i18n="defendingHeader">Defending</th>
+                                <th class="text-center th-earned" data-i18n="earnedHeader">Earned</th>
+                                <th class="text-center th-net" data-i18n="netDiffHeader">Net Diff</th>
                             </tr>
                         </thead>
                         <tbody id="tournament-data"></tbody>
@@ -336,15 +372,25 @@
             </div>
         </section>
 
+        <section class="footer-note card glass">
+            <div>
+                <p class="label-xs text-muted" data-i18n="dataSource">Data source</p>
+                <p class="font-bold mt-1">Tennis API via RapidAPI</p>
+            </div>
+            <div class="text-right">
+                <p class="label-xs text-muted" data-i18n="cacheNote">Last cached snapshot</p>
+                <p id="footer-updated" class="font-bold mt-1">—</p>
+            </div>
+        </section>
     </main>
 
-    <footer class="bg-fox-black/95 border-t border-white/[0.06] text-slate-500 py-6 text-center mt-8">
+    <footer class="bg-fox-black/95 border-t border-white/[0.06] text-slate-500 py-7 text-center mt-8">
         <p class="label-xs tracking-widest" data-i18n="footerText">Sinner Tracker 2026 — Unofficial Fan Dashboard</p>
     </footer>
 
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+            window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(console.warn));
         }
     </script>
     <script src="script.js"></script>

@@ -1,21 +1,16 @@
 {
-  "name": "Sinner Tracker",
-  "short_name": "Sinner Stats",
-  "description": "The ultimate Jannik Sinner database and tracker.",
-  "start_url": "/sinner-tracker/",
+  "name": "Sinner Tracker - The Fox Dashboard",
+  "short_name": "Sinner Tracker",
+  "description": "Jannik Sinner ATP ranking, stats, trophies, rivalries and tournament roadmap.",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f8fafc",
+  "orientation": "portrait-primary",
+  "background_color": "#080d17",
   "theme_color": "#f97316",
+  "categories": ["sports", "entertainment"],
   "icons": [
-    {
-      "src": "assets/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "assets/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    {"src":"assets/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"assets/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
   ]
 }
