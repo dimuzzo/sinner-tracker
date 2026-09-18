@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-17T07:24:09.684482+00:00",
+  "last_updated": "2026-09-18T07:13:24.522092+00:00",
   "ranking": 1,
   "total_points": 11500,
   "win_loss": "44 - 3",
@@ -234,13 +234,13 @@
     {
       "name": "Paris Masters",
       "date": "2026-10-28T00:00:00Z",
-      "court": "I.hard",
+      "court": "Indoor Hard",
       "country": "FRA"
     },
     {
       "name": "ATP Finals Turin",
       "date": "2026-11-10T00:00:00Z",
-      "court": "I.hard",
+      "court": "Indoor Hard",
       "country": "ITA"
     }
   ],
@@ -267,5 +267,13 @@
     "coach": "Simone Vagnozzi, Darren Cahill"
   },
   "current_streak": 7,
-  "api_errors": []
+  "api_errors": [],
+  "history": {
+    "points": [
+      {
+        "date": "2026-09-18",
+        "points": 11500
+      }
+    ]
+  }
 }
