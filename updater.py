@@ -155,17 +155,102 @@ def load_database():
         print(f"CRITICAL: cannot read data.json: {exc}")
         return None
 
+def fetch_ranking_points_on(date_obj):
+    """Fetch Sinner's ATP points from a dated ranking snapshot."""
+    date_str = date_obj.strftime("%d.%m.%Y")
+    endpoint = (
+        f"/tennis/v2/ranking/atp"
+        f"?date={date_str}&group=singles&page=1&limit=100"
+    )
 
-def update_history(db, now):
-    """Persist a small daily history used by the dashboard charts."""
+    rankings = api_call(endpoint)
+
+    if not isinstance(rankings, list):
+        return None
+
+    for row in rankings:
+        player = row.get("player", {})
+
+        if str(player.get("id")) == str(SINNER_ID):
+            points = row.get("pts", row.get("point"))
+
+            if isinstance(points, (int, float)):
+                return int(points)
+
+    return None
+
+
+def backfill_history(db, now):
+    """Build an initial six-month ATP points history using weekly snapshots."""
     history = db.setdefault("history", {})
     points_history = history.setdefault("points", [])
+
+    if history.get("backfilled_6m"):
+        return
+
+    today = now.date()
+
+    # Start from approximately six months ago, aligned to Monday
+    current_monday = today - datetime.timedelta(days=today.weekday())
+    start_monday = current_monday - datetime.timedelta(weeks=25)
+
+    snapshots = {}
+
+    for week in range(26):
+        snapshot_date = start_monday + datetime.timedelta(weeks=week)
+        points = fetch_ranking_points_on(snapshot_date)
+
+        if points is not None:
+            snapshots[snapshot_date.isoformat()] = {
+                "date": snapshot_date.isoformat(),
+                "points": points
+            }
+
+    # Merge with any history that may already exist
+    for item in points_history:
+        if isinstance(item, dict) and item.get("date"):
+            snapshots[item["date"]] = item
+
+    points_history[:] = sorted(
+        snapshots.values(),
+        key=lambda x: x["date"]
+    )[-180:]
+
+    # Avoid repeating the expensive 26-request backfill every day
+    if len(points_history) >= 20:
+        history["backfilled_6m"] = True
+        print(f"History backfilled: {len(points_history)} snapshots")
+    else:
+        print(
+            f"WARNING: history backfill returned only "
+            f"{len(points_history)} snapshots"
+        )
+
+def update_history(db, now):
+    """Persist a rolling six-month ATP points history."""
+    history = db.setdefault("history", {})
+    points_history = history.setdefault("points", [])
+
+    backfill_history(db, now)
+
     day = now.strftime("%Y-%m-%d")
 
-    points_snapshot = {"date": day, "points": int(db.get("total_points", 0))}
-    points_history[:] = [x for x in points_history if x.get("date") != day]
+    points_snapshot = {
+        "date": day,
+        "points": int(db.get("total_points", 0))
+    }
+
+    points_history[:] = [
+        x for x in points_history
+        if x.get("date") != day
+    ]
+
     points_history.append(points_snapshot)
-    points_history[:] = points_history[-180:]
+
+    points_history[:] = sorted(
+        points_history,
+        key=lambda x: x.get("date", "")
+    )[-180:]
 
 def update_database():
     if not API_KEY or API_KEY == "YOUR_API_KEY":
