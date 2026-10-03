@@ -770,6 +770,31 @@ button:focus-visible,a:focus-visible {
   border-color:rgba(249,115,22,.4);
   box-shadow:0 0 0 1px rgba(249,115,22,.08)
 }
+.roadmap-stop.withdrawn {
+    opacity: .7;
+}
+
+.roadmap-stop.withdrawn .roadmap-dot {
+    background: #94a3b8;
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, .08);
+}
+
+.roadmap-stop.withdrawn .roadmap-info {
+    border-color: rgba(148, 163, 184, .35);
+}
+
+.roadmap-withdrawn {
+    position: absolute;
+    right: .5rem;
+    top: -.55rem;
+    background: #64748b;
+    color: white;
+    font-size: .55rem;
+    font-weight: 900;
+    letter-spacing: .08em;
+    padding: .2rem .45rem;
+    border-radius: 999px;
+}
 .roadmap-dot {
   width:1.4rem;
   height:1.4rem;

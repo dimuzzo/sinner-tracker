@@ -53,7 +53,7 @@ const T = {
         gs: 'Grand Slam', masters: 'Masters 1000', finals: 'ATP Finals',
         noData: 'No data available', historyStartsToday: 'Historical snapshots start from the first automated sync.', netMovementNote: 'Net movement = earned − defending points.',
         resultWin: 'W', resultLoss: 'L', dataSource: 'Data source', surfaceHard: 'Hard', surfaceClay: 'Clay', surfaceGrass: 'Grass', indoorHard: 'Indoor Hard',
-        unknown: 'Unknown'
+        unknown: 'Unknown', withdrawn: 'Withdrawn',
     },
     it: {
         navOverview: 'Overview', navPerformance: 'Prestazioni', navRoadmap: 'Calendario', navHistory: 'Storico',
@@ -86,7 +86,8 @@ const T = {
         all: 'Tutti', wins: 'Vittorie', losses: 'Sconfitte', season: 'Stagione', net: 'Netto', filterWin: 'V', filterLoss: 'S',
         gs: 'Grand Slam', masters: 'Masters 1000', finals: 'ATP Finals',
         noData: 'Nessun dato disponibile', historyStartsToday: 'Lo storico parte dal primo aggiornamento automatico.', netMovementNote: 'Variazione netta = punti guadagnati − punti da difendere.',
-        resultWin: 'V', resultLoss: 'S', dataSource: 'Fonte dei dati', surfaceHard: 'Cemento', surfaceClay: 'Terra', surfaceGrass: 'Erba', indoorHard: 'Cemento Indoor', unknown: 'Sconosciuto'
+        resultWin: 'V', resultLoss: 'S', dataSource: 'Fonte dei dati', surfaceHard: 'Cemento', surfaceClay: 'Terra', surfaceGrass: 'Erba', indoorHard: 'Cemento Indoor', unknown: 'Sconosciuto',
+        withdrawn: 'Ritirato',
     }
 };
 
@@ -225,7 +226,7 @@ function getNextEvent(data) {
     const now = Date.now();
     const items = Array.isArray(data.roadmap) ? data.roadmap
         .map(item => ({ ...item, ts: new Date(item.date).getTime() }))
-        .filter(item => Number.isFinite(item.ts) && item.ts >= now - 86400000)
+        .filter(item => !item.withdrawn && Number.isFinite(item.ts) && item.ts >= now - 86400000)
         .sort((a, b) => a.ts - b.ts) : [];
     return items[0] || null;
 }
@@ -484,22 +485,61 @@ function formatCourtLabel(court) {
 function renderRoadmap(items) {
     const container = document.getElementById('roadmap-container');
     if (!container) return;
+
     const now = Date.now();
-    const events = (Array.isArray(items) ? items : []).slice().sort((a,b) => new Date(a.date) - new Date(b.date));
-    if (!events.length) { container.innerHTML = `<p class="text-sm text-muted">${escapeHTML(t('noData'))}</p>`; return; }
-    container.innerHTML = events.map((event, i) => {
+
+    const events = (Array.isArray(items) ? items : [])
+        .slice()
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    if (!events.length) {
+        container.innerHTML = `<p class="text-sm text-muted">${escapeHTML(t('noData'))}</p>`;
+        return;
+    }
+
+    const upcomingEvents = events.filter(event => {
+        const date = new Date(event.date).getTime();
+        return date >= now && !event.withdrawn;
+    });
+
+    const withdrawnEvents = events.filter(event => Boolean(event.withdrawn));
+
+    const visibleEvents = [
+        ...withdrawnEvents,
+        ...upcomingEvents
+    ];
+
+    container.innerHTML = visibleEvents.map((event, i) => {
         const d = new Date(event.date);
+        const isWithdrawn = Boolean(event.withdrawn);
         const isPast = d.getTime() < now;
-        const isNext = !isPast && events.slice(0, i).every(e => new Date(e.date).getTime() < now);
-        const dateLabel = formatDate(event.date, { month: 'short', day: 'numeric' });
+        const isNext = !isWithdrawn &&
+            !isPast &&
+            upcomingEvents.indexOf(event) === 0;
+
+        const dateLabel = formatDate(event.date, {
+            month: 'short',
+            day: 'numeric'
+        });
+
         const flag = COUNTRY_FLAGS[event.country] || event.country || '';
-        return `<article class="roadmap-stop ${isPast ? 'past' : ''} ${isNext ? 'next' : ''}">
+
+        return `<article class="roadmap-stop ${isPast ? 'past' : ''} ${isNext ? 'next' : ''} ${isWithdrawn ? 'withdrawn' : ''}">
             <div class="roadmap-dot" aria-hidden="true"></div>
+
             <div class="roadmap-info">
                 ${isNext ? `<span class="roadmap-next">NEXT</span>` : ''}
+                ${isWithdrawn ? `<span class="roadmap-withdrawn">${escapeHTML(t('withdrawn'))}</span>` : ''}
+
                 <p class="roadmap-date">${dateLabel} · ${flag}</p>
-                <h3 class="roadmap-name">${escapeHTML(event.name)}</h3>
-                <p class="roadmap-court">${escapeHTML(formatCourtLabel(event.court))}</p>
+
+                <h3 class="roadmap-name">
+                    ${escapeHTML(event.name)}
+                </h3>
+
+                <p class="roadmap-court">
+                    ${escapeHTML(formatCourtLabel(event.court))}
+                </p>
             </div>
         </article>`;
     }).join('');

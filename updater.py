@@ -432,15 +432,29 @@ def update_database():
             {"name": "Canadian Open", "date": f"{current_year}-08-06T00:00:00Z", "court": "Hard",   "country": "CAN", "withdrawn": True},
             {"name": "Cincinnati Open", "date": f"{current_year}-08-12T00:00:00Z", "court": "Hard",   "country": "USA", "withdrawn": True},
             {"name": "US Open", "date": f"{current_year}-08-26T00:00:00Z", "court": "Hard",   "country": "USA", "withdrawn": True},
-            {"name": "China Open", "date": f"{current_year}-09-26T00:00:00Z", "court": "Hard",   "country": "CHN"},
-            {"name": "Shanghai Masters", "date": f"{current_year}-10-02T00:00:00Z", "court": "Hard",   "country": "CHN"},
+            {"name": "China Open", "date": f"{current_year}-09-26T00:00:00Z", "court": "Hard",   "country": "CHN", "withdrawn": True},
+            {"name": "Shanghai Masters", "date": f"{current_year}-10-02T00:00:00Z", "court": "Hard",   "country": "CHN", "withdrawn": True},
             {"name": "Paris Masters", "date": f"{current_year}-10-28T00:00:00Z", "court": "Indoor Hard", "country": "FRA"},
             {"name": "ATP Finals Turin", "date": f"{current_year}-11-10T00:00:00Z", "court": "Indoor Hard", "country": "ITA"},
         ]
-        db['roadmap'] = [
+        roadmap_candidates = [
             t for t in elite_schedule
-            if datetime.datetime.strptime(t["date"][:10], "%Y-%m-%d").replace(tzinfo=datetime.timezone.utc) >= now - datetime.timedelta(days=7)
-        ][:5]
+            if (
+                t.get("withdrawn")
+                or datetime.datetime.strptime(
+                    t["date"][:10],
+                    "%Y-%m-%d"
+                ).replace(tzinfo=datetime.timezone.utc) >= now
+            )
+        ]
+
+        db['roadmap'] = sorted(
+            roadmap_candidates,
+            key=lambda t: datetime.datetime.strptime(
+                t["date"][:10],
+                "%Y-%m-%d"
+            )
+        )
 
         # 8/9 Special H2H
         print("8/9 Syncing Pigeon & Nemesis...")
