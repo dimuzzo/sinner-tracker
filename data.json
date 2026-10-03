@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-02T08:11:29.766269+00:00",
+  "last_updated": "2026-10-03T07:48:34.073333+00:00",
   "ranking": 1,
   "total_points": 11500,
   "win_loss": "44 - 3",
@@ -220,12 +220,6 @@
   },
   "roadmap": [
     {
-      "name": "China Open",
-      "date": "2026-09-26T00:00:00Z",
-      "court": "Hard",
-      "country": "CHN"
-    },
-    {
       "name": "Shanghai Masters",
       "date": "2026-10-02T00:00:00Z",
       "court": "Hard",
@@ -335,6 +329,10 @@
       },
       {
         "date": "2026-10-02",
+        "points": 11500
+      },
+      {
+        "date": "2026-10-03",
         "points": 11500
       }
     ]
