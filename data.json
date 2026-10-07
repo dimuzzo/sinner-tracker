@@ -220,58 +220,42 @@
   },
   "roadmap": [
     {
-      "name": "Halle Open",
-      "date": "2026-06-17T00:00:00Z",
+      "name": "Wimbledon",
+      "date": "2026-06-29T00:00:00Z",
+      "end": "2026-07-12T00:00:00Z",
       "court": "Grass",
-      "country": "GER",
-      "withdrawn": true
-    },
-    {
-      "name": "Canadian Open",
-      "date": "2026-08-06T00:00:00Z",
-      "court": "Hard",
-      "country": "CAN",
-      "withdrawn": true
-    },
-    {
-      "name": "Cincinnati Open",
-      "date": "2026-08-12T00:00:00Z",
-      "court": "Hard",
-      "country": "USA",
-      "withdrawn": true
-    },
-    {
-      "name": "US Open",
-      "date": "2026-08-26T00:00:00Z",
-      "court": "Hard",
-      "country": "USA",
-      "withdrawn": true
-    },
-    {
-      "name": "China Open",
-      "date": "2026-09-26T00:00:00Z",
-      "court": "Hard",
-      "country": "CHN",
-      "withdrawn": true
+      "country": "GBR"
     },
     {
       "name": "Shanghai Masters",
-      "date": "2026-10-02T00:00:00Z",
+      "date": "2026-10-07T00:00:00Z",
+      "end": "2026-10-18T00:00:00Z",
       "court": "Hard",
       "country": "CHN",
       "withdrawn": true
     },
     {
       "name": "Paris Masters",
-      "date": "2026-10-28T00:00:00Z",
+      "date": "2026-11-02T00:00:00Z",
+      "end": "2026-11-08T00:00:00Z",
       "court": "Indoor Hard",
-      "country": "FRA"
+      "country": "FRA",
+      "withdrawn": true
     },
     {
       "name": "ATP Finals Turin",
-      "date": "2026-11-10T00:00:00Z",
+      "date": "2026-11-15T00:00:00Z",
+      "end": "2026-11-22T00:00:00Z",
       "court": "Indoor Hard",
-      "country": "ITA"
+      "country": "ITA",
+      "withdrawn": true
+    },
+    {
+      "name": "Australian Open",
+      "date": "2027-01-17T00:00:00Z",
+      "end": "2027-01-31T00:00:00Z",
+      "court": "Hard",
+      "country": "AUS"
     }
   ],
   "special_h2h": {
@@ -369,22 +353,6 @@
       },
       {
         "date": "2026-10-03",
-        "points": 11500
-      },
-      {
-        "date": "2026-10-04",
-        "points": 11500
-      },
-      {
-        "date": "2026-10-05",
-        "points": 11500
-      },
-      {
-        "date": "2026-10-06",
-        "points": 11500
-      },
-      {
-        "date": "2026-10-07",
         "points": 11500
       }
     ]

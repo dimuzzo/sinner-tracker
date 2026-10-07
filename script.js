@@ -53,7 +53,7 @@ const T = {
         gs: 'Grand Slam', masters: 'Masters 1000', finals: 'ATP Finals',
         noData: 'No data available', historyStartsToday: 'Historical snapshots start from the first automated sync.', netMovementNote: 'Net movement = earned − defending points.',
         resultWin: 'W', resultLoss: 'L', dataSource: 'Data source', surfaceHard: 'Hard', surfaceClay: 'Clay', surfaceGrass: 'Grass', indoorHard: 'Indoor Hard',
-        unknown: 'Unknown', withdrawn: 'Withdrawn',
+        unknown: 'Unknown', withdrawn: 'Withdrawn', current: 'Current',
     },
     it: {
         navOverview: 'Overview', navPerformance: 'Prestazioni', navRoadmap: 'Calendario', navHistory: 'Storico',
@@ -87,7 +87,7 @@ const T = {
         gs: 'Grand Slam', masters: 'Masters 1000', finals: 'ATP Finals',
         noData: 'Nessun dato disponibile', historyStartsToday: 'Lo storico parte dal primo aggiornamento automatico.', netMovementNote: 'Variazione netta = punti guadagnati − punti da difendere.',
         resultWin: 'V', resultLoss: 'S', dataSource: 'Fonte dei dati', surfaceHard: 'Cemento', surfaceClay: 'Terra', surfaceGrass: 'Erba', indoorHard: 'Cemento Indoor', unknown: 'Sconosciuto',
-        withdrawn: 'Ritirato',
+        withdrawn: 'Ritirato', current: 'In corso',
     }
 };
 
@@ -222,11 +222,56 @@ function isValidMatch(match) {
     return match && match.tournament && match.tournament !== 'Unknown Tournament' && match.date;
 }
 
+const ROADMAP_CURRENT_WINDOW_MS = 14 * 86400000;
+const ROADMAP_VISIBLE_COUNT = 5;
+
+function getRoadmapWindow(items) {
+    const now = Date.now();
+    const events = (Array.isArray(items) ? items : [])
+        .map(item => ({
+            ...item,
+            ts: new Date(item.date).getTime(),
+            endTs: item.end ? new Date(item.end).getTime() : new Date(item.date).getTime()
+        }))
+        .filter(item => Number.isFinite(item.ts))
+        .sort((a, b) => a.ts - b.ts);
+
+    if (!events.length) return [];
+
+    const recentlyPlayed = events.filter(
+        item => !item.withdrawn && item.endTs < now
+    );
+    const lastPlayed = recentlyPlayed[recentlyPlayed.length - 1]
+        || events.find(item => !item.withdrawn && item.ts < now)
+        || null;
+
+    const current = events.find(item =>
+        item.ts <= now && now <= item.endTs
+    ) || null;
+
+    const future = events.filter(item => item.ts > now);
+    const upcoming = current
+        ? [current, ...future]
+        : future;
+
+    const selected = lastPlayed ? [lastPlayed] : [];
+
+    for (const item of upcoming) {
+        if (selected.some(selectedItem => selectedItem.ts === item.ts && selectedItem.name === item.name)) {
+            continue;
+        }
+        selected.push(item);
+        if (selected.length === ROADMAP_VISIBLE_COUNT) break;
+    }
+
+    return selected.slice(0, ROADMAP_VISIBLE_COUNT);
+}
+
 function getNextEvent(data) {
     const now = Date.now();
     const items = Array.isArray(data.roadmap) ? data.roadmap
         .map(item => ({ ...item, ts: new Date(item.date).getTime() }))
-        .filter(item => !item.withdrawn && Number.isFinite(item.ts) && item.ts >= now - 86400000)
+        .filter(item => !item.withdrawn && Number.isFinite(item.ts) && item.ts >= now - ROADMAP_CURRENT_WINDOW_MS)
         .sort((a, b) => a.ts - b.ts) : [];
     return items[0] || null;
 }
@@ -487,59 +532,49 @@ function renderRoadmap(items) {
     if (!container) return;
 
     const now = Date.now();
+    const visibleEvents = getRoadmapWindow(items);
 
-    const events = (Array.isArray(items) ? items : [])
-        .slice()
-        .sort((a, b) => new Date(a.date) - new Date(b.date));
-
-    if (!events.length) {
+    if (!visibleEvents.length) {
         container.innerHTML = `<p class="text-sm text-muted">${escapeHTML(t('noData'))}</p>`;
         return;
     }
 
-    const upcomingEvents = events.filter(event => {
-        const date = new Date(event.date).getTime();
-        return date >= now && !event.withdrawn;
-    });
+    const firstUpcoming = visibleEvents.find(event =>
+        !event.withdrawn && new Date(event.date).getTime() > now
+    );
 
-    const withdrawnEvents = events.filter(event => Boolean(event.withdrawn));
-
-    const visibleEvents = [
-        ...withdrawnEvents,
-        ...upcomingEvents
-    ];
-
-    container.innerHTML = visibleEvents.map((event, i) => {
+    container.innerHTML = visibleEvents.map(event => {
         const d = new Date(event.date);
+        const ts = d.getTime();
         const isWithdrawn = Boolean(event.withdrawn);
-        const isPast = d.getTime() < now;
-        const isNext = !isWithdrawn &&
-            !isPast &&
-            upcomingEvents.indexOf(event) === 0;
+        const endTs = Number.isFinite(event.endTs) ? event.endTs : ts;
+        const isCurrent = ts <= now && now <= endTs;
+        const isPast = endTs < now;
+        const isNext = !isCurrent && !isWithdrawn && event === firstUpcoming;
 
         const dateLabel = formatDate(event.date, {
             month: 'short',
-            day: 'numeric'
+            day: 'numeric',
+            year: d.getUTCFullYear() !== new Date().getUTCFullYear() ? 'numeric' : undefined
         });
 
         const flag = COUNTRY_FLAGS[event.country] || event.country || '';
 
-        return `<article class="roadmap-stop ${isPast ? 'past' : ''} ${isNext ? 'next' : ''} ${isWithdrawn ? 'withdrawn' : ''}">
+        return `<article class="roadmap-stop ${isPast ? 'past' : ''} ${isCurrent ? 'current' : ''} ${isNext ? 'next' : ''} ${isWithdrawn ? 'withdrawn' : ''}">
             <div class="roadmap-dot" aria-hidden="true"></div>
 
             <div class="roadmap-info">
-                ${isNext ? `<span class="roadmap-next">NEXT</span>` : ''}
-                ${isWithdrawn ? `<span class="roadmap-withdrawn">${escapeHTML(t('withdrawn'))}</span>` : ''}
+                <div class="roadmap-badges">
+                    ${isCurrent ? `<span class="roadmap-current">${escapeHTML(t('current'))}</span>` : ''}
+                    ${isNext ? `<span class="roadmap-next">NEXT</span>` : ''}
+                    ${isWithdrawn ? `<span class="roadmap-withdrawn">${escapeHTML(t('withdrawn'))}</span>` : ''}
+                </div>
 
                 <p class="roadmap-date">${dateLabel} · ${flag}</p>
 
-                <h3 class="roadmap-name">
-                    ${escapeHTML(event.name)}
-                </h3>
+                <h3 class="roadmap-name">${escapeHTML(event.name)}</h3>
 
-                <p class="roadmap-court">
-                    ${escapeHTML(formatCourtLabel(event.court))}
-                </p>
+                <p class="roadmap-court">${escapeHTML(formatCourtLabel(event.court))}</p>
             </div>
         </article>`;
     }).join('');
@@ -728,7 +763,7 @@ async function loadData() {
     } catch (error) {
         console.warn('Network data load failed, trying cached response:', error);
         try {
-            const cache = await caches.open('sinner-tracker-runtime-v8');
+            const cache = await caches.open('sinner-tracker-runtime-v11');
             const cached = await cache.match(DATA_URL) || await cache.match(new Request(DATA_URL));
             if (cached) return await cached.json();
         } catch (cacheError) {

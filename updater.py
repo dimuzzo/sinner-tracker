@@ -45,6 +45,36 @@ TOURNAMENT_COUNTRY_MAP = {
     "Paris Masters": "FRA", "Indian Wells Open": "USA", "Miami Open": "USA",
 }
 
+ROADMAP_CURRENT_WINDOW_DAYS = 14
+ROADMAP_VISIBLE_COUNT = 5
+
+ROADMAP_SCHEDULE = [
+    # 2026 schedule
+    {"name": "Monte-Carlo Masters", "date": "2026-04-12T00:00:00Z", "end": "2026-04-19T00:00:00Z", "court": "Clay", "country": "MON"},
+    {"name": "Madrid Open", "date": "2026-04-24T00:00:00Z", "end": "2026-05-03T00:00:00Z", "court": "Clay", "country": "ESP"},
+    {"name": "Internazionali d'Italia", "date": "2026-05-08T00:00:00Z", "end": "2026-05-17T00:00:00Z", "court": "Clay", "country": "ITA"},
+    {"name": "Roland Garros", "date": "2026-05-26T00:00:00Z", "end": "2026-06-07T00:00:00Z", "court": "Clay", "country": "FRA"},
+    {"name": "Halle Open", "date": "2026-06-17T00:00:00Z", "end": "2026-06-23T00:00:00Z", "court": "Grass", "country": "GER", "withdrawn": True},
+    {"name": "Wimbledon", "date": "2026-06-29T00:00:00Z", "end": "2026-07-12T00:00:00Z", "court": "Grass", "country": "GBR"},
+    {"name": "Canadian Open", "date": "2026-08-02T00:00:00Z", "end": "2026-08-09T00:00:00Z", "court": "Hard", "country": "CAN", "withdrawn": True},
+    {"name": "Cincinnati Open", "date": "2026-08-13T00:00:00Z", "end": "2026-08-23T00:00:00Z", "court": "Hard", "country": "USA", "withdrawn": True},
+    {"name": "US Open", "date": "2026-08-31T00:00:00Z", "end": "2026-09-13T00:00:00Z", "court": "Hard", "country": "USA", "withdrawn": True},
+    {"name": "China Open", "date": "2026-09-30T00:00:00Z", "end": "2026-10-06T00:00:00Z", "court": "Hard", "country": "CHN", "withdrawn": True},
+    {"name": "Shanghai Masters", "date": "2026-10-07T00:00:00Z", "end": "2026-10-18T00:00:00Z", "court": "Hard", "country": "CHN", "withdrawn": True},
+    {"name": "Paris Masters", "date": "2026-11-02T00:00:00Z", "end": "2026-11-08T00:00:00Z", "court": "Indoor Hard", "country": "FRA", "withdrawn": True},
+    {"name": "ATP Finals Turin", "date": "2026-11-15T00:00:00Z", "end": "2026-11-22T00:00:00Z", "court": "Indoor Hard", "country": "ITA", "withdrawn": True},
+
+    # 2027 fallback schedule: these are calendar placeholders, not confirmed entries for Sinner.
+    {"name": "Australian Open", "date": "2027-01-17T00:00:00Z", "end": "2027-01-31T00:00:00Z", "court": "Hard", "country": "AUS"},
+    {"name": "Indian Wells Open", "date": "2027-03-03T00:00:00Z", "end": "2027-03-17T00:00:00Z", "court": "Hard", "country": "USA"},
+    {"name": "Miami Open", "date": "2027-03-17T00:00:00Z", "end": "2027-03-31T00:00:00Z", "court": "Hard", "country": "USA"},
+    {"name": "Monte-Carlo Masters", "date": "2027-04-04T00:00:00Z", "end": "2027-04-11T00:00:00Z", "court": "Clay", "country": "MON"},
+    {"name": "Madrid Open", "date": "2027-04-21T00:00:00Z", "end": "2027-05-02T00:00:00Z", "court": "Clay", "country": "ESP"},
+    {"name": "Internazionali d'Italia", "date": "2027-05-05T00:00:00Z", "end": "2027-05-16T00:00:00Z", "court": "Clay", "country": "ITA"},
+    {"name": "Roland Garros", "date": "2027-05-23T00:00:00Z", "end": "2027-06-06T00:00:00Z", "court": "Clay", "country": "FRA"},
+    {"name": "Wimbledon", "date": "2027-06-28T00:00:00Z", "end": "2027-07-11T00:00:00Z", "court": "Grass", "country": "GBR"},
+]
+
 def api_call(endpoint_path):
     url = f"https://{HOST}{endpoint_path}"
     req = urllib.request.Request(url, headers=HEADERS)
@@ -252,6 +282,60 @@ def update_history(db, now):
         key=lambda x: x.get("date", "")
     )[-180:]
 
+def select_roadmap_window(schedule, now):
+    """Keep five roadmap items: last played + current/next three."""
+    events = []
+    for event in schedule:
+        try:
+            start = datetime.datetime.strptime(
+                event["date"][:10], "%Y-%m-%d"
+            ).replace(tzinfo=datetime.timezone.utc)
+            end = datetime.datetime.strptime(
+                event.get("end", event["date"])[:10], "%Y-%m-%d"
+            ).replace(tzinfo=datetime.timezone.utc)
+        except (KeyError, TypeError, ValueError):
+            continue
+        events.append((start, end, event))
+
+    events.sort(key=lambda item: item[0])
+
+    # Prefer the last tournament Sinner actually played. Withdrawn events never become the "last played" item.
+    played = [
+        event for start, end, event in events
+        if not event.get("withdrawn") and end < now
+    ]
+    last_played = played[-1] if played else None
+
+    # A current event is determined by its real start/end window, so a finished withdrawal
+    # such as China Open does not remain visible just because it started recently.
+    current_events = [
+        event for start, end, event in events
+        if start <= now <= end
+    ]
+    current = current_events[0] if current_events else None
+
+    future = [
+        event for start, end, event in events
+        if start > now
+    ]
+
+    upcoming = []
+    if current:
+        upcoming.append(current)
+        upcoming.extend(future[:3])
+    else:
+        upcoming.extend(future[:4])
+
+    roadmap = [last_played] if last_played else []
+    for event in upcoming:
+        if last_played and event.get("name") == last_played.get("name") and event.get("date") == last_played.get("date"):
+            continue
+        roadmap.append(event)
+        if len(roadmap) >= ROADMAP_VISIBLE_COUNT:
+            break
+
+    return roadmap[:ROADMAP_VISIBLE_COUNT]
+
 def update_database():
     if not API_KEY or API_KEY == "YOUR_API_KEY":
         print("CRITICAL: API_KEY not configured!")
@@ -421,40 +505,7 @@ def update_database():
         # 7/9 Roadmap
         print("7/9 Syncing Tournament Roadmap...")
         now = datetime.datetime.now(datetime.timezone.utc)
-        current_year = now.year
-        elite_schedule = [
-            {"name": "Monte-Carlo Masters", "date": f"{current_year}-04-12T00:00:00Z", "court": "Clay",   "country": "MON"},
-            {"name": "Madrid Open", "date": f"{current_year}-04-24T00:00:00Z", "court": "Clay",   "country": "ESP"},
-            {"name": "Internazionali d'Italia", "date": f"{current_year}-05-08T00:00:00Z", "court": "Clay",   "country": "ITA"},
-            {"name": "Roland Garros", "date": f"{current_year}-05-26T00:00:00Z", "court": "Clay",   "country": "FRA"},
-            {"name": "Halle Open", "date": f"{current_year}-06-17T00:00:00Z", "court": "Grass",  "country": "GER", "withdrawn": True},
-            {"name": "Wimbledon", "date": f"{current_year}-06-29T00:00:00Z", "court": "Grass",  "country": "GBR"},
-            {"name": "Canadian Open", "date": f"{current_year}-08-06T00:00:00Z", "court": "Hard",   "country": "CAN", "withdrawn": True},
-            {"name": "Cincinnati Open", "date": f"{current_year}-08-12T00:00:00Z", "court": "Hard",   "country": "USA", "withdrawn": True},
-            {"name": "US Open", "date": f"{current_year}-08-26T00:00:00Z", "court": "Hard",   "country": "USA", "withdrawn": True},
-            {"name": "China Open", "date": f"{current_year}-09-26T00:00:00Z", "court": "Hard",   "country": "CHN", "withdrawn": True},
-            {"name": "Shanghai Masters", "date": f"{current_year}-10-02T00:00:00Z", "court": "Hard",   "country": "CHN", "withdrawn": True},
-            {"name": "Paris Masters", "date": f"{current_year}-10-28T00:00:00Z", "court": "Indoor Hard", "country": "FRA"},
-            {"name": "ATP Finals Turin", "date": f"{current_year}-11-10T00:00:00Z", "court": "Indoor Hard", "country": "ITA"},
-        ]
-        roadmap_candidates = [
-            t for t in elite_schedule
-            if (
-                t.get("withdrawn")
-                or datetime.datetime.strptime(
-                    t["date"][:10],
-                    "%Y-%m-%d"
-                ).replace(tzinfo=datetime.timezone.utc) >= now
-            )
-        ]
-
-        db['roadmap'] = sorted(
-            roadmap_candidates,
-            key=lambda t: datetime.datetime.strptime(
-                t["date"][:10],
-                "%Y-%m-%d"
-            )
-        )
+        db['roadmap'] = select_roadmap_window(ROADMAP_SCHEDULE, now)
 
         # 8/9 Special H2H
         print("8/9 Syncing Pigeon & Nemesis...")

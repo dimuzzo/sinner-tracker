@@ -1,5 +1,5 @@
-const CACHE_NAME = 'sinner-tracker-v9';
-const RUNTIME_CACHE = 'sinner-tracker-runtime-v9';
+const CACHE_NAME = 'sinner-tracker-v11';
+const RUNTIME_CACHE = 'sinner-tracker-runtime-v11';
 const APP_SHELL = [
   './', './index.html', './style.css', './script.js', './data.json', './manifest.json',
   './assets/icon-192.png', './assets/icon-512.png', './assets/social-cover.png'
