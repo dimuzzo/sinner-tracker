@@ -179,7 +179,7 @@ button:focus-visible,a:focus-visible {
   position:relative;
   overflow:hidden;
   border-radius:1.5rem;
-  background:linear-gradient(90deg,#090b11 0%,#101521 45%,rgba(16,21,33,.55) 100%),url('assets/social-cover.png') right center/cover no-repeat
+  background:linear-gradient(90deg,#090b11 0%,#101521 45%,rgba(16,21,33,.55) 100%),url('../assets/social-cover.png') right center/cover no-repeat
 }
 .hero-overlay {
   position:absolute;

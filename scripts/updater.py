@@ -179,7 +179,7 @@ def validate_database(db):
 
 def load_database():
     try:
-        with open("data.json", "r", encoding="utf-8") as f:
+        with open("data/data.json", "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception as exc:
         print(f"CRITICAL: cannot read data.json: {exc}")
@@ -548,7 +548,7 @@ def update_database():
                 print(f" - {error}")
             return False
 
-        with open('data.json', 'w', encoding='utf-8') as f:
+        with open('data/data.json', 'w', encoding='utf-8') as f:
             json.dump(db, f, indent=2, ensure_ascii=False)
         print("\nSUCCESS: data.json updated and validated safely!")
         return True

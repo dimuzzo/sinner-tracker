@@ -39,6 +39,25 @@ Check out the live dashboard [here](https://dimuzzo.github.io/sinner-tracker/).
 * **Validation & Testing**: Automated data validation and Python tests for the dashboard data pipeline.
 * **Data Source**: Tennis API via [RapidAPI](https://rapidapi.com/).
 
+## Project Structure
+
+```text
+sinner-tracker/
+├── .github/workflows/    # GitHub Actions automation
+├── assets/               # Images and icons
+├── css/                  # Stylesheets
+├── data/                 # Generated dashboard data
+├── scripts/              # Python automation scripts and frontend JavaScript
+├── tests/                # Data pipeline tests
+├── index.html            # Main dashboard page
+├── manifest.json         # PWA manifest
+├── sw.js                 # Service worker
+├── README.md
+├── LICENSE
+├── CODE_OF_CONDUCT.md
+└── .gitignore
+```
+
 ## How It Works (Automation)
 
 The project uses a "serverless" approach to keep data fresh without a backend:
@@ -67,13 +86,13 @@ If you want to contribute or run this locally:
 3. **Run Updater**:
 
    ```bash
-   python updater.py
+   python scripts/updater.py
    ```
 
 4. **Validate Data**:
 
    ```bash
-   python updater.py --validate-only
+   python scripts/updater.py --validate-only
    ```
 
 5. **Launch Web UI**:

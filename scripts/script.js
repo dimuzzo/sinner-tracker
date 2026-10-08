@@ -1,5 +1,5 @@
 const QUALIFICATION_POINTS = 7730;
-const DATA_URL = 'data.json';
+const DATA_URL = 'data/data.json';
 
 const COUNTRY_FLAGS = {
     ES: '🇪🇸', SR: '🇷🇸', DE: '🇩🇪', IT: '🇮🇹', US: '🇺🇸', GB: '🇬🇧', FR: '🇫🇷',

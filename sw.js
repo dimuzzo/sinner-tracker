@@ -1,8 +1,15 @@
 const CACHE_NAME = 'sinner-tracker-v11';
 const RUNTIME_CACHE = 'sinner-tracker-runtime-v11';
 const APP_SHELL = [
-  './', './index.html', './style.css', './script.js', './data.json', './manifest.json',
-  './assets/icon-192.png', './assets/icon-512.png', './assets/social-cover.png'
+  './',
+  './index.html',
+  './css/style.css',
+  './scripts/script.js',
+  './data/data.json',
+  './manifest.json',
+  './assets/icon-192.png',
+  './assets/icon-512.png',
+  './assets/social-cover.png'
 ];
 
 self.addEventListener('install', event => {
