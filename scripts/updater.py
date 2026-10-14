@@ -510,20 +510,47 @@ def update_database():
         # 8/9 Special H2H
         print("8/9 Syncing Pigeon & Nemesis...")
         h2h_data = api_call(f"/tennis/v2/atp/player/intersting-h2h/{SINNER_ID}")
-        # h2h_data must be a non-empty list
+
+        # Use the standard H2H records for tracked rivals
+        tracked_records = {
+            rival.get("name"): rival
+            for rival in db.get("rivalries", [])
+            if isinstance(rival, dict) and rival.get("name")
+        }
+
         if h2h_data and isinstance(h2h_data, list) and len(h2h_data) > 0:
             pigeon = {"name": "TBD", "diff": -999, "wins": 0, "losses": 0}
             nemesis = {"name": "TBD", "diff": 999, "wins": 0, "losses": 0}
+
             for entry in h2h_data:
                 p1, p2 = entry.get("player1", {}), entry.get("player2", {})
-                if str(p1.get("id")) == str(SINNER_ID): s_wins, o_wins, o_name = p1.get("wins", 0), p2.get("wins", 0), p2.get("name", "Unknown")
-                else: s_wins, o_wins, o_name = p2.get("wins", 0), p1.get("wins", 0), p1.get("name", "Unknown")
+
+                if str(p1.get("id")) == str(SINNER_ID):
+                    s_wins = int(p1.get("wins", 0) or 0)
+                    o_wins = int(p2.get("wins", 0) or 0)
+                    o_name = p2.get("name", "Unknown")
+                else:
+                    s_wins = int(p2.get("wins", 0) or 0)
+                    o_wins = int(p1.get("wins", 0) or 0)
+                    o_name = p1.get("name", "Unknown")
+
+                # Prefer the standard H2H totals for tracked rivals
+                tracked = tracked_records.get(o_name)
+                if tracked:
+                    s_wins = int(tracked.get("wins", s_wins) or 0)
+                    o_wins = int(tracked.get("losses", o_wins) or 0)
+
                 diff = s_wins - o_wins
-                if diff > pigeon["diff"]: pigeon = {"name": o_name, "diff": diff, "wins": s_wins, "losses": o_wins}
-                if diff < nemesis["diff"]: nemesis = {"name": o_name, "diff": diff, "wins": s_wins, "losses": o_wins}
-            db['special_h2h'] = {"pigeon": pigeon, "nemesis": nemesis}
+
+                if diff > pigeon["diff"]:
+                    pigeon = { "name": o_name, "diff": diff, "wins": s_wins, "losses": o_wins }                    
+
+                if diff < nemesis["diff"]:
+                    nemesis = { "name": o_name, "diff": diff, "wins": s_wins, "losses": o_wins }
+
+            db["special_h2h"] = { "pigeon": pigeon, "nemesis": nemesis }
         else:
-            db['api_errors'].append('special_h2h')
+            db["api_errors"].append("special_h2h")
 
         # 9/9 Player Bio
         print("9/9 Syncing Player Bio...")

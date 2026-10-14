@@ -71,6 +71,11 @@
       "name": "US Open",
       "defending": 1300,
       "earned": 0
+    },
+    {
+      "name": "China Open",
+      "defending": 500,
+      "earned": 0
     }
   ],
   "rivalries": [
@@ -267,9 +272,9 @@
     },
     "nemesis": {
       "name": "Carlos Alcaraz",
-      "diff": -4,
+      "diff": -3,
       "wins": 7,
-      "losses": 11
+      "losses": 10
     }
   },
   "bio": {
