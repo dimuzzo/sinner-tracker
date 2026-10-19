@@ -76,6 +76,11 @@
       "name": "China Open",
       "defending": 500,
       "earned": 0
+    },
+    {
+      "name": "Shanghai Masters",
+      "defending": 50,
+      "earned": 0
     }
   ],
   "rivalries": [
