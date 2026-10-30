@@ -81,6 +81,21 @@
       "name": "Shanghai Masters",
       "defending": 50,
       "earned": 0
+    },
+    {
+      "name": "Vienna Open",
+      "defending": 500,
+      "earned": 0
+    },
+    {
+      "name": "Paris Masters",
+      "defending": 1000,
+      "earned": 0
+    },
+    {
+      "name": "Nitto ATP Finals",
+      "defending": 1500,
+      "earned": 0
     }
   ],
   "rivalries": [
