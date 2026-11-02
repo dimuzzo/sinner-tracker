@@ -1,7 +1,7 @@
 {
-  "last_updated": "2026-11-01T08:55:44.530852+00:00",
-  "ranking": 1,
-  "total_points": 10450,
+  "last_updated": "2026-11-02T09:05:38.490366+00:00",
+  "ranking": 2,
+  "total_points": 9450,
   "win_loss": "44 - 3",
   "stats": {
     "first_serve_in": 59.9,
@@ -305,7 +305,11 @@
     "coach": "Simone Vagnozzi, Darren Cahill"
   },
   "current_streak": 7,
-  "api_errors": [],
+  "api_errors": [
+    "recent_form",
+    "surface_mastery",
+    "special_h2h"
+  ],
   "history": {
     "points": [
       {
@@ -471,6 +475,10 @@
       {
         "date": "2026-11-01",
         "points": 10450
+      },
+      {
+        "date": "2026-11-02",
+        "points": 9450
       }
     ],
     "backfilled_6m": true
