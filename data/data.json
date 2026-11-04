@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-03T09:13:02.350679+00:00",
+  "last_updated": "2026-11-04T08:48:48.909673+00:00",
   "ranking": 2,
   "total_points": 9450,
   "win_loss": "44 - 3",
@@ -306,6 +306,8 @@
   },
   "current_streak": 7,
   "api_errors": [
+    "ranking",
+    "stats",
     "rivalries",
     "recent_form",
     "surface_mastery",
@@ -483,6 +485,10 @@
       },
       {
         "date": "2026-11-03",
+        "points": 9450
+      },
+      {
+        "date": "2026-11-04",
         "points": 9450
       }
     ],
