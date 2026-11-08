@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-07T08:31:39.556358+00:00",
+  "last_updated": "2026-11-08T08:45:25.811802+00:00",
   "ranking": 2,
   "total_points": 9450,
   "win_loss": "44 - 3",
@@ -252,14 +252,6 @@
       "country": "GBR"
     },
     {
-      "name": "Paris Masters",
-      "date": "2026-11-02T00:00:00Z",
-      "end": "2026-11-08T00:00:00Z",
-      "court": "Indoor Hard",
-      "country": "FRA",
-      "withdrawn": true
-    },
-    {
       "name": "ATP Finals Turin",
       "date": "2026-11-15T00:00:00Z",
       "end": "2026-11-22T00:00:00Z",
@@ -278,6 +270,13 @@
       "name": "Indian Wells Open",
       "date": "2027-03-03T00:00:00Z",
       "end": "2027-03-17T00:00:00Z",
+      "court": "Hard",
+      "country": "USA"
+    },
+    {
+      "name": "Miami Open",
+      "date": "2027-03-17T00:00:00Z",
+      "end": "2027-03-31T00:00:00Z",
       "court": "Hard",
       "country": "USA"
     }
@@ -501,6 +500,10 @@
       },
       {
         "date": "2026-11-07",
+        "points": 9450
+      },
+      {
+        "date": "2026-11-08",
         "points": 9450
       }
     ],
