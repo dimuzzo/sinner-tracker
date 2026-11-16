@@ -1,7 +1,7 @@
 {
-  "last_updated": "2026-11-15T08:58:52.610761+00:00",
+  "last_updated": "2026-11-16T09:14:42.431412+00:00",
   "ranking": 2,
-  "total_points": 9450,
+  "total_points": 7950,
   "win_loss": "44 - 3",
   "stats": {
     "first_serve_in": 59.9,
@@ -526,6 +526,10 @@
       {
         "date": "2026-11-15",
         "points": 9450
+      },
+      {
+        "date": "2026-11-16",
+        "points": 7950
       }
     ],
     "backfilled_6m": true
