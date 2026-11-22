@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-21T09:25:55.484581+00:00",
+  "last_updated": "2026-11-22T09:31:13.263728+00:00",
   "ranking": 2,
   "total_points": 7950,
   "win_loss": "44 - 3",
@@ -252,14 +252,6 @@
       "country": "GBR"
     },
     {
-      "name": "ATP Finals Turin",
-      "date": "2026-11-15T00:00:00Z",
-      "end": "2026-11-22T00:00:00Z",
-      "court": "Indoor Hard",
-      "country": "ITA",
-      "withdrawn": true
-    },
-    {
       "name": "Australian Open",
       "date": "2027-01-17T00:00:00Z",
       "end": "2027-01-31T00:00:00Z",
@@ -279,6 +271,13 @@
       "end": "2027-03-31T00:00:00Z",
       "court": "Hard",
       "country": "USA"
+    },
+    {
+      "name": "Monte-Carlo Masters",
+      "date": "2027-04-04T00:00:00Z",
+      "end": "2027-04-11T00:00:00Z",
+      "court": "Clay",
+      "country": "MON"
     }
   ],
   "special_h2h": {
@@ -549,6 +548,10 @@
       },
       {
         "date": "2026-11-21",
+        "points": 7950
+      },
+      {
+        "date": "2026-11-22",
         "points": 7950
       }
     ],
